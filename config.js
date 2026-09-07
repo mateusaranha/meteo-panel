@@ -1,6 +1,6 @@
 /**
  * Configuração central do protótipo.
- * A ideia é que novos locais sejam adicionados aqui sem alterar o restante da interface.
+ * Novos locais podem ser adicionados aqui sem alterar o restante da interface.
  */
 window.METEO_CONFIG = {
   appName: "MeteoPanel",
@@ -16,8 +16,7 @@ window.METEO_CONFIG = {
         windUnit: "knots",
         temperatureUnit: "c",
         waveUnit: "m"
-      },
-      climatempo: { cityId: 377, slug: "florianopolis-sc" }
+      }
     }
   }
 };
