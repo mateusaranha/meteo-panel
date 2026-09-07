@@ -12,10 +12,26 @@ Na configuração atual, a página apresenta:
 
 1. **Windy** — mapa meteorológico interativo;
 2. **Open-Meteo** — resumo geral com condições atuais e previsão dos próximos dias;
-3. **Windguru** — tabela técnica de vento, rajadas, direção, temperatura, nebulosidade e precipitação para o spot configurado;
-4. **Temperatura do mar** — módulo de consulta de temperatura superficial estimada com locais favoritos.
+3. **Vento agora — Aldeia da Conceição** — observação local da Windguru Station `6023`, com leitura atual e gráfico recente;
+4. **Windguru** — tabela técnica de vento, rajadas, direção, temperatura, nebulosidade e precipitação para o spot configurado;
+5. **Temperatura do mar** — módulo de consulta de temperatura superficial estimada com locais favoritos.
 
-O local meteorológico principal configurado atualmente é **Florianópolis, SC**. O Windguru usa o spot `105160`.
+O local meteorológico principal configurado atualmente é **Florianópolis, SC**. O Windguru de previsão usa o spot `105160`.
+
+## Vento agora — Aldeia da Conceição
+
+Este módulo complementa as previsões com uma **medição local** da estação meteorológica da Aldeia da Conceição, identificada no Windguru como estação `6023`.
+
+A integração usa os widgets oficiais do Windguru Station/Windguru Live em vez de copiar ou fazer scraping dos valores da página da Aldeia.
+
+A apresentação é adaptativa:
+
+- em telas maiores, leitura atual e gráfico ficam lado a lado;
+- em telas menores, os dois painéis formam um carrossel horizontal com `scroll-snap`: a leitura atual aparece primeiro e o gráfico fica a um gesto lateral de distância.
+
+O módulo é isolado dos demais. Se o Windguru restringir o widget ao domínio autorizado pelo proprietário da estação ou se o serviço estiver indisponível, o MeteoPanel mostra um fallback com link para a página original da estação sem interromper Windy, Open-Meteo, Windguru de previsão ou temperatura do mar.
+
+A rede Windguru Station informa que as estações podem enviar medições em intervalos de aproximadamente um minuto. O horário e a disponibilidade efetivos continuam sendo responsabilidade do provedor/estação.
 
 ## Temperatura do mar
 
@@ -43,10 +59,12 @@ O MeteoPanel é uma aplicação client-side sem etapa de build:
 meteo-panel/
 ├── index.html                 # estrutura da interface
 ├── styles.css                 # estilos gerais
+├── aldeia-live.css            # layout da estação local e responsividade
 ├── marine-search.css          # estilos da busca/seleção marítima
 ├── config.js                  # configuração central
 ├── app.js                     # cabeçalho, Windy e Open-Meteo
-├── windguru.js                # carregamento isolado do widget Windguru
+├── aldeia-live.js             # Windguru Station 6023: leitura atual + gráfico
+├── windguru.js                # carregamento isolado do widget Windguru de previsão
 ├── marine.js                  # favoritos, mapa, geocodificação e temperatura do mar
 ├── README.md                  # documentação principal
 ├── AGENTS.md                  # contexto operacional para agentes de código
@@ -71,6 +89,7 @@ O projeto atualmente se integra com:
 
 - **Windy** — visualização meteorológica incorporada;
 - **Windguru** — widget de previsão para um spot configurado;
+- **Windguru Station / Windguru Live** — observação local da estação `6023` da Aldeia da Conceição e gráfico recente;
 - **Open-Meteo Forecast API** — previsão geral;
 - **Open-Meteo Marine API** — temperatura superficial do mar;
 - **OpenStreetMap** — dados/mapa usados na seleção de pontos;
@@ -89,7 +108,9 @@ Por exemplo, a API gratuita do Open-Meteo possui condições próprias para uso 
 
 MeteoPanel é uma ferramenta de consulta, não um sistema de segurança, navegação ou emergência.
 
-Previsões meteorológicas e marítimas podem estar incorretas, atrasadas, incompletas ou indisponíveis. Não use o painel como única fonte para decidir sobre travessias a nado, atividades em mar aberto, navegação ou outras situações em que condições meteorológicas e marítimas possam representar risco.
+Previsões e medições meteorológicas podem estar incorretas, atrasadas, incompletas ou indisponíveis. Uma estação local também pode sofrer obstruções, falhas de sensor, problemas de transmissão ou não representar as condições em toda a Lagoa da Conceição.
+
+Não use o painel como única fonte para decidir sobre travessias a nado, velejadas, navegação ou outras situações em que condições meteorológicas e marítimas possam representar risco.
 
 Consulte fontes oficiais/locais adequadas, condições observadas e procedimentos de segurança próprios para a atividade.
 
@@ -125,7 +146,8 @@ A configuração principal fica em [`config.js`](config.js). Nela é possível a
 - local meteorológico padrão;
 - latitude, longitude e zoom do Windy;
 - modelo/camada do Windy;
-- spot e unidades do Windguru;
+- spot e unidades do Windguru de previsão;
+- ID, unidades e URL da estação local da Aldeia;
 - chaves de `localStorage` do módulo marítimo;
 - favoritos marítimos usados como padrão antes de existir configuração salva no navegador.
 
@@ -145,6 +167,8 @@ Não há etapa de build.
 - os favoritos marítimos são locais ao navegador/dispositivo;
 - integrações externas podem mudar ou deixar de funcionar sem alteração no MeteoPanel;
 - a disponibilidade do Windy/Windguru depende dos widgets e regras dos próprios serviços;
+- o widget Windguru Station pode depender de autorização do domínio configurada pelo proprietário da estação;
+- uma estação local representa as condições no ponto onde o sensor está instalado, não necessariamente em toda a região;
 - a temperatura do mar é um valor modelado;
 - o uso dos serviços públicos OpenStreetMap/Nominatim deve permanecer dentro das políticas de uso dos respectivos projetos;
 - um projeto com tráfego relevante deve reavaliar APIs, tiles, geocodificação, limites e termos antes de escalar.
@@ -163,6 +187,7 @@ A MIT é intencionalmente permissiva: permite uso, modificação, distribuição
 
 ## Próximos passos possíveis
 
+- validar o widget Windguru Station `6023` no domínio publicado do GitHub Pages;
 - previsão horária compacta;
 - reordenação de favoritos marítimos;
 - exportação/importação de favoritos entre dispositivos;
