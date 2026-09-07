@@ -1,6 +1,6 @@
 /**
- * Configuração central do protótipo.
- * Novos locais podem ser adicionados aqui sem alterar o restante da interface.
+ * Configuração central do MeteoPanel.
+ * Ajustes do local padrão e valores iniciais ficam concentrados aqui.
  */
 window.METEO_CONFIG = {
   appName: "MeteoPanel",
