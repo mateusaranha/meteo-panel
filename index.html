@@ -7,7 +7,8 @@
   <meta name="description" content="Painel simples para consultar Windy, Windguru, Open-Meteo e temperatura do mar em uma única página." />
   <title>MeteoPanel</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <link rel="stylesheet" href="styles.css?v=20260907-5" />
+  <link rel="stylesheet" href="styles.css?v=20260907-6" />
+  <link rel="stylesheet" href="marine-search.css?v=20260907-6" />
 </head>
 <body>
   <main class="shell">
@@ -189,42 +190,64 @@
         <button id="marineDialogClose" class="dialog-close" type="button" aria-label="Fechar">×</button>
       </div>
 
-      <label class="form-field">
-        <span>Nome do local</span>
-        <input id="marineNameInput" type="text" maxlength="60" required placeholder="Ex.: Praia do Campeche" autocomplete="off" />
-      </label>
+      <section class="marine-search-section" aria-labelledby="marineSearchLabel">
+        <label id="marineSearchLabel" class="form-field marine-search-field" for="marineSearchInput">
+          <span>Buscar lugar</span>
+        </label>
+        <div class="marine-search-row">
+          <input id="marineSearchInput" type="search" maxlength="100" placeholder="Ex.: Praia de Cabeçudas, Itajaí" autocomplete="off" />
+          <button id="marineSearchButton" class="button button-secondary" type="button">Buscar</button>
+        </div>
+        <p class="marine-search-help">Enter apenas pesquisa. O local só será salvo depois que você conferir o ponto e clicar em “Adicionar aos favoritos”.</p>
+        <div id="marineSearchStatus" class="marine-search-status" aria-live="polite"></div>
+        <div id="marineSearchResults" class="marine-search-results" aria-label="Resultados da busca"></div>
+      </section>
 
       <div>
         <div class="map-heading">
-          <span>Escolha o ponto no mapa</span>
-          <small>Clique ou arraste o marcador.</small>
+          <span>Confira o ponto no mapa</span>
+          <small>Você também pode clicar no mapa ou arrastar o marcador.</small>
         </div>
-        <div id="marineMap" class="marine-map" aria-label="Mapa para escolher o ponto no mar"></div>
+        <div id="marineMap" class="marine-map" aria-label="Mapa para conferir o ponto no mar"></div>
       </div>
 
-      <div class="coordinate-grid">
-        <label class="form-field">
-          <span>Latitude</span>
-          <input id="marineLatInput" type="number" min="-90" max="90" step="any" required />
-        </label>
-        <label class="form-field">
-          <span>Longitude</span>
-          <input id="marineLonInput" type="number" min="-180" max="180" step="any" required />
-        </label>
+      <div id="marineSelectionCard" class="marine-selection-card" hidden>
+        <span class="marine-selection-kicker">Ponto selecionado</span>
+        <strong id="marineSelectionLabel">—</strong>
+        <span id="marineSelectionCoords">—</span>
       </div>
+
+      <label class="form-field marine-favorite-name-field">
+        <span>Nome nos favoritos</span>
+        <input id="marineNameInput" type="text" maxlength="60" required placeholder="Ex.: Cabeçudas" autocomplete="off" />
+      </label>
+
+      <details class="marine-coordinate-details">
+        <summary>Ajustar coordenadas manualmente</summary>
+        <div class="coordinate-grid">
+          <label class="form-field">
+            <span>Latitude</span>
+            <input id="marineLatInput" type="number" min="-90" max="90" step="any" />
+          </label>
+          <label class="form-field">
+            <span>Longitude</span>
+            <input id="marineLonInput" type="number" min="-180" max="180" step="any" />
+          </label>
+        </div>
+      </details>
 
       <p class="marine-form-note">Os favoritos ficam salvos somente neste navegador/dispositivo.</p>
 
       <div class="dialog-actions">
         <button id="marineCancelButton" class="button button-secondary" type="button">Cancelar</button>
-        <button id="marineSaveButton" class="button button-primary" type="submit">Adicionar</button>
+        <button id="marineSaveButton" class="button button-primary" type="submit" disabled>Adicionar aos favoritos</button>
       </div>
     </form>
   </dialog>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <script src="config.js?v=20260907-5"></script>
-  <script src="app.js?v=20260907-5"></script>
-  <script src="marine.js?v=20260907-5"></script>
+  <script src="config.js?v=20260907-6"></script>
+  <script src="app.js?v=20260907-6"></script>
+  <script src="marine.js?v=20260907-6"></script>
 </body>
 </html>
