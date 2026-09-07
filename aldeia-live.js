@@ -29,6 +29,7 @@
     ) return;
 
     stationLink.href = station.url || `https://www.windguru.cz/station/${stationId}`;
+    currentTarget.inert = true;
 
     const formatValue = (value) => {
       const number = Number(String(value ?? "").trim().replace(",", "."));
@@ -46,6 +47,7 @@
       if (hasOfficialWidget) {
         currentTarget.classList.add("aldeia-current-source--fallback");
         currentTarget.setAttribute("aria-hidden", "false");
+        currentTarget.inert = false;
         currentFallback.hidden = true;
       } else {
         currentFallback.hidden = false;
@@ -94,6 +96,7 @@
 
       currentTarget.classList.remove("aldeia-current-source--fallback");
       currentTarget.setAttribute("aria-hidden", "true");
+      currentTarget.inert = true;
       currentFallback.hidden = true;
       currentLoading.hidden = true;
       currentDisplay.hidden = false;
