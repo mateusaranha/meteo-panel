@@ -67,7 +67,7 @@ h1 {
   font-size: 0.85rem;
 }
 
-.button, .source-link, .quick-link {
+.button, .source-link {
   border-radius: 999px;
   text-decoration: none;
   transition: transform 140ms ease, opacity 140ms ease, background 140ms ease;
@@ -85,11 +85,16 @@ h1 {
   background: #172634;
 }
 
-.button:hover, .source-link:hover, .quick-link:hover { transform: translateY(-1px); }
+.button-secondary {
+  color: #324e67;
+  background: #edf3f8;
+}
+
+.button:hover, .source-link:hover { transform: translateY(-1px); }
 
 .dashboard {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(280px, 0.8fr);
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 0.95fr);
   gap: 18px;
 }
 
@@ -142,45 +147,179 @@ h1 {
   border: 0;
 }
 
-.climatempo-wrap {
-  display: grid;
-  min-height: 260px;
-  place-items: center;
-  padding: 28px 22px;
-  background: linear-gradient(180deg, rgba(238, 244, 249, 0.72), rgba(255, 255, 255, 0.25));
+.openmeteo-wrap {
+  min-height: 540px;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(238, 244, 249, 0.75), rgba(255, 255, 255, 0.15));
 }
 
-.climatempo-content {
-  width: min(100%, 340px);
+.openmeteo-state {
+  display: grid;
+  min-height: 450px;
+  place-content: center;
+  gap: 10px;
+  color: #617181;
   text-align: center;
 }
 
-.climatempo-status {
-  margin-bottom: 8px;
-  font-weight: 750;
-  line-height: 1.45;
+.openmeteo-state[hidden], .openmeteo-content[hidden] { display: none !important; }
+
+.loading-dot {
+  width: 18px;
+  height: 18px;
+  margin: 0 auto;
+  border: 2px solid rgba(97, 113, 129, 0.25);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 900ms linear infinite;
 }
 
-.climatempo-helper {
-  margin-bottom: 20px;
-  color: #6c7884;
-  font-size: 0.86rem;
-  line-height: 1.45;
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.openmeteo-error .button { justify-self: center; margin-top: 8px; }
+
+.current-weather {
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(31, 49, 65, 0.09);
 }
 
-.climatempo-links {
+.current-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.weather-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.weather-icon-current {
+  width: 66px;
+  height: 66px;
+  font-size: 3.2rem;
+}
+
+.current-temperature {
+  display: flex;
+  align-items: flex-start;
+  font-size: clamp(2.7rem, 6vw, 4rem);
+  font-weight: 780;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.degree {
+  margin-top: 5px;
+  margin-left: 2px;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+}
+
+.current-description {
+  margin: 7px 0 0;
+  color: #536273;
+  font-size: 0.95rem;
+}
+
+.weather-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  margin-top: 18px;
 }
 
-.quick-link {
-  padding: 10px 12px;
-  color: #324e67;
-  background: #edf3f8;
-  font-size: 0.84rem;
-  font-weight: 750;
+.weather-metric {
+  display: grid;
+  gap: 4px;
+  padding: 12px 13px;
+  border: 1px solid rgba(31, 49, 65, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
 }
+
+.metric-label {
+  color: #6b7986;
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.weather-metric strong { font-size: 0.95rem; }
+
+.daily-section { padding-top: 18px; }
+
+.daily-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.forecast-updated {
+  color: #7a8793;
+  font-size: 0.72rem;
+}
+
+.daily-forecast {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.day-card {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 10px 5px;
+  border: 1px solid rgba(31, 49, 65, 0.08);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
+.day-name {
+  color: #52616f;
+  font-size: 0.74rem;
+  font-weight: 750;
+  text-transform: capitalize;
+}
+
+.day-card .weather-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 1.55rem;
+}
+
+.day-temperature {
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.day-temperature strong { font-size: 0.9rem; }
+
+.day-rain {
+  min-height: 16px;
+  color: #617181;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.openmeteo-attribution {
+  margin: 14px 0 0;
+  color: #7b8792;
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+.openmeteo-attribution a { color: inherit; }
 
 .windguru-scroll {
   position: relative;
@@ -190,7 +329,6 @@ h1 {
 }
 
 #windguruTarget { min-width: 760px; }
-
 #windguruTarget:empty { min-height: 120px; }
 
 .fallback {
@@ -236,6 +374,8 @@ h1 {
     min-height: 470px;
     height: 470px;
   }
+
+  .openmeteo-wrap { min-height: auto; }
 }
 
 @media (max-width: 560px) {
@@ -264,8 +404,11 @@ h1 {
     height: 420px;
   }
 
-  .climatempo-wrap { min-height: 230px; }
-  .climatempo-links { grid-template-columns: 1fr; }
+  .openmeteo-wrap { padding: 16px; }
+  .current-main { gap: 10px; }
+  .weather-icon-current { width: 54px; height: 54px; font-size: 2.7rem; }
+  .weather-metrics { grid-template-columns: 1fr 1fr; }
+  .daily-forecast { grid-template-columns: repeat(5, 78px); overflow-x: auto; padding-bottom: 4px; }
   .windguru-scroll { padding-inline: 12px; }
 }
 
@@ -287,9 +430,10 @@ h1 {
     box-shadow: none;
   }
 
-  .card-header { border-bottom-color: rgba(255, 255, 255, 0.08); }
+  .card-header,
+  .current-weather { border-bottom-color: rgba(255, 255, 255, 0.08); }
 
-  .source-link, .quick-link {
+  .source-link, .button-secondary {
     color: #dce9f2;
     background: #263641;
   }
@@ -299,6 +443,12 @@ h1 {
     background: #eef5fa;
   }
 
-  .climatempo-helper, .fallback { color: #9fb0bf; }
-  .climatempo-wrap, .windguru-scroll { background: #111a21; }
+  .current-description, .metric-label, .day-name, .day-rain, .forecast-updated, .openmeteo-attribution, .openmeteo-state { color: #9fb0bf; }
+
+  .openmeteo-wrap, .windguru-scroll { background: #111a21; }
+
+  .weather-metric, .day-card {
+    border-color: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.035);
+  }
 }
