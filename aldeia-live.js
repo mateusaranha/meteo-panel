@@ -102,8 +102,8 @@
         `wj=${encodeURIComponent(station.windUnit || "knots")}`,
         `tj=${encodeURIComponent(station.temperatureUnit || "c")}`,
         "avg_min=0",
-        "gsize=520",
-        "msize=300",
+        "gsize=360",
+        "msize=240",
         "m=3",
         "show=g"
       ];
