@@ -83,29 +83,38 @@ References:
 
 ## Windguru
 
-MeteoPanel loads a forecast widget from **Windguru** for a configured Windguru spot. The widget, forecasts, branding and any content supplied by Windguru remain third-party material and are not covered by the MeteoPanel MIT License.
+MeteoPanel uses Windguru in two distinct ways:
 
-Anyone redistributing or deploying the project should review Windguru's current terms and widget rules directly. MeteoPanel does not claim ownership of Windguru forecasts, interfaces, trademarks or branding.
+- a **forecast widget** for the configured Florianópolis spot;
+- **Windguru Station / Windguru Live widgets** for the local station `6023` (“Aldeia da conceição, Aldeia”), including current wind observations and a recent-wind graph.
+
+The widgets, forecasts, station observations, branding and any other content supplied by Windguru remain third-party material and are **not** covered by the MeteoPanel MIT License.
+
+The Windguru Station documentation states that station owners can generate embed code for Windguru Live widgets/graphs. Availability of a specific station widget may depend on the station owner's configuration, including domain restrictions. MeteoPanel does not bypass such restrictions; if the provider refuses the embed, the application shows a fallback link to the original station page.
+
+Anyone redistributing or deploying the project should review Windguru's current terms and widget/station rules directly. MeteoPanel does not claim ownership of Windguru forecasts, station measurements, interfaces, trademarks or branding.
 
 References:
 
 - https://www.windguru.cz/
+- https://www.windguru.cz/station/6023
+- https://stations.windguru.cz/
 - https://www.windguru.cz/help.php?sec=terms
 
 ## Trademarks and affiliation
 
 Windy, Windguru, Open-Meteo, OpenStreetMap, Leaflet and any associated names, logos or marks belong to their respective owners where applicable.
 
-MeteoPanel is an independent project. The use of a service, link, widget or attribution does **not** imply sponsorship, endorsement, partnership or affiliation with those providers.
+MeteoPanel is an independent project. The use of a service, link, widget or attribution does **not** imply sponsorship, endorsement, partnership or affiliation with those providers or with the owner/operator of any integrated weather station.
 
 ## External-service availability and privacy
 
 Because MeteoPanel is intentionally serverless, the user's browser communicates directly with third-party providers. Those providers may receive ordinary request metadata such as IP address, browser information and referrer information according to their own privacy policies.
 
-External APIs/widgets can change, become unavailable, alter their terms, impose rate limits, or discontinue endpoints without changes to this repository. The MIT License's warranty disclaimer applies to MeteoPanel's code; third-party providers also have their own warranties/disclaimers and terms.
+External APIs/widgets can change, become unavailable, alter their terms, impose rate limits, restrict allowed domains, or discontinue endpoints without changes to this repository. The MIT License's warranty disclaimer applies to MeteoPanel's code; third-party providers also have their own warranties/disclaimers and terms.
 
 ## No safety or navigation guarantee
 
-Weather and marine information in MeteoPanel is informational and may be delayed, modeled, incomplete, unavailable or inaccurate. Sea-surface temperature is a modeled value and is not necessarily an in-situ measurement at the shoreline or along a swimming route.
+Weather and marine information in MeteoPanel is informational and may be delayed, modeled, incomplete, unavailable or inaccurate. Local station observations can also be affected by sensor placement, obstruction, calibration, transmission failures or highly localized conditions. Sea-surface temperature is a modeled value and is not necessarily an in-situ measurement at the shoreline or along a swimming route.
 
-Do not use MeteoPanel as the sole basis for open-water swimming, crossings, navigation, emergency decisions or other safety-critical activity. Users should consult appropriate official/local sources, current conditions and their own safety procedures.
+Do not use MeteoPanel as the sole basis for open-water swimming, crossings, sailing, navigation, emergency decisions or other safety-critical activity. Users should consult appropriate official/local sources, current conditions and their own safety procedures.

@@ -14,8 +14,20 @@ A ordem atual dos módulos na página é intencional:
 
 1. **Windy** — mapa meteorológico interativo;
 2. **Open-Meteo** — resumo geral de condições atuais e previsão dos próximos dias;
-3. **Windguru** — widget técnico para o spot fixo de Florianópolis;
-4. **Temperatura do mar** — módulo de uso mais ocasional, mantido como último card da página.
+3. **Vento agora — Aldeia da Conceição** — observação local da Windguru Station `6023`, com leitura atual e gráfico recente;
+4. **Windguru** — widget técnico de previsão para o spot fixo de Florianópolis;
+5. **Temperatura do mar** — módulo de uso mais ocasional, mantido como último card da página.
+
+### Vento agora — Aldeia da Conceição
+
+- Estação atual: **Windguru Station `6023`**, identificada como “Aldeia da conceição, Aldeia”.
+- Objetivo: complementar previsões com uma medição local real no ponto onde o veleiro fica guardado.
+- Usar integração oficial Windguru Station/Windguru Live; **não fazer scraping** da página da Aldeia ou da página da estação.
+- O painel atual usa `WgsWidget(..., type: "curr")` para leitura atual e `wglive.php` para o gráfico.
+- Em desktop, leitura atual e gráfico ficam lado a lado.
+- Em mobile, os dois painéis usam rolagem horizontal com `scroll-snap`; a leitura atual aparece primeiro.
+- O proprietário da estação pode restringir os domínios autorizados para embed. Se o widget não carregar, manter um fallback explícito com link para a estação original.
+- Não permitir uma falha deste módulo derrubar os demais.
 
 ### Windguru
 
@@ -61,10 +73,12 @@ Evite overengineering. Não introduza React, Vue, bundlers, npm, servidor, banco
 
 - `index.html` — estrutura e ordem dos cards/modais.
 - `styles.css` — estilos gerais do dashboard.
+- `aldeia-live.css` — estilos e responsividade do módulo de vento local.
 - `marine-search.css` — estilos específicos da busca/seleção de locais marítimos.
-- `config.js` — configuração central do local padrão, Windy, Windguru e defaults do módulo marítimo.
+- `config.js` — configuração central do local padrão, estação local, Windy, Windguru e defaults do módulo marítimo.
 - `app.js` — cabeçalho, Windy e Open-Meteo geral.
-- `windguru.js` — carregamento isolado do widget Windguru.
+- `aldeia-live.js` — carregamento isolado dos widgets Windguru Station/Windguru Live da estação `6023`.
+- `windguru.js` — carregamento isolado do widget Windguru de previsão.
 - `marine.js` — favoritos marítimos, busca, mapa, geocodificação e temperatura do mar.
 - `README.md` — documentação pública principal.
 - `THIRD_PARTY_NOTICES.md` — licenças, termos e ressalvas de terceiros.
@@ -79,11 +93,11 @@ Não assumir que dados, widgets, tiles, mapas, marcas ou APIs de terceiros são 
 1. verificar os termos/licença atuais do provedor;
 2. manter atribuições exigidas;
 3. atualizar `THIRD_PARTY_NOTICES.md` quando necessário;
-4. considerar CORS, rate limits, disponibilidade e falhas;
+4. considerar CORS, rate limits, disponibilidade, permissões de domínio e falhas;
 5. não adicionar scraping quando existe uma integração oficial adequada;
 6. não colocar chaves privadas ou credenciais no repositório.
 
-Integrações atuais incluem Windy, Windguru, Open-Meteo, Leaflet, OpenStreetMap e Nominatim.
+Integrações atuais incluem Windy, Windguru Forecast, Windguru Station/Windguru Live, Open-Meteo, Leaflet, OpenStreetMap e Nominatim.
 
 O Nominatim público deve ser usado apenas para buscas explícitas disparadas pelo usuário; não implementar autocomplete agressivo contra o serviço público.
 
@@ -94,7 +108,23 @@ O Nominatim público deve ser usado apenas para buscas explícitas disparadas pe
 - Preferir ações explícitas quando um erro de seleção pode gerar dado incorreto.
 - Evitar salvar automaticamente um local antes de o usuário confirmar que o ponto é o correto.
 - Manter a temperatura do mar no final da página.
+- Para o módulo da Aldeia: leitura atual primeiro; gráfico secundário. Em mobile, preferir gesto lateral a empilhar dois blocos grandes verticalmente.
 - Preferir módulos independentes e pequenos a um único script que possa quebrar toda a aplicação.
+
+## Fluxo de Git e pull requests
+
+A partir de setembro de 2026, novas funcionalidades e mudanças relevantes devem preferencialmente ser feitas por **branch + pull request**, em vez de commits diretos no `main`.
+
+Fluxo esperado:
+
+1. inspecionar `main` e ler este arquivo;
+2. criar uma branch curta e descritiva a partir de `main`;
+3. fazer commits pequenos e coerentes na branch;
+4. validar o que for possível antes da PR;
+5. abrir PR para `main` com resumo, decisões de UX, riscos/limitações e plano de teste;
+6. não fazer merge automaticamente sem pedido explícito do proprietário.
+
+Correções triviais podem usar fluxo diferente se o usuário pedir explicitamente.
 
 ## Como trabalhar em uma tarefa
 
