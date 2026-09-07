@@ -27,9 +27,11 @@ A ordem atual dos módulos na página é intencional:
 - O painel usa `WgsWidget(..., type: "curr")` para a leitura atual e `wglive.php` para o gráfico.
 - A leitura atual é renderizada pelo widget oficial dentro de um iframe cross-origin. O JavaScript do MeteoPanel **não pode ler nem reestilizar o conteúdo interno desse iframe** por causa da same-origin policy.
 - Não tentar novamente montar uma UI própria lendo classes, texto ou DOM interno do iframe. Essa abordagem já foi testada e falhou corretamente para o widget real.
-- A UX deve melhorar o que é controlável externamente: largura/altura da viewport do iframe, proporção das colunas, espaçamento, ordem e fallback.
-- Em desktop, o painel “Agora” deve ser compacto e não deve esticar até a altura do gráfico; o gráfico recebe a maior parte da largura.
-- Em mobile, os dois painéis usam rolagem horizontal com `scroll-snap`; a leitura atual aparece primeiro.
+- A UX deve melhorar apenas o que é controlável externamente: viewport do iframe, espaçamento, ordem, proporção do gráfico e fallback.
+- **Não usar novamente layout de duas colunas para “Agora” + gráfico no desktop.** Esse formato gerou uma grande área vazia sob a leitura atual.
+- O módulo da Aldeia deve ser vertical: faixa compacta de leitura atual no topo, seguida pelo gráfico em largura total.
+- Em mobile, manter a mesma ordem vertical; não usar carrossel horizontal para esses dois elementos.
+- Manter o gráfico visualmente mais baixo que a primeira implementação; evitar que ele domine a página.
 - Se o widget não carregar, manter um fallback explícito com link para a estação original.
 - Não permitir uma falha deste módulo derrubar os demais.
 
@@ -113,8 +115,8 @@ O Nominatim público deve ser usado apenas para buscas explícitas disparadas pe
 - Evitar salvar automaticamente um local antes de o usuário confirmar que o ponto é o correto.
 - Manter a temperatura do mar no final da página.
 - Manter o Windguru de previsão imediatamente antes da observação local da Aldeia: primeiro previsão, depois medição real.
-- Para o módulo da Aldeia: leitura atual primeiro; gráfico secundário. Em mobile, preferir gesto lateral a empilhar dois blocos grandes verticalmente.
-- No desktop, evitar que o painel curto “Agora” seja artificialmente esticado até a altura do gráfico.
+- Para o módulo da Aldeia, leitura atual primeiro e gráfico secundário logo abaixo.
+- Evitar espaço vazio artificial: não colocar conteúdo meramente decorativo para preencher layout.
 - Preferir módulos independentes e pequenos a um único script que possa quebrar toda a aplicação.
 
 ## Fluxo de Git e pull requests
