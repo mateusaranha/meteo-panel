@@ -33,15 +33,17 @@ A estação `6023` foi validada no domínio publicado do GitHub Pages em setembr
 
 A leitura “Agora” é renderizada pelo Windguru dentro de um **iframe cross-origin**. Por segurança do navegador, o JavaScript do MeteoPanel não pode ler nem modificar o DOM interno desse iframe.
 
-Uma tentativa anterior de montar uma apresentação própria a partir dos campos internos do widget foi removida depois de se confirmar essa limitação. O MeteoPanel agora mantém o widget oficial como fonte visual e melhora somente o que pode controlar com segurança ao redor dele.
+Uma tentativa anterior de montar uma apresentação própria a partir dos campos internos do widget foi removida depois de se confirmar essa limitação. O MeteoPanel mantém o widget oficial como fonte visual e melhora somente o que pode controlar com segurança ao redor dele.
 
-No desktop:
+A apresentação atual trata a estação como **um único módulo vertical**:
 
-- o painel “Agora” é compacto e não é esticado até a altura do gráfico;
-- a viewport do iframe é reduzida para evitar uma grande faixa branca sem conteúdo útil;
-- o gráfico recebe a maior parte da largura disponível.
+- a leitura “Agora” aparece primeiro em uma faixa compacta;
+- a identificação da estação fica na mesma faixa, sem criar uma segunda coluna alta;
+- o gráfico de vento recente vem logo abaixo e ocupa toda a largura disponível;
+- o gráfico usa uma configuração de altura mais contida para não dominar a página;
+- em telas menores, os elementos permanecem empilhados na mesma ordem, sem carrossel horizontal.
 
-Em telas menores, leitura atual e gráfico continuam em uma faixa horizontal com `scroll-snap`: a leitura aparece primeiro e o gráfico fica a um gesto lateral de distância.
+Essa organização evita o grande espaço vazio que surgia quando a leitura curta e o gráfico alto eram colocados lado a lado.
 
 O módulo é isolado dos demais. Se o Windguru estiver indisponível, o MeteoPanel mostra um fallback com link para a página original da estação sem interromper Windy, Open-Meteo, Windguru de previsão ou temperatura do mar.
 
