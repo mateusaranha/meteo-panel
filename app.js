@@ -6,7 +6,7 @@
 
   const $ = (id) => document.getElementById(id);
   const windyFrame = $("windyFrame");
-  const climatempoFrame = $("climatempoFrame");
+  const windguruTarget = $("windguruTarget");
   const windguruFallback = $("windguruFallback");
 
   $("panelTitle").textContent = config.appName;
@@ -16,29 +16,53 @@
 
   const windyEmbedUrl = new URL("https://embed.windy.com/embed2.html");
   windyEmbedUrl.search = new URLSearchParams({
-    lat: String(lat), lon: String(lon), detailLat: String(lat), detailLon: String(lon),
-    width: "650", height: "450", zoom: String(zoom), level: "surface",
-    overlay: locationConfig.windy.overlay, product: locationConfig.windy.model,
-    menu: "", message: "true", marker: "true", calendar: "now", pressure: "",
-    type: "map", location: "coordinates", detail: "true", metricWind: "kt",
-    metricTemp: "°C", radarRange: "-1"
+    lat: String(lat),
+    lon: String(lon),
+    detailLat: String(lat),
+    detailLon: String(lon),
+    width: "650",
+    height: "450",
+    zoom: String(zoom),
+    level: "surface",
+    overlay: locationConfig.windy.overlay,
+    product: locationConfig.windy.model,
+    menu: "",
+    message: "true",
+    marker: "true",
+    calendar: "now",
+    pressure: "",
+    type: "map",
+    location: "coordinates",
+    detail: "true",
+    metricWind: "kt",
+    metricTemp: "°C",
+    radarRange: "-1"
   }).toString();
 
   const windySiteUrl = `https://www.windy.com/?${locationConfig.windy.model},${locationConfig.windy.overlay},${lat},${lon},${zoom}`;
-  const climatempoWidgetUrl = `https://selos.climatempo.com.br/selos/MostraSelo120.php?CODCIDADE=${locationConfig.climatempo.cityId}&SKIN=padrao`;
-  const climatempoSiteUrl = `https://www.climatempo.com.br/previsao-do-tempo/cidade/${locationConfig.climatempo.cityId}/${locationConfig.climatempo.slug}`;
+  const climatempoBaseUrl = `https://www.climatempo.com.br/previsao-do-tempo/cidade/${locationConfig.climatempo.cityId}/${locationConfig.climatempo.slug}`;
   const windguruSiteUrl = `https://www.windguru.cz/${locationConfig.windguru.spotId}`;
 
   windyFrame.src = windyEmbedUrl.toString();
-  climatempoFrame.src = climatempoWidgetUrl;
   $("windyLink").href = windySiteUrl;
-  $("climatempoLink").href = climatempoSiteUrl;
+  $("climatempoLink").href = climatempoBaseUrl;
+  $("climatempoNowLink").href = climatempoBaseUrl;
+  $("climatempoTodayLink").href = climatempoBaseUrl;
+  $("climatempoTomorrowLink").href = climatempoBaseUrl;
+  $("climatempo15DaysLink").href = climatempoBaseUrl;
   $("windguruLink").href = windguruSiteUrl;
 
   const formatted = new Intl.DateTimeFormat("pt-BR", {
-    hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit"
+    hour: "2-digit",
+    minute: "2-digit",
+    day: "2-digit",
+    month: "2-digit"
   }).format(new Date());
   $("updatedAt").textContent = `Painel carregado em ${formatted}`;
+
+  function showWindguruFallback() {
+    windguruFallback.hidden = false;
+  }
 
   function loadWindguruWidget() {
     const script = document.createElement("script");
@@ -47,7 +71,7 @@
 
     script.onload = () => {
       if (typeof window.WgWidget !== "function") {
-        windguruFallback.hidden = false;
+        showWindguruFallback();
         return;
       }
 
@@ -72,13 +96,19 @@
           link_archive: false,
           link_new_window: true
         }, "windguruTarget");
+
+        window.setTimeout(() => {
+          if (windguruTarget.children.length === 0 && !windguruTarget.textContent.trim()) {
+            showWindguruFallback();
+          }
+        }, 3500);
       } catch (error) {
         console.error("Falha ao inicializar widget Windguru:", error);
-        windguruFallback.hidden = false;
+        showWindguruFallback();
       }
     };
 
-    script.onerror = () => { windguruFallback.hidden = false; };
+    script.onerror = showWindguruFallback;
     document.head.appendChild(script);
   }
 
