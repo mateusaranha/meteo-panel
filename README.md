@@ -49,7 +49,7 @@ meteo-panel/
 ├── windguru.js                # carregamento isolado do widget Windguru
 ├── marine.js                  # favoritos, mapa, geocodificação e temperatura do mar
 ├── README.md                  # documentação principal
-├── CONTRIBUTING.md            # orientação para contribuições
+├── AGENTS.md                  # contexto operacional para agentes de código
 ├── THIRD_PARTY_NOTICES.md     # licenças/termos dos serviços externos
 └── LICENSE                    # licença MIT do código original
 ```
@@ -149,11 +149,9 @@ Não há etapa de build.
 - o uso dos serviços públicos OpenStreetMap/Nominatim deve permanecer dentro das políticas de uso dos respectivos projetos;
 - um projeto com tráfego relevante deve reavaliar APIs, tiles, geocodificação, limites e termos antes de escalar.
 
-## Contribuindo
+## Para agentes de código
 
-Contribuições são bem-vindas. Para mudanças maiores, é recomendável abrir uma issue primeiro.
-
-Leia [`CONTRIBUTING.md`](CONTRIBUTING.md), especialmente antes de adicionar novas APIs ou widgets externos.
+O repositório inclui [`AGENTS.md`](AGENTS.md), com contexto operacional e decisões já tomadas sobre arquitetura, UX e integrações externas. Ele existe para evitar que um novo agente precise reconstruir a história do projeto a cada conversa.
 
 ## Licença
 
