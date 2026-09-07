@@ -14,26 +14,9 @@ window.METEO_CONFIG = {
         spotId: 105160,
         forecastHours: 120,
         windUnit: "knots",
-        temperatureUnit: "c",
-        waveUnit: "m"
+        temperatureUnit: "c"
       }
     }
-  },
-  windguru: {
-    storageKey: "meteo-panel:windguru-favorites:v1",
-    selectedStorageKey: "meteo-panel:windguru-selected:v1",
-    defaultFavorites: [
-      {
-        id: "windguru-florianopolis",
-        name: "Florianópolis",
-        spotId: 105160
-      },
-      {
-        id: "windguru-lagoa-conceicao",
-        name: "Lagoa da Conceição",
-        spotId: 477589
-      }
-    ]
   },
   marine: {
     storageKey: "meteo-panel:marine-favorites:v1",
