@@ -1,0 +1,173 @@
+.marine-search-section {
+  margin-bottom: 16px;
+}
+
+.marine-search-field {
+  margin-bottom: 7px;
+}
+
+.marine-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.marine-search-row input {
+  width: 100%;
+  border: 1px solid rgba(31, 49, 65, 0.16);
+  border-radius: 11px;
+  padding: 10px 11px;
+  background: white;
+  color: inherit;
+}
+
+.marine-search-help {
+  margin: 7px 0 0;
+  color: #73808c;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.marine-search-status {
+  min-height: 18px;
+  margin-top: 8px;
+  color: #667585;
+  font-size: 0.78rem;
+}
+
+.marine-search-results {
+  display: grid;
+  gap: 7px;
+  margin-top: 6px;
+}
+
+.marine-search-result {
+  width: 100%;
+  border: 1px solid rgba(31, 49, 65, 0.11);
+  border-radius: 11px;
+  padding: 10px 11px;
+  background: rgba(255, 255, 255, 0.7);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.marine-search-result:hover,
+.marine-search-result:focus-visible {
+  background: #edf3f8;
+}
+
+.marine-search-result strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 0.86rem;
+}
+
+.marine-search-result span {
+  display: block;
+  color: #6d7b88;
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.marine-selection-card {
+  display: grid;
+  gap: 4px;
+  margin: 14px 0;
+  padding: 12px 13px;
+  border: 1px solid rgba(37, 121, 88, 0.22);
+  border-radius: 13px;
+  background: rgba(219, 245, 232, 0.5);
+}
+
+.marine-selection-card[hidden] {
+  display: none !important;
+}
+
+.marine-selection-kicker {
+  color: #4e7465;
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#marineSelectionLabel {
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+#marineSelectionCoords {
+  color: #687884;
+  font-size: 0.73rem;
+}
+
+.marine-favorite-name-field {
+  margin-top: 4px;
+}
+
+.marine-coordinate-details {
+  margin: 4px 0 12px;
+}
+
+.marine-coordinate-details summary {
+  cursor: pointer;
+  color: #667585;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.marine-coordinate-details .coordinate-grid {
+  margin-top: 10px;
+}
+
+#marineSaveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+@media (max-width: 560px) {
+  .marine-search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .marine-search-row .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .marine-search-row input {
+    background: #111a21;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #eef3f7;
+  }
+
+  .marine-search-help,
+  .marine-search-status,
+  .marine-search-result span,
+  #marineSelectionCoords,
+  .marine-coordinate-details summary {
+    color: #9fb0bf;
+  }
+
+  .marine-search-result {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .marine-search-result:hover,
+  .marine-search-result:focus-visible {
+    background: #263641;
+  }
+
+  .marine-selection-card {
+    border-color: rgba(106, 205, 160, 0.2);
+    background: rgba(44, 104, 76, 0.16);
+  }
+
+  .marine-selection-kicker {
+    color: #8fc9ad;
+  }
+}
