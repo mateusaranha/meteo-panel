@@ -1,6 +1,6 @@
 # MeteoPanel — protótipo
 
-Painel meteorológico estático para consultar **Windy**, **Windguru** e **Climatempo** na mesma página.
+Painel meteorológico estático para consultar **Windy**, **Windguru** e **Open-Meteo** na mesma página.
 
 ## Objetivo do protótipo
 
@@ -14,6 +14,12 @@ Painel meteorológico estático para consultar **Windy**, **Windguru** e **Clima
 
 O local inicial configurado é **Florianópolis, SC**.
 
+## Fontes
+
+- **Windy**: mapa meteorológico interativo;
+- **Windguru**: tabela técnica de vento, rajadas e modelos;
+- **Open-Meteo**: condições atuais e previsão resumida dos próximos dias.
+
 ## Estrutura
 
 ```text
@@ -26,7 +32,7 @@ README.md
 
 ## Rodar localmente
 
-Por usar widgets externos, é melhor servir os arquivos por HTTP em vez de abrir `index.html` diretamente pelo Explorador de Arquivos.
+Por usar conteúdo e dados externos, é melhor servir os arquivos por HTTP em vez de abrir `index.html` diretamente pelo Explorador de Arquivos.
 
 Com Python instalado:
 
@@ -42,10 +48,8 @@ http://localhost:8080
 
 ## Publicar no GitHub Pages
 
-1. Crie um repositório.
-2. Coloque estes arquivos na raiz.
-3. Em **Settings → Pages**, escolha a branch principal e a pasta `/ (root)`.
-4. Salve.
+1. Em **Settings → Pages**, escolha a branch principal e a pasta `/ (root)`.
+2. Salve.
 
 Não há etapa de build.
 
@@ -53,34 +57,30 @@ Não há etapa de build.
 
 Os dados do local ficam em `config.js`:
 
-- coordenadas do Windy;
-- ID do spot no Windguru;
-- ID/slug da cidade no Climatempo.
+- coordenadas usadas pelo Windy e Open-Meteo;
+- ID do spot no Windguru.
 
-O protótipo usa:
+O protótipo usa o spot `105160` do Windguru para Florianópolis.
 
-- Windguru Florianópolis: spot `105160`;
-- Climatempo Florianópolis: cidade `377`.
+## Open-Meteo
 
-## Limitações conhecidas do MVP
+O painel consulta diretamente a API pública do Open-Meteo no navegador e mostra:
 
-### Climatempo
+- temperatura atual;
+- sensação térmica;
+- condição meteorológica;
+- vento e rajadas;
+- precipitação atual;
+- máxima e mínima dos próximos 5 dias;
+- probabilidade e acumulado diário de precipitação.
 
-O selo oficial é bem compacto. Por isso o dashboard também oferece um link para a previsão completa. Uma próxima versão pode testar outros tamanhos/formatos disponibilizados pelo gerador oficial do Climatempo.
-
-### Windguru
-
-O widget é carregado pelo script oficial do Windguru. Como é conteúdo de terceiro, alterações futuras no widget podem exigir ajuste no dashboard. Há um fallback com link direto para o spot.
-
-### Windy
-
-O mapa é carregado pelo embed oficial e permanece interativo.
+A atribuição ao Open-Meteo é exibida no próprio painel.
 
 ## Próximos passos sugeridos
 
-- testar os três widgets em Chrome/Firefox e no celular;
-- ajustar dimensões com base no uso real;
+- testar o card do Open-Meteo em desktop e celular;
+- ajustar a hierarquia visual com base no uso real;
 - adicionar seletor de locais;
 - salvar local favorito em `localStorage`;
-- adicionar PWA apenas se fizer sentido;
-- criar repositório público depois que o layout básico estiver aprovado.
+- avaliar uma previsão horária compacta;
+- adicionar PWA apenas se fizer sentido.
