@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Painel simples para consultar Windy, Windguru e Climatempo em uma única página." />
+  <title>MeteoPanel</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PAINEL METEOROLÓGICO</p>
+        <h1 id="panelTitle">MeteoPanel</h1>
+        <p class="location" id="locationLabel">Carregando local…</p>
+      </div>
+
+      <div class="topbar-actions">
+        <p class="updated" id="updatedAt" aria-live="polite"></p>
+        <button class="button button-primary" id="refreshButton" type="button">Atualizar painel</button>
+      </div>
+    </header>
+
+    <section class="dashboard" aria-label="Fontes de previsão do tempo">
+      <article class="weather-card weather-card-windy">
+        <div class="card-header">
+          <div>
+            <p class="source-kicker">Mapa e previsão</p>
+            <h2>Windy</h2>
+          </div>
+          <a id="windyLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir no Windy ↗</a>
+        </div>
+        <div class="embed-frame embed-frame-large">
+          <iframe id="windyFrame" title="Previsão do Windy" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </article>
+
+      <article class="weather-card weather-card-climatempo">
+        <div class="card-header">
+          <div>
+            <p class="source-kicker">Resumo da cidade</p>
+            <h2>Climatempo</h2>
+          </div>
+          <a id="climatempoLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir previsão completa ↗</a>
+        </div>
+        <div class="climatempo-wrap">
+          <iframe id="climatempoFrame" class="climatempo-frame" title="Previsão do Climatempo" loading="eager" scrolling="no" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+        <p class="card-note">O Climatempo oferece um selo oficial compacto; a previsão detalhada continua disponível no link acima.</p>
+      </article>
+
+      <article class="weather-card weather-card-windguru">
+        <div class="card-header">
+          <div>
+            <p class="source-kicker">Vento, rajadas e modelos</p>
+            <h2>Windguru</h2>
+          </div>
+          <a id="windguruLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir no Windguru ↗</a>
+        </div>
+        <div class="windguru-scroll" aria-label="Widget Windguru">
+          <div id="windguruTarget"></div>
+          <div id="windguruFallback" class="fallback" hidden>
+            <strong>O widget do Windguru não carregou.</strong>
+            <span>Use o botão “Abrir no Windguru” para consultar a previsão completa.</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <p>Um painel de consulta rápida. Os dados continuam sendo fornecidos diretamente por Windy, Windguru e Climatempo.</p>
+    </footer>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
