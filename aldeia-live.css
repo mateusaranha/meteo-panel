@@ -5,42 +5,43 @@
   background: linear-gradient(180deg, rgba(232, 243, 248, .76), rgba(255, 255, 255, .22));
 }
 
-.aldeia-live-track {
+.aldeia-live-stack {
   display: grid;
-  grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
-  align-items: start;
   gap: 14px;
 }
 
-.aldeia-live-pane {
+.aldeia-now-strip {
+  display: grid;
+  grid-template-columns: minmax(90px, auto) minmax(240px, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 4px 2px 14px;
+  border-bottom: 1px solid rgba(31, 49, 65, .08);
+}
+
+.aldeia-now-label {
+  display: grid;
+  gap: 3px;
+}
+
+.aldeia-now-label strong {
+  font-size: .95rem;
+}
+
+.aldeia-now-label span,
+.aldeia-pane-heading span {
+  color: #74818d;
+  font-size: .72rem;
+}
+
+.aldeia-now-reading {
   min-width: 0;
-  border: 1px solid rgba(31, 49, 65, .09);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, .6);
-  padding: 16px;
-  overflow: hidden;
 }
-
-.aldeia-current-pane {
-  align-self: start;
-}
-
-.aldeia-pane-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.aldeia-pane-heading strong { font-size: .95rem; }
-.aldeia-pane-heading span { color: #74818d; font-size: .72rem; }
 
 .aldeia-current-loading {
   min-height: 84px;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 9px;
   color: #667585;
   font-size: .8rem;
@@ -50,15 +51,14 @@
 
 .aldeia-current-widget {
   min-height: 84px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
 /*
- * O conteúdo da leitura atual vem do widget oficial do Windguru dentro de um
- * iframe cross-origin. Não tentamos ler nem reestilizar o interior do iframe;
- * apenas limitamos sua viewport para evitar uma grande faixa branca vazia.
+ * A leitura atual é um iframe cross-origin do Windguru. O MeteoPanel controla
+ * apenas a viewport externa; não lê nem reestiliza o conteúdo interno.
  */
 .aldeia-current-widget iframe {
   display: block;
@@ -73,11 +73,12 @@
 .aldeia-live-source {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px;
-  margin-top: 12px;
   color: #667585;
   font-size: .74rem;
   line-height: 1.35;
+  text-align: right;
 }
 
 .aldeia-live-dot {
@@ -89,12 +90,24 @@
   box-shadow: 0 0 0 4px rgba(102, 117, 133, .12);
 }
 
-.aldeia-mobile-hint {
-  display: none;
-  margin: 10px 0 0;
-  color: #74818d;
-  font-size: .72rem;
+.aldeia-graph-pane {
+  min-width: 0;
+  border: 1px solid rgba(31, 49, 65, .09);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .6);
+  padding: 16px;
+  overflow: hidden;
 }
+
+.aldeia-pane-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.aldeia-pane-heading strong { font-size: .95rem; }
 
 .aldeia-graph-slot {
   min-height: 220px;
@@ -104,7 +117,10 @@
   overflow: auto;
 }
 
-.aldeia-graph-slot iframe { max-width: 100%; }
+.aldeia-graph-slot iframe {
+  display: block;
+  max-width: 100%;
+}
 
 .aldeia-live-fallback {
   display: grid;
@@ -120,26 +136,29 @@
 .aldeia-live-fallback a { color: inherit; font-weight: 750; }
 
 @media (max-width: 760px) {
-  .aldeia-live-wrap { padding-inline: 14px; }
+  .aldeia-live-wrap {
+    padding-inline: 14px;
+  }
 
-  .aldeia-live-track {
-    display: flex;
-    align-items: flex-start;
+  .aldeia-now-strip {
+    grid-template-columns: 1fr;
     gap: 10px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-inline: contain;
-    scrollbar-width: thin;
-    padding-bottom: 6px;
+    padding-bottom: 16px;
   }
 
-  .aldeia-live-pane {
-    flex: 0 0 calc(100% - 12px);
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+  .aldeia-now-reading {
+    display: flex;
+    justify-content: flex-start;
   }
 
-  .aldeia-mobile-hint { display: block; }
+  .aldeia-live-source {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .aldeia-graph-pane {
+    padding: 14px;
+  }
 }
 
 @media (max-width: 460px) {
@@ -152,14 +171,18 @@
 @media (prefers-color-scheme: dark) {
   .aldeia-live-wrap { background: #111a21; }
 
-  .aldeia-live-pane {
+  .aldeia-now-strip {
+    border-bottom-color: rgba(255, 255, 255, .07);
+  }
+
+  .aldeia-graph-pane {
     border-color: rgba(255, 255, 255, .07);
     background: rgba(255, 255, 255, .035);
   }
 
+  .aldeia-now-label span,
   .aldeia-pane-heading span,
   .aldeia-current-loading,
   .aldeia-live-source,
-  .aldeia-mobile-hint,
   .aldeia-live-fallback { color: #9fb0bf; }
 }
