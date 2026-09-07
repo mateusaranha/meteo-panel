@@ -40,15 +40,25 @@
       <article class="weather-card weather-card-climatempo">
         <div class="card-header">
           <div>
-            <p class="source-kicker">Resumo da cidade</p>
+            <p class="source-kicker">Previsão da cidade</p>
             <h2>Climatempo</h2>
           </div>
           <a id="climatempoLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir previsão completa ↗</a>
         </div>
+
         <div class="climatempo-wrap">
-          <iframe id="climatempoFrame" class="climatempo-frame" title="Previsão do Climatempo" loading="eager" scrolling="no" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <div class="climatempo-content">
+            <p class="climatempo-status">O selo público do Climatempo usa uma tecnologia antiga que não funciona nos navegadores atuais.</p>
+            <p class="climatempo-helper">Por enquanto, use os atalhos abaixo sem sair do painel de consulta.</p>
+
+            <nav class="climatempo-links" aria-label="Atalhos do Climatempo">
+              <a id="climatempoNowLink" class="quick-link" target="_blank" rel="noopener noreferrer">Agora ↗</a>
+              <a id="climatempoTodayLink" class="quick-link" target="_blank" rel="noopener noreferrer">Hoje ↗</a>
+              <a id="climatempoTomorrowLink" class="quick-link" target="_blank" rel="noopener noreferrer">Amanhã ↗</a>
+              <a id="climatempo15DaysLink" class="quick-link" target="_blank" rel="noopener noreferrer">15 dias ↗</a>
+            </nav>
+          </div>
         </div>
-        <p class="card-note">O Climatempo oferece um selo oficial compacto; a previsão detalhada continua disponível no link acima.</p>
       </article>
 
       <article class="weather-card weather-card-windguru">
