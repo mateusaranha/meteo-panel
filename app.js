@@ -152,7 +152,7 @@
           s: locationConfig.windguru.spotId, odh: 0, doh: 24,
           wj: locationConfig.windguru.windUnit, tj: locationConfig.windguru.temperatureUnit,
           waj: locationConfig.windguru.waveUnit, fhours: locationConfig.windguru.forecastHours,
-          lng: "pt", params: ["WINDSPD", "GUST", "SMER", "TMPE", "CDC", "APCPs"],
+          lng: "pt", params: ["WINDSPD", "GUST", "SMER", "HTSGW", "TMPE", "CDC", "APCPs"],
           first_row: true, spotname: true, first_row_minfo: true, last_row: true,
           lat_lon: false, tz: true, sun: true, link_archive: false, link_new_window: true
         }, "windguruTarget");
