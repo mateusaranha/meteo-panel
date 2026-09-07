@@ -59,7 +59,10 @@
   const weatherInfo = (code) => weatherCodes[code] || ["🌡️", "Condição variável"];
   const formatNumber = (value, digits = 0) => {
     if (value == null || Number.isNaN(Number(value))) return "—";
-    return new Intl.NumberFormat("pt-BR", { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(Number(value));
+    return new Intl.NumberFormat("pt-BR", {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits
+    }).format(Number(value));
   };
 
   async function loadOpenMeteo() {
@@ -103,7 +106,9 @@
       data.daily.time.forEach((dateString, index) => {
         const [dayIcon] = weatherInfo(data.daily.weather_code[index]);
         const date = new Date(`${dateString}T12:00:00`);
-        const dayName = index === 0 ? "Hoje" : new Intl.DateTimeFormat("pt-BR", { weekday: "short" }).format(date).replace(".", "");
+        const dayName = index === 0
+          ? "Hoje"
+          : new Intl.DateTimeFormat("pt-BR", { weekday: "short" }).format(date).replace(".", "");
         const day = document.createElement("article");
         day.className = "day-card";
         day.innerHTML = `<span class="day-name">${dayName}</span><span class="weather-icon" aria-hidden="true">${dayIcon}</span><span class="day-temperature"><strong>${formatNumber(data.daily.temperature_2m_max[index])}°</strong> / ${formatNumber(data.daily.temperature_2m_min[index])}°</span><span class="day-rain">${formatNumber(data.daily.precipitation_probability_max?.[index])}% · ${formatNumber(data.daily.precipitation_sum?.[index], 1)} mm</span>`;
@@ -111,7 +116,9 @@
       });
 
       const currentTime = data.current.time ? new Date(data.current.time) : new Date();
-      $("forecastUpdatedAt").textContent = `dados de ${new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(currentTime)}`;
+      $("forecastUpdatedAt").textContent = `dados de ${new Intl.DateTimeFormat("pt-BR", {
+        hour: "2-digit", minute: "2-digit"
+      }).format(currentTime)}`;
       loading.hidden = true;
       content.hidden = false;
     } catch (error) {
@@ -124,257 +131,6 @@
   function initOpenMeteo() {
     $("openMeteoRetry")?.addEventListener("click", loadOpenMeteo);
     loadOpenMeteo();
-  }
-
-  function initMarine() {
-    const marineConfig = config.marine || {};
-    const storageKey = marineConfig.storageKey || "meteo-panel:marine-favorites:v1";
-    const selectedStorageKey = marineConfig.selectedStorageKey || "meteo-panel:marine-selected:v1";
-    const defaults = Array.isArray(marineConfig.defaultFavorites) ? marineConfig.defaultFavorites : [];
-
-    const favoritesEl = $("marineFavorites");
-    const emptyEl = $("marineEmpty");
-    const selectedEl = $("marineSelected");
-    const addButton = $("marineAddButton");
-    const emptyAddButton = $("marineEmptyAddButton");
-    const editButton = $("marineEditButton");
-    const removeButton = $("marineRemoveButton");
-    const retryButton = $("marineRetryButton");
-    const menu = $("marineMenu");
-    const dialog = $("marineDialog");
-    const form = $("marineForm");
-    const closeButton = $("marineDialogClose");
-    const cancelButton = $("marineCancelButton");
-    const nameInput = $("marineNameInput");
-    const latInput = $("marineLatInput");
-    const lonInput = $("marineLonInput");
-    const dialogTitle = $("marineDialogTitle");
-    const saveButton = $("marineSaveButton");
-
-    if (!favoritesEl || !emptyEl || !selectedEl || !dialog || !form) return;
-
-    let favorites;
-    try {
-      const stored = JSON.parse(localStorage.getItem(storageKey));
-      favorites = Array.isArray(stored) ? stored : defaults.map((item) => ({ ...item }));
-    } catch {
-      favorites = defaults.map((item) => ({ ...item }));
-    }
-
-    favorites = favorites.filter((item) => item && item.id && item.name && Number.isFinite(Number(item.lat)) && Number.isFinite(Number(item.lon)));
-
-    let selectedId = localStorage.getItem(selectedStorageKey);
-    if (!favorites.some((item) => item.id === selectedId)) selectedId = favorites[0]?.id || null;
-
-    let editingId = null;
-    let marineMap = null;
-    let marineMarker = null;
-    let marineRequestToken = 0;
-
-    const saveFavorites = () => {
-      localStorage.setItem(storageKey, JSON.stringify(favorites));
-      if (selectedId) localStorage.setItem(selectedStorageKey, selectedId);
-      else localStorage.removeItem(selectedStorageKey);
-    };
-
-    const selectedFavorite = () => favorites.find((item) => item.id === selectedId) || null;
-
-    const updateCoordinateInputs = (newLat, newLon) => {
-      latInput.value = Number(newLat).toFixed(5);
-      lonInput.value = Number(newLon).toFixed(5);
-    };
-
-    const ensureMap = (mapLat, mapLon) => {
-      if (typeof window.L === "undefined") return;
-
-      if (!marineMap) {
-        marineMap = window.L.map("marineMap", { zoomControl: true }).setView([mapLat, mapLon], 13);
-        window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-          attribution: "&copy; OpenStreetMap contributors"
-        }).addTo(marineMap);
-
-        marineMarker = window.L.marker([mapLat, mapLon], { draggable: true }).addTo(marineMap);
-        marineMarker.on("dragend", () => {
-          const point = marineMarker.getLatLng();
-          updateCoordinateInputs(point.lat, point.lng);
-        });
-
-        marineMap.on("click", (event) => {
-          marineMarker.setLatLng(event.latlng);
-          updateCoordinateInputs(event.latlng.lat, event.latlng.lng);
-        });
-      } else {
-        marineMap.setView([mapLat, mapLon], 13);
-        marineMarker.setLatLng([mapLat, mapLon]);
-      }
-
-      window.setTimeout(() => marineMap.invalidateSize(), 80);
-    };
-
-    const openDialog = (favorite = null) => {
-      editingId = favorite?.id || null;
-      dialogTitle.textContent = favorite ? "Editar local" : "Adicionar local";
-      saveButton.textContent = favorite ? "Salvar alterações" : "Adicionar";
-      nameInput.value = favorite?.name || "";
-      const initialLat = Number(favorite?.lat ?? lat);
-      const initialLon = Number(favorite?.lon ?? lon);
-      updateCoordinateInputs(initialLat, initialLon);
-      dialog.showModal();
-      ensureMap(initialLat, initialLon);
-      window.setTimeout(() => nameInput.focus(), 100);
-    };
-
-    const closeDialog = () => {
-      if (dialog.open) dialog.close();
-      editingId = null;
-    };
-
-    const renderFavorites = () => {
-      favoritesEl.replaceChildren();
-      favorites.forEach((favorite) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "marine-chip";
-        button.textContent = favorite.name;
-        button.setAttribute("aria-current", favorite.id === selectedId ? "true" : "false");
-        button.addEventListener("click", () => {
-          selectedId = favorite.id;
-          saveFavorites();
-          render();
-        });
-        favoritesEl.appendChild(button);
-      });
-    };
-
-    async function loadSeaTemperature(favorite) {
-      const loading = $("marineLoading");
-      const errorBox = $("marineError");
-      const content = $("marineContent");
-      const token = ++marineRequestToken;
-
-      loading.hidden = false;
-      errorBox.hidden = true;
-      content.hidden = true;
-
-      const url = new URL("https://marine-api.open-meteo.com/v1/marine");
-      url.search = new URLSearchParams({
-        latitude: String(favorite.lat),
-        longitude: String(favorite.lon),
-        current: "sea_surface_temperature",
-        timezone: "auto",
-        cell_selection: "sea"
-      }).toString();
-
-      try {
-        const response = await fetch(url.toString(), { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        if (token !== marineRequestToken) return;
-
-        const value = data?.current?.sea_surface_temperature;
-        if (value == null || Number.isNaN(Number(value))) throw new Error("Temperatura indisponível");
-
-        $("marineTemperature").textContent = formatNumber(value, 1);
-        const observation = data.current?.time ? new Date(data.current.time) : new Date();
-        $("marineObservationTime").textContent = `Dados de ${new Intl.DateTimeFormat("pt-BR", {
-          day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
-        }).format(observation)}`;
-
-        loading.hidden = true;
-        content.hidden = false;
-      } catch (error) {
-        if (token !== marineRequestToken) return;
-        console.error("MeteoPanel: falha na temperatura do mar", error);
-        loading.hidden = true;
-        errorBox.hidden = false;
-      }
-    }
-
-    const renderSelected = () => {
-      const favorite = selectedFavorite();
-      if (!favorite) {
-        emptyEl.hidden = false;
-        selectedEl.hidden = true;
-        return;
-      }
-
-      emptyEl.hidden = true;
-      selectedEl.hidden = false;
-      $("marineSelectedName").textContent = favorite.name;
-      $("marineSelectedCoords").textContent = `${Number(favorite.lat).toFixed(4)}, ${Number(favorite.lon).toFixed(4)}`;
-      loadSeaTemperature(favorite);
-    };
-
-    const render = () => {
-      renderFavorites();
-      renderSelected();
-    };
-
-    addButton?.addEventListener("click", () => openDialog());
-    emptyAddButton?.addEventListener("click", () => openDialog());
-    closeButton?.addEventListener("click", closeDialog);
-    cancelButton?.addEventListener("click", closeDialog);
-    dialog.addEventListener("cancel", (event) => {
-      event.preventDefault();
-      closeDialog();
-    });
-
-    editButton?.addEventListener("click", () => {
-      menu?.removeAttribute("open");
-      const favorite = selectedFavorite();
-      if (favorite) openDialog(favorite);
-    });
-
-    removeButton?.addEventListener("click", () => {
-      menu?.removeAttribute("open");
-      const favorite = selectedFavorite();
-      if (!favorite) return;
-      if (!window.confirm(`Remover “${favorite.name}” dos favoritos?`)) return;
-      favorites = favorites.filter((item) => item.id !== favorite.id);
-      selectedId = favorites[0]?.id || null;
-      saveFavorites();
-      render();
-    });
-
-    retryButton?.addEventListener("click", () => {
-      const favorite = selectedFavorite();
-      if (favorite) loadSeaTemperature(favorite);
-    });
-
-    const syncMarkerFromInputs = () => {
-      const newLat = Number(latInput.value);
-      const newLon = Number(lonInput.value);
-      if (!Number.isFinite(newLat) || !Number.isFinite(newLon) || !marineMap || !marineMarker) return;
-      marineMarker.setLatLng([newLat, newLon]);
-      marineMap.panTo([newLat, newLon]);
-    };
-
-    latInput?.addEventListener("change", syncMarkerFromInputs);
-    lonInput?.addEventListener("change", syncMarkerFromInputs);
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const name = nameInput.value.trim();
-      const newLat = Number(latInput.value);
-      const newLon = Number(lonInput.value);
-      if (!name || !Number.isFinite(newLat) || !Number.isFinite(newLon)) return;
-
-      if (editingId) {
-        favorites = favorites.map((item) => item.id === editingId ? { ...item, name, lat: newLat, lon: newLon } : item);
-        selectedId = editingId;
-      } else {
-        const id = `marine-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-        favorites.push({ id, name, lat: newLat, lon: newLon });
-        selectedId = id;
-      }
-
-      saveFavorites();
-      closeDialog();
-      render();
-    });
-
-    render();
   }
 
   function initWindguru() {
@@ -400,7 +156,6 @@
           first_row: true, spotname: true, first_row_minfo: true, last_row: true,
           lat_lon: false, tz: true, sun: true, link_archive: false, link_new_window: true
         }, "windguruTarget");
-
         window.setTimeout(() => {
           if (target.children.length === 0 && !target.textContent.trim()) showFallback();
         }, 4500);
@@ -420,6 +175,5 @@
   safeInit("cabeçalho", initHeader);
   safeInit("Windy", initWindy);
   safeInit("Open-Meteo", initOpenMeteo);
-  safeInit("temperatura do mar", initMarine);
   safeInit("Windguru", initWindguru);
 })();
