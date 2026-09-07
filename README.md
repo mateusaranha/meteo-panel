@@ -1,107 +1,172 @@
-# MeteoPanel — protótipo
+# MeteoPanel
 
-Painel meteorológico estático para consultar **Windy**, **Windguru**, **Open-Meteo** e **temperatura do mar** na mesma página.
+MeteoPanel é um dashboard meteorológico estático para reunir, em uma única página, diferentes formas de consultar o tempo e as condições do mar.
 
-## Objetivo do protótipo
+O projeto nasceu para um uso cotidiano simples: evitar abrir vários sites separadamente para comparar previsões. Ele permanece deliberadamente leve, sem backend, conta de usuário, banco de dados ou framework de aplicação.
 
-- zero backend;
-- zero banco de dados;
-- sem framework de aplicação;
-- compatível com GitHub Pages;
-- layout responsivo para desktop e celular;
-- cada fonte continua responsável pelos próprios dados.
+> **Importante:** a licença MIT deste repositório cobre o **código original do MeteoPanel**. Dados, mapas, widgets, marcas e serviços de terceiros continuam sujeitos às licenças e termos dos respectivos provedores. Leia [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) antes de redistribuir, publicar em escala ou comercializar uma versão do projeto.
 
-O local meteorológico inicial configurado é **Florianópolis, SC**.
+## O que o painel mostra
 
-## Fontes
+Na configuração atual, a página apresenta:
 
-- **Windy**: mapa meteorológico interativo;
-- **Windguru**: tabela técnica de vento, rajadas e modelos;
-- **Open-Meteo Forecast**: condições atuais e previsão resumida dos próximos dias;
-- **Open-Meteo Marine**: temperatura superficial estimada do mar nos locais favoritos;
-- **OpenStreetMap + Leaflet**: mapa usado somente para escolher as coordenadas dos favoritos marítimos.
+1. **Windy** — mapa meteorológico interativo;
+2. **Open-Meteo** — resumo geral com condições atuais e previsão dos próximos dias;
+3. **Windguru** — tabela técnica de vento, rajadas, direção, temperatura, nebulosidade e precipitação para o spot configurado;
+4. **Temperatura do mar** — módulo de consulta de temperatura superficial estimada com locais favoritos.
+
+O local meteorológico principal configurado atualmente é **Florianópolis, SC**. O Windguru usa o spot `105160`.
 
 ## Temperatura do mar
 
-O módulo permite:
+O módulo marítimo usa a API Marine do Open-Meteo e permite:
 
-- adicionar locais favoritos;
-- escolher o ponto clicando no mapa ou arrastando o marcador;
-- editar nome e coordenadas;
-- alternar rapidamente entre favoritos;
-- remover um favorito com confirmação;
-- consultar a temperatura superficial estimada do mar para o ponto selecionado.
+- pesquisar um local por nome;
+- conferir o resultado no mapa **antes** de salvá-lo;
+- escolher ou ajustar o ponto diretamente no mapa;
+- definir um nome curto para o favorito;
+- alternar entre locais salvos;
+- editar ou remover favoritos;
+- consultar a temperatura superficial estimada do mar no ponto selecionado.
 
-Os favoritos são armazenados em `localStorage`. Isso mantém o MeteoPanel sem contas, backend ou banco de dados, mas significa que a lista é específica de cada navegador/dispositivo.
+Os favoritos ficam no `localStorage` do navegador. Isso preserva a arquitetura sem backend, mas significa que os locais salvos não são sincronizados automaticamente entre dispositivos ou navegadores.
 
-Há um ponto inicial de exemplo chamado **Campeche**, que pode ser editado ou removido normalmente.
+Há um favorito inicial de exemplo chamado **Campeche**, que pode ser editado ou removido.
 
-A temperatura do mar é modelada e não deve ser interpretada como uma medição in situ junto à areia. O módulo usa preferência por célula marítima para pontos costeiros.
+A temperatura exibida é **modelada**. Ela não deve ser interpretada como uma medição in situ exata na areia, no ponto de entrada da água ou ao longo de uma travessia.
 
-## Estrutura
+## Arquitetura
+
+O MeteoPanel é uma aplicação client-side sem etapa de build:
 
 ```text
-index.html
-styles.css
-config.js
-app.js
-README.md
+meteo-panel/
+├── index.html                 # estrutura da interface
+├── styles.css                 # estilos gerais
+├── marine-search.css          # estilos da busca/seleção marítima
+├── config.js                  # configuração central
+├── app.js                     # cabeçalho, Windy e Open-Meteo
+├── windguru.js                # carregamento isolado do widget Windguru
+├── marine.js                  # favoritos, mapa, geocodificação e temperatura do mar
+├── README.md                  # documentação principal
+├── CONTRIBUTING.md            # orientação para contribuições
+├── THIRD_PARTY_NOTICES.md     # licenças/termos dos serviços externos
+└── LICENSE                    # licença MIT do código original
 ```
+
+### Princípios do projeto
+
+- HTML, CSS e JavaScript puro;
+- sem backend;
+- sem banco de dados;
+- sem login;
+- sem chaves secretas no cliente;
+- compatível com hospedagem estática, incluindo GitHub Pages;
+- falhas de um provedor devem ficar isoladas e não derrubar os demais módulos;
+- preferências locais simples são mantidas no navegador.
+
+## Fontes e dependências externas
+
+O projeto atualmente se integra com:
+
+- **Windy** — visualização meteorológica incorporada;
+- **Windguru** — widget de previsão para um spot configurado;
+- **Open-Meteo Forecast API** — previsão geral;
+- **Open-Meteo Marine API** — temperatura superficial do mar;
+- **OpenStreetMap** — dados/mapa usados na seleção de pontos;
+- **Nominatim** — geocodificação de buscas explícitas feitas pelo usuário;
+- **Leaflet 1.9.4** — biblioteca JavaScript para o mapa interativo.
+
+Esses componentes **não passam a ser MIT** por aparecerem no MeteoPanel. Consulte [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) para detalhes, atribuições, restrições de uso e links para os termos atuais.
+
+### Ressalva sobre uso comercial
+
+A licença MIT permite uso comercial do **código original do MeteoPanel**, mas isso não significa que a configuração atual de serviços externos possa ser usada comercialmente sem alterações.
+
+Por exemplo, a API gratuita do Open-Meteo possui condições próprias para uso não comercial, e o Windy possui regras específicas para seu widget incorporável. Um fork comercial deve revisar cada integração e, quando necessário, contratar o plano apropriado, obter permissão ou substituir/remover o provedor.
+
+## Segurança e uso responsável
+
+MeteoPanel é uma ferramenta de consulta, não um sistema de segurança, navegação ou emergência.
+
+Previsões meteorológicas e marítimas podem estar incorretas, atrasadas, incompletas ou indisponíveis. Não use o painel como única fonte para decidir sobre travessias a nado, atividades em mar aberto, navegação ou outras situações em que condições meteorológicas e marítimas possam representar risco.
+
+Consulte fontes oficiais/locais adequadas, condições observadas e procedimentos de segurança próprios para a atividade.
+
+## Privacidade
+
+Não há conta de usuário nem backend do MeteoPanel. Entretanto, por ser uma aplicação client-side que consome serviços externos, o navegador faz requisições diretamente aos provedores.
+
+Dependendo do recurso utilizado, terceiros podem receber metadados normais de rede, como endereço IP, informações do navegador e referrer, de acordo com as próprias políticas de privacidade desses serviços. Termos pesquisados no módulo de locais são enviados ao serviço de geocodificação utilizado.
 
 ## Rodar localmente
 
-Por usar conteúdo e dados externos, é melhor servir os arquivos por HTTP em vez de abrir `index.html` diretamente pelo Explorador de Arquivos.
+Como a aplicação carrega recursos externos, sirva os arquivos por HTTP em vez de abrir `index.html` diretamente pelo sistema de arquivos.
 
-Com Python instalado:
+Com Python:
 
 ```bash
 python -m http.server 8080
 ```
 
-Depois abra:
+Depois acesse:
 
 ```text
 http://localhost:8080
 ```
 
-## Publicar no GitHub Pages
-
-1. Em **Settings → Pages**, escolha a branch principal e a pasta `/ (root)`.
-2. Salve.
-
-Não há etapa de build.
+Não há `npm install`, compilação ou etapa de build.
 
 ## Configuração
 
-Os dados gerais ficam em `config.js`:
+A configuração principal fica em [`config.js`](config.js). Nela é possível alterar:
 
-- coordenadas usadas pelo Windy e Open-Meteo;
-- ID do spot no Windguru;
-- chaves de armazenamento local do módulo marítimo;
-- favoritos marítimos usados somente quando ainda não existe configuração salva no navegador.
+- nome do aplicativo;
+- local meteorológico padrão;
+- latitude, longitude e zoom do Windy;
+- modelo/camada do Windy;
+- spot e unidades do Windguru;
+- chaves de `localStorage` do módulo marítimo;
+- favoritos marítimos usados como padrão antes de existir configuração salva no navegador.
 
-O protótipo usa o spot `105160` do Windguru para Florianópolis.
+## GitHub Pages
 
-## Open-Meteo
+O projeto pode ser publicado diretamente a partir da raiz da branch `main`:
 
-O painel consulta diretamente as APIs públicas do Open-Meteo no navegador.
+1. abra **Settings → Pages**;
+2. selecione publicação a partir de uma branch;
+3. escolha `main` e `/ (root)`;
+4. salve.
 
-A previsão geral mostra:
+Não há etapa de build.
 
-- temperatura atual;
-- sensação térmica;
-- condição meteorológica;
-- vento e rajadas;
-- precipitação atual;
-- máxima e mínima dos próximos 5 dias;
-- probabilidade e acumulado diário de precipitação.
+## Limitações conhecidas
 
-O módulo marítimo mostra a temperatura superficial estimada para o favorito selecionado.
+- os favoritos marítimos são locais ao navegador/dispositivo;
+- integrações externas podem mudar ou deixar de funcionar sem alteração no MeteoPanel;
+- a disponibilidade do Windy/Windguru depende dos widgets e regras dos próprios serviços;
+- a temperatura do mar é um valor modelado;
+- o uso dos serviços públicos OpenStreetMap/Nominatim deve permanecer dentro das políticas de uso dos respectivos projetos;
+- um projeto com tráfego relevante deve reavaliar APIs, tiles, geocodificação, limites e termos antes de escalar.
 
-## Próximos passos sugeridos
+## Contribuindo
 
-- validar os valores marítimos nos locais realmente usados;
-- avaliar previsão horária compacta;
-- considerar reordenação dos favoritos;
-- considerar exportar/importar favoritos entre dispositivos;
-- adicionar PWA apenas se fizer sentido.
+Contribuições são bem-vindas. Para mudanças maiores, é recomendável abrir uma issue primeiro.
+
+Leia [`CONTRIBUTING.md`](CONTRIBUTING.md), especialmente antes de adicionar novas APIs ou widgets externos.
+
+## Licença
+
+O **código original e a documentação original do MeteoPanel** são disponibilizados sob a **MIT License**. Veja [`LICENSE`](LICENSE).
+
+A MIT é intencionalmente permissiva: permite uso, modificação, distribuição e uso comercial do código, mantendo o aviso de copyright e a licença. Ela também inclui a cláusula padrão de ausência de garantia.
+
+**A MIT não se aplica automaticamente a conteúdo de terceiros.** Para dados meteorológicos, mapas, tiles, bibliotecas, widgets, marcas e serviços externos, consulte [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) e os termos de cada fornecedor.
+
+## Próximos passos possíveis
+
+- previsão horária compacta;
+- reordenação de favoritos marítimos;
+- exportação/importação de favoritos entre dispositivos;
+- fallback/substituição configurável para provedores externos;
+- PWA, caso o ganho de uso justifique a complexidade adicional.
