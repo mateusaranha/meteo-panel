@@ -7,9 +7,8 @@
   <meta name="description" content="Painel simples para consultar Windy, Windguru, Open-Meteo e temperatura do mar em uma única página." />
   <title>MeteoPanel</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <link rel="stylesheet" href="styles.css?v=20260907-8" />
-  <link rel="stylesheet" href="marine-search.css?v=20260907-8" />
-  <link rel="stylesheet" href="windguru.css?v=20260907-8" />
+  <link rel="stylesheet" href="styles.css?v=20260907-9" />
+  <link rel="stylesheet" href="marine-search.css?v=20260907-9" />
 </head>
 <body>
   <main class="shell">
@@ -88,35 +87,11 @@
       <article class="weather-card weather-card-windguru">
         <div class="card-header">
           <div>
-            <p class="source-kicker">Vento, rajadas, ondas e modelos</p>
+            <p class="source-kicker">Vento, rajadas e modelos</p>
             <h2>Windguru</h2>
           </div>
-          <div class="windguru-header-actions">
-            <button id="windguruAddButton" class="button button-secondary" type="button">+ Adicionar local</button>
-            <a id="windguruLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir no Windguru ↗</a>
-          </div>
+          <a id="windguruLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir no Windguru ↗</a>
         </div>
-
-        <div class="windguru-favorites-bar">
-          <div id="windguruFavorites" class="windguru-favorites" aria-label="Locais favoritos do Windguru"></div>
-          <div class="windguru-selection-meta">
-            <span id="windguruSelectedName" class="windguru-selected-name"></span>
-            <details id="windguruMenu" class="windguru-menu">
-              <summary aria-label="Opções do local do Windguru">⋮</summary>
-              <div class="windguru-menu-popover">
-                <button id="windguruEditButton" type="button">Editar local</button>
-                <button id="windguruRemoveButton" class="danger-action" type="button">Remover</button>
-              </div>
-            </details>
-          </div>
-        </div>
-
-        <div id="windguruEmpty" class="windguru-empty" hidden>
-          <strong>Nenhum local do Windguru salvo.</strong>
-          <span>Adicione um spot para acompanhar a previsão.</span>
-          <button id="windguruEmptyAddButton" class="button button-secondary" type="button">Adicionar primeiro local</button>
-        </div>
-
         <div class="windguru-scroll" aria-label="Widget Windguru">
           <div id="windguruTarget"></div>
           <div id="windguruFallback" class="fallback" hidden>
@@ -189,41 +164,6 @@
     </footer>
   </main>
 
-  <dialog id="windguruDialog" class="windguru-dialog">
-    <form id="windguruForm" class="windguru-form">
-      <div class="windguru-dialog-header">
-        <div>
-          <p class="source-kicker">Windguru</p>
-          <h2 id="windguruDialogTitle">Adicionar local do Windguru</h2>
-        </div>
-        <button id="windguruDialogClose" class="dialog-close" type="button" aria-label="Fechar">×</button>
-      </div>
-
-      <p class="windguru-help">O widget usa os spots do próprio Windguru. Abra o local desejado no Windguru, copie a URL da página e cole abaixo — ou informe somente o número do spot.</p>
-
-      <label class="form-field">
-        <span>Nome nos favoritos</span>
-        <input id="windguruNameInput" type="text" maxlength="60" required placeholder="Ex.: Lagoa da Conceição" autocomplete="off" />
-      </label>
-
-      <label class="form-field">
-        <span>URL ou ID do spot</span>
-        <input id="windguruSpotInput" type="text" inputmode="url" required placeholder="https://www.windguru.cz/477589" autocomplete="off" />
-      </label>
-
-      <div id="windguruSpotPreview" class="windguru-spot-preview" hidden>
-        <strong id="windguruPreviewId">—</strong>
-        <a id="windguruPreviewLink" class="windguru-preview-link" target="_blank" rel="noopener noreferrer">Conferir no Windguru ↗</a>
-      </div>
-      <p id="windguruValidation" class="windguru-validation" aria-live="polite"></p>
-
-      <div class="windguru-dialog-actions">
-        <button id="windguruCancelButton" class="button button-secondary" type="button">Cancelar</button>
-        <button id="windguruSaveButton" class="button button-primary" type="submit" disabled>Adicionar aos favoritos</button>
-      </div>
-    </form>
-  </dialog>
-
   <dialog id="marineDialog" class="marine-dialog">
     <form id="marineForm" class="marine-form">
       <div class="marine-dialog-header">
@@ -287,9 +227,9 @@
   </dialog>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <script src="config.js?v=20260907-8"></script>
-  <script src="app.js?v=20260907-8"></script>
-  <script src="windguru.js?v=20260907-8"></script>
-  <script src="marine.js?v=20260907-8"></script>
+  <script src="config.js?v=20260907-9"></script>
+  <script src="app.js?v=20260907-9"></script>
+  <script src="windguru.js?v=20260907-9"></script>
+  <script src="marine.js?v=20260907-9"></script>
 </body>
 </html>
