@@ -22,26 +22,30 @@ O local meteorológico principal configurado atualmente é **Florianópolis, SC*
 
 Este módulo complementa as previsões com uma **medição local** da estação meteorológica da Aldeia da Conceição, identificada no Windguru como estação `6023`.
 
-A integração usa os widgets oficiais do Windguru Station/Windguru Live. A leitura atual continua sendo obtida pelo `WgsWidget`, mas seus campos de vento são apresentados em uma interface própria do MeteoPanel, com:
+A integração usa os widgets oficiais do Windguru Station/Windguru Live:
 
-- velocidade atual em destaque;
-- seta e direção do vento;
-- rajada/máxima recente;
-- horário da última medição;
-- identificação explícita da estação de origem.
+- `WgsWidget(..., type: "curr")` para a leitura atual;
+- `wglive.php` para o gráfico recente.
 
-O widget oficial permanece no DOM como fonte e fallback. Se a estrutura exposta pelo widget mudar e o MeteoPanel não conseguir montar a apresentação própria, a interface volta a exibir o widget oficial em vez de ocultar a medição.
+A estação `6023` foi validada no domínio publicado do GitHub Pages em setembro de 2026.
 
-O gráfico recente continua sendo fornecido diretamente pelo Windguru Live.
+### Limitação do widget atual
 
-A apresentação é adaptativa:
+A leitura “Agora” é renderizada pelo Windguru dentro de um **iframe cross-origin**. Por segurança do navegador, o JavaScript do MeteoPanel não pode ler nem modificar o DOM interno desse iframe.
 
-- em telas maiores, leitura atual e gráfico ficam lado a lado;
-- em telas menores, os dois painéis formam um carrossel horizontal com `scroll-snap`: a leitura atual aparece primeiro e o gráfico fica a um gesto lateral de distância.
+Uma tentativa anterior de montar uma apresentação própria a partir dos campos internos do widget foi removida depois de se confirmar essa limitação. O MeteoPanel agora mantém o widget oficial como fonte visual e melhora somente o que pode controlar com segurança ao redor dele.
+
+No desktop:
+
+- o painel “Agora” é compacto e não é esticado até a altura do gráfico;
+- a viewport do iframe é reduzida para evitar uma grande faixa branca sem conteúdo útil;
+- o gráfico recebe a maior parte da largura disponível.
+
+Em telas menores, leitura atual e gráfico continuam em uma faixa horizontal com `scroll-snap`: a leitura aparece primeiro e o gráfico fica a um gesto lateral de distância.
 
 O módulo é isolado dos demais. Se o Windguru estiver indisponível, o MeteoPanel mostra um fallback com link para a página original da estação sem interromper Windy, Open-Meteo, Windguru de previsão ou temperatura do mar.
 
-A estação `6023` foi validada no domínio publicado do GitHub Pages em setembro de 2026. A rede Windguru Station informa que as estações podem enviar medições em intervalos de aproximadamente um minuto; o horário e a disponibilidade efetivos continuam sendo responsabilidade do provedor/estação.
+A rede Windguru Station informa que as estações podem enviar medições em intervalos de aproximadamente um minuto; o horário e a disponibilidade efetivos continuam sendo responsabilidade do provedor/estação.
 
 ## Temperatura do mar
 
@@ -73,7 +77,7 @@ meteo-panel/
 ├── marine-search.css          # estilos da busca/seleção marítima
 ├── config.js                  # configuração central
 ├── app.js                     # cabeçalho, Windy e Open-Meteo
-├── aldeia-live.js             # Windguru Station 6023: leitura atual + gráfico
+├── aldeia-live.js             # widgets oficiais da estação local
 ├── windguru.js                # carregamento isolado do widget Windguru de previsão
 ├── marine.js                  # favoritos, mapa, geocodificação e temperatura do mar
 ├── README.md                  # documentação principal
@@ -177,7 +181,7 @@ Não há etapa de build.
 - os favoritos marítimos são locais ao navegador/dispositivo;
 - integrações externas podem mudar ou deixar de funcionar sem alteração no MeteoPanel;
 - a disponibilidade do Windy/Windguru depende dos widgets e regras dos próprios serviços;
-- a apresentação própria de “Vento agora” depende da estrutura DOM exposta pelo widget oficial; se ela mudar, o widget oficial é usado como fallback;
+- o interior do iframe da leitura atual da estação não pode ser customizado pelo MeteoPanel por causa da política de mesma origem do navegador;
 - uma estação local representa as condições no ponto onde o sensor está instalado, não necessariamente em toda a região;
 - a temperatura do mar é um valor modelado;
 - o uso dos serviços públicos OpenStreetMap/Nominatim deve permanecer dentro das políticas de uso dos respectivos projetos;
