@@ -70,6 +70,24 @@ References:
 - https://github.com/Leaflet/Leaflet
 - https://github.com/Leaflet/Leaflet/blob/main/LICENSE
 
+## QRCode.js
+
+The marine-favorites transfer feature uses **QRCode.js 1.0.0** to generate QR codes in the user's browser.
+
+QRCode.js is licensed under the **MIT License** by its upstream authors. Its own copyright/license terms remain applicable and are separate from the copyright of the original MeteoPanel code.
+
+MeteoPanel loads the minified library **only when the user asks to display a QR code**, from the cdnjs-hosted URL:
+
+- `https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js`
+
+The library performs QR generation client-side. MeteoPanel does not send the favorites payload to a remote QR-generation API. Loading the library itself still makes an ordinary browser request to the CDN, which may receive normal request metadata under its own policies.
+
+References:
+
+- https://github.com/davidshimjs/qrcodejs
+- https://github.com/davidshimjs/qrcodejs/blob/master/LICENSE
+- https://cdnjs.com/libraries/qrcodejs
+
 ## Windy
 
 MeteoPanel embeds a visualization provided by **Windy.com**. Windy services, visualizations, data, branding and other content remain governed by Windy's own terms and the rights of Windy and its suppliers. They are not covered by the MeteoPanel MIT License.
@@ -103,7 +121,7 @@ References:
 
 ## Trademarks and affiliation
 
-Windy, Windguru, Open-Meteo, OpenStreetMap, Leaflet and any associated names, logos or marks belong to their respective owners where applicable.
+Windy, Windguru, Open-Meteo, OpenStreetMap, Leaflet, QRCode.js and any associated names, logos or marks belong to their respective owners where applicable.
 
 MeteoPanel is an independent project. The use of a service, link, widget or attribution does **not** imply sponsorship, endorsement, partnership or affiliation with those providers or with the owner/operator of any integrated weather station.
 
