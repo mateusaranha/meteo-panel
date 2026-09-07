@@ -18,6 +18,13 @@ window.METEO_CONFIG = {
       }
     }
   },
+  aldeiaStation: {
+    stationId: 6023,
+    name: "Aldeia da Conceição",
+    windUnit: "knots",
+    temperatureUnit: "c",
+    url: "https://www.windguru.cz/station/6023"
+  },
   marine: {
     storageKey: "meteo-panel:marine-favorites:v1",
     selectedStorageKey: "meteo-panel:marine-selected:v1",
