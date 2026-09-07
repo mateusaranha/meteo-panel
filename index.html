@@ -4,9 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
-  <meta name="description" content="Painel simples para consultar Windy, Windguru e Open-Meteo em uma única página." />
+  <meta name="description" content="Painel simples para consultar Windy, Windguru, Open-Meteo e temperatura do mar em uma única página." />
   <title>MeteoPanel</title>
-  <link rel="stylesheet" href="styles.css?v=20260907-3" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="styles.css?v=20260907-4" />
 </head>
 <body>
   <main class="shell">
@@ -89,6 +90,72 @@
         </div>
       </article>
 
+      <article class="weather-card weather-card-sea">
+        <div class="card-header">
+          <div>
+            <p class="source-kicker">Locais favoritos</p>
+            <h2>Temperatura do mar</h2>
+          </div>
+          <button id="marineAddButton" class="button button-secondary marine-add-button" type="button">+ Adicionar local</button>
+        </div>
+
+        <div class="marine-wrap">
+          <div id="marineFavorites" class="marine-favorites" aria-label="Locais marítimos favoritos"></div>
+
+          <div id="marineEmpty" class="marine-empty" hidden>
+            <span class="marine-empty-icon" aria-hidden="true">🌊</span>
+            <strong>Nenhum local salvo.</strong>
+            <span>Adicione um ponto no mar para acompanhar a temperatura superficial.</span>
+            <button id="marineEmptyAddButton" class="button button-secondary" type="button">Adicionar primeiro local</button>
+          </div>
+
+          <section id="marineSelected" class="marine-selected" aria-live="polite">
+            <div class="marine-reading-header">
+              <div>
+                <h3 id="marineSelectedName">—</h3>
+                <p id="marineSelectedCoords" class="marine-coordinates"></p>
+              </div>
+
+              <details id="marineMenu" class="marine-menu">
+                <summary aria-label="Opções do local">⋮</summary>
+                <div class="marine-menu-popover">
+                  <button id="marineEditButton" type="button">Editar local</button>
+                  <button id="marineRemoveButton" class="danger-action" type="button">Remover</button>
+                </div>
+              </details>
+            </div>
+
+            <div id="marineLoading" class="marine-state">
+              <span class="loading-dot" aria-hidden="true"></span>
+              <span>Carregando temperatura do mar…</span>
+            </div>
+
+            <div id="marineError" class="marine-state" hidden>
+              <strong>Não foi possível obter a temperatura deste ponto.</strong>
+              <span>Você pode tentar novamente ou editar a localização.</span>
+              <button id="marineRetryButton" class="button button-secondary" type="button">Tentar novamente</button>
+            </div>
+
+            <div id="marineContent" class="marine-content" hidden>
+              <div class="marine-temperature-block">
+                <span class="marine-wave" aria-hidden="true">🌊</span>
+                <div>
+                  <div class="marine-temperature"><span id="marineTemperature">—</span><span>°C</span></div>
+                  <p>Temperatura superficial estimada</p>
+                </div>
+              </div>
+
+              <div class="marine-meta">
+                <span id="marineObservationTime">—</span>
+                <span>Open-Meteo Marine</span>
+              </div>
+
+              <p class="marine-note">Valor modelado para a superfície do mar. Condições locais junto à praia podem variar.</p>
+            </div>
+          </section>
+        </div>
+      </article>
+
       <article class="weather-card weather-card-windguru">
         <div class="card-header">
           <div>
@@ -112,7 +179,51 @@
     </footer>
   </main>
 
-  <script src="config.js?v=20260907-3"></script>
-  <script src="app.js?v=20260907-3"></script>
+  <dialog id="marineDialog" class="marine-dialog">
+    <form id="marineForm" class="marine-form">
+      <div class="marine-dialog-header">
+        <div>
+          <p class="source-kicker">Temperatura do mar</p>
+          <h2 id="marineDialogTitle">Adicionar local</h2>
+        </div>
+        <button id="marineDialogClose" class="dialog-close" type="button" aria-label="Fechar">×</button>
+      </div>
+
+      <label class="form-field">
+        <span>Nome do local</span>
+        <input id="marineNameInput" type="text" maxlength="60" required placeholder="Ex.: Praia do Campeche" autocomplete="off" />
+      </label>
+
+      <div>
+        <div class="map-heading">
+          <span>Escolha o ponto no mapa</span>
+          <small>Clique ou arraste o marcador.</small>
+        </div>
+        <div id="marineMap" class="marine-map" aria-label="Mapa para escolher o ponto no mar"></div>
+      </div>
+
+      <div class="coordinate-grid">
+        <label class="form-field">
+          <span>Latitude</span>
+          <input id="marineLatInput" type="number" min="-90" max="90" step="any" required />
+        </label>
+        <label class="form-field">
+          <span>Longitude</span>
+          <input id="marineLonInput" type="number" min="-180" max="180" step="any" required />
+        </label>
+      </div>
+
+      <p class="marine-form-note">Os favoritos ficam salvos somente neste navegador/dispositivo.</p>
+
+      <div class="dialog-actions">
+        <button id="marineCancelButton" class="button button-secondary" type="button">Cancelar</button>
+        <button id="marineSaveButton" class="button button-primary" type="submit">Adicionar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="config.js?v=20260907-4"></script>
+  <script src="app.js?v=20260907-4"></script>
 </body>
 </html>
