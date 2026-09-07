@@ -20,6 +20,12 @@
   overflow: hidden;
 }
 
+.aldeia-current-pane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
 .aldeia-pane-heading {
   display: flex;
   align-items: baseline;
@@ -31,41 +37,161 @@
 .aldeia-pane-heading strong { font-size: .95rem; }
 .aldeia-pane-heading span { color: #74818d; font-size: .72rem; }
 
-.aldeia-current-widget {
-  min-height: 170px;
-  display: grid;
-  align-content: center;
+.aldeia-current-loading {
+  min-height: 188px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #667585;
+  font-size: .8rem;
 }
 
-.aldeia-current-widget .wgs_wind_avg_value {
-  font-size: clamp(2.7rem, 6vw, 4.4rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -.045em;
+.aldeia-current-loading[hidden],
+.aldeia-current-display[hidden] { display: none !important; }
+
+.aldeia-current-display {
+  min-height: 188px;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  padding: 5px 2px 3px;
+}
+
+.aldeia-current-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.aldeia-direction-dial {
+  flex: 0 0 92px;
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(31, 49, 65, .09);
+  border-radius: 50%;
+  background: rgba(231, 240, 246, .86);
+  box-shadow: inset 0 0 0 7px rgba(255, 255, 255, .5);
+}
+
+.aldeia-direction-arrow {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  transform-origin: center;
+  transition: transform .25s ease;
+}
+
+.aldeia-speed-block { min-width: 0; }
+
+.aldeia-speed-line {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
   line-height: 1;
 }
 
-.aldeia-current-widget .wgs_wind_units {
-  font-weight: 700;
+.aldeia-speed-value {
+  font-size: clamp(3.35rem, 7vw, 5.15rem);
+  font-weight: 850;
+  letter-spacing: -.055em;
 }
 
-.aldeia-current-widget .wgs_wind_max,
-.aldeia-current-widget .wgs_wind_dir,
-.aldeia-current-widget .wgs-wind-dir-txt {
-  font-weight: 700;
+.aldeia-speed-unit {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #536473;
 }
 
-.aldeia-current-widget .wgs_wind_min { display: none !important; }
+.aldeia-direction-label {
+  margin: 7px 0 0;
+  font-size: .9rem;
+  font-weight: 750;
+  color: #536473;
+}
+
+.aldeia-current-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.aldeia-current-metric {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid rgba(31, 49, 65, .07);
+  border-radius: 12px;
+  background: rgba(238, 244, 248, .72);
+}
+
+.aldeia-current-metric > span {
+  color: #74818d;
+  font-size: .7rem;
+}
+
+.aldeia-current-metric strong {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.aldeia-current-metric small {
+  margin-left: 4px;
+  color: #74818d;
+  font-size: .7rem;
+  font-weight: 600;
+}
+
+/*
+ * O widget oficial permanece no DOM como fonte da medição. Quando conseguimos
+ * ler seus campos, ele fica visualmente oculto e a interface acima é exibida.
+ * Se a estrutura mudar, o JS restaura o widget oficial como fallback.
+ */
+.aldeia-current-source {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.aldeia-current-source--fallback {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 150px;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: auto !important;
+  clip-path: none !important;
+  white-space: normal !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  display: grid;
+  align-content: center;
+}
 
 .aldeia-live-source {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: auto;
+  padding-top: 12px;
   color: #667585;
   font-size: .76rem;
 }
 
 .aldeia-live-dot {
+  flex: 0 0 auto;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -88,9 +214,7 @@
   overflow: auto;
 }
 
-.aldeia-graph-slot iframe {
-  max-width: 100%;
-}
+.aldeia-graph-slot iframe { max-width: 100%; }
 
 .aldeia-live-fallback {
   display: grid;
@@ -127,13 +251,45 @@
   .aldeia-mobile-hint { display: block; }
 }
 
+@media (max-width: 460px) {
+  .aldeia-current-main { gap: 14px; }
+
+  .aldeia-direction-dial {
+    flex-basis: 76px;
+    width: 76px;
+    height: 76px;
+  }
+
+  .aldeia-direction-arrow { font-size: 2.45rem; }
+  .aldeia-speed-value { font-size: clamp(3rem, 16vw, 4rem); }
+  .aldeia-speed-unit { font-size: .9rem; }
+}
+
 @media (prefers-color-scheme: dark) {
   .aldeia-live-wrap { background: #111a21; }
+
   .aldeia-live-pane {
     border-color: rgba(255, 255, 255, .07);
     background: rgba(255, 255, 255, .035);
   }
+
+  .aldeia-direction-dial {
+    border-color: rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .055);
+    box-shadow: inset 0 0 0 7px rgba(255, 255, 255, .018);
+  }
+
+  .aldeia-current-metric {
+    border-color: rgba(255, 255, 255, .055);
+    background: rgba(255, 255, 255, .035);
+  }
+
+  .aldeia-speed-unit,
+  .aldeia-direction-label,
   .aldeia-pane-heading span,
+  .aldeia-current-loading,
+  .aldeia-current-metric > span,
+  .aldeia-current-metric small,
   .aldeia-live-source,
   .aldeia-mobile-hint,
   .aldeia-live-fallback { color: #9fb0bf; }
