@@ -18,5 +18,17 @@ window.METEO_CONFIG = {
         waveUnit: "m"
       }
     }
+  },
+  marine: {
+    storageKey: "meteo-panel:marine-favorites:v1",
+    selectedStorageKey: "meteo-panel:marine-selected:v1",
+    defaultFavorites: [
+      {
+        id: "campeche-example",
+        name: "Campeche",
+        lat: -27.6828,
+        lon: -48.4590
+      }
+    ]
   }
 };
