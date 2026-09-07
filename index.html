@@ -7,8 +7,9 @@
   <meta name="description" content="Painel simples para consultar Windy, Windguru, Open-Meteo e temperatura do mar em uma única página." />
   <title>MeteoPanel</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <link rel="stylesheet" href="styles.css?v=20260907-6" />
-  <link rel="stylesheet" href="marine-search.css?v=20260907-6" />
+  <link rel="stylesheet" href="styles.css?v=20260907-8" />
+  <link rel="stylesheet" href="marine-search.css?v=20260907-8" />
+  <link rel="stylesheet" href="windguru.css?v=20260907-8" />
 </head>
 <body>
   <main class="shell">
@@ -18,7 +19,6 @@
         <h1 id="panelTitle">MeteoPanel</h1>
         <p class="location" id="locationLabel">Carregando local…</p>
       </div>
-
       <div class="topbar-actions">
         <p class="updated" id="updatedAt" aria-live="polite"></p>
         <button class="button button-primary" id="refreshButton" type="button">Atualizar painel</button>
@@ -47,19 +47,16 @@
           </div>
           <a class="source-link" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Sobre a fonte ↗</a>
         </div>
-
         <div class="openmeteo-wrap" aria-live="polite">
           <div id="openMeteoLoading" class="openmeteo-state">
             <span class="loading-dot" aria-hidden="true"></span>
             <span>Carregando previsão…</span>
           </div>
-
           <div id="openMeteoError" class="openmeteo-state openmeteo-error" hidden>
             <strong>Não foi possível carregar a previsão.</strong>
             <span>Windy e Windguru continuam disponíveis normalmente.</span>
             <button id="openMeteoRetry" class="button button-secondary" type="button">Tentar novamente</button>
           </div>
-
           <div id="openMeteoContent" class="openmeteo-content" hidden>
             <section class="current-weather" aria-label="Condições atuais">
               <div class="current-main">
@@ -69,7 +66,6 @@
                   <p id="currentDescription" class="current-description">—</p>
                 </div>
               </div>
-
               <div class="weather-metrics">
                 <div class="weather-metric"><span class="metric-label">Sensação</span><strong id="currentFeelsLike">—</strong></div>
                 <div class="weather-metric"><span class="metric-label">Vento</span><strong id="currentWind">—</strong></div>
@@ -77,7 +73,6 @@
                 <div class="weather-metric"><span class="metric-label">Chuva agora</span><strong id="currentPrecipitation">—</strong></div>
               </div>
             </section>
-
             <section class="daily-section" aria-label="Previsão para os próximos dias">
               <div class="daily-heading">
                 <strong>Próximos dias</strong>
@@ -85,8 +80,48 @@
               </div>
               <div id="dailyForecast" class="daily-forecast"></div>
             </section>
-
             <p class="openmeteo-attribution">Dados meteorológicos: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="weather-card weather-card-windguru">
+        <div class="card-header">
+          <div>
+            <p class="source-kicker">Vento, rajadas, ondas e modelos</p>
+            <h2>Windguru</h2>
+          </div>
+          <div class="windguru-header-actions">
+            <button id="windguruAddButton" class="button button-secondary" type="button">+ Adicionar local</button>
+            <a id="windguruLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir no Windguru ↗</a>
+          </div>
+        </div>
+
+        <div class="windguru-favorites-bar">
+          <div id="windguruFavorites" class="windguru-favorites" aria-label="Locais favoritos do Windguru"></div>
+          <div class="windguru-selection-meta">
+            <span id="windguruSelectedName" class="windguru-selected-name"></span>
+            <details id="windguruMenu" class="windguru-menu">
+              <summary aria-label="Opções do local do Windguru">⋮</summary>
+              <div class="windguru-menu-popover">
+                <button id="windguruEditButton" type="button">Editar local</button>
+                <button id="windguruRemoveButton" class="danger-action" type="button">Remover</button>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div id="windguruEmpty" class="windguru-empty" hidden>
+          <strong>Nenhum local do Windguru salvo.</strong>
+          <span>Adicione um spot para acompanhar a previsão.</span>
+          <button id="windguruEmptyAddButton" class="button button-secondary" type="button">Adicionar primeiro local</button>
+        </div>
+
+        <div class="windguru-scroll" aria-label="Widget Windguru">
+          <div id="windguruTarget"></div>
+          <div id="windguruFallback" class="fallback" hidden>
+            <strong>O widget do Windguru não carregou.</strong>
+            <span>Use o botão “Abrir no Windguru” para consultar a previsão completa.</span>
           </div>
         </div>
       </article>
@@ -99,24 +134,20 @@
           </div>
           <button id="marineAddButton" class="button button-secondary marine-add-button" type="button">+ Adicionar local</button>
         </div>
-
         <div class="marine-wrap">
           <div id="marineFavorites" class="marine-favorites" aria-label="Locais marítimos favoritos"></div>
-
           <div id="marineEmpty" class="marine-empty" hidden>
             <span class="marine-empty-icon" aria-hidden="true">🌊</span>
             <strong>Nenhum local salvo.</strong>
             <span>Adicione um ponto no mar para acompanhar a temperatura superficial.</span>
             <button id="marineEmptyAddButton" class="button button-secondary" type="button">Adicionar primeiro local</button>
           </div>
-
           <section id="marineSelected" class="marine-selected" aria-live="polite">
             <div class="marine-reading-header">
               <div>
                 <h3 id="marineSelectedName">—</h3>
                 <p id="marineSelectedCoords" class="marine-coordinates"></p>
               </div>
-
               <details id="marineMenu" class="marine-menu">
                 <summary aria-label="Opções do local">⋮</summary>
                 <div class="marine-menu-popover">
@@ -125,18 +156,15 @@
                 </div>
               </details>
             </div>
-
             <div id="marineLoading" class="marine-state">
               <span class="loading-dot" aria-hidden="true"></span>
               <span>Carregando temperatura do mar…</span>
             </div>
-
             <div id="marineError" class="marine-state" hidden>
               <strong>Não foi possível obter a temperatura deste ponto.</strong>
               <span>Você pode tentar novamente ou editar a localização.</span>
               <button id="marineRetryButton" class="button button-secondary" type="button">Tentar novamente</button>
             </div>
-
             <div id="marineContent" class="marine-content" hidden>
               <div class="marine-temperature-block">
                 <span class="marine-wave" aria-hidden="true">🌊</span>
@@ -145,32 +173,13 @@
                   <p>Temperatura superficial estimada</p>
                 </div>
               </div>
-
               <div class="marine-meta">
                 <span id="marineObservationTime">—</span>
                 <span>Open-Meteo Marine</span>
               </div>
-
               <p class="marine-note">Valor modelado para a superfície do mar. Condições locais junto à praia podem variar.</p>
             </div>
           </section>
-        </div>
-      </article>
-
-      <article class="weather-card weather-card-windguru">
-        <div class="card-header">
-          <div>
-            <p class="source-kicker">Vento, rajadas e modelos</p>
-            <h2>Windguru</h2>
-          </div>
-          <a id="windguruLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir no Windguru ↗</a>
-        </div>
-        <div class="windguru-scroll" aria-label="Widget Windguru">
-          <div id="windguruTarget"></div>
-          <div id="windguruFallback" class="fallback" hidden>
-            <strong>O widget do Windguru não carregou.</strong>
-            <span>Use o botão “Abrir no Windguru” para consultar a previsão completa.</span>
-          </div>
         </div>
       </article>
     </section>
@@ -179,6 +188,41 @@
       <p>Um painel de consulta rápida. Os dados continuam sendo fornecidos diretamente por Windy, Windguru e Open-Meteo.</p>
     </footer>
   </main>
+
+  <dialog id="windguruDialog" class="windguru-dialog">
+    <form id="windguruForm" class="windguru-form">
+      <div class="windguru-dialog-header">
+        <div>
+          <p class="source-kicker">Windguru</p>
+          <h2 id="windguruDialogTitle">Adicionar local do Windguru</h2>
+        </div>
+        <button id="windguruDialogClose" class="dialog-close" type="button" aria-label="Fechar">×</button>
+      </div>
+
+      <p class="windguru-help">O widget usa os spots do próprio Windguru. Abra o local desejado no Windguru, copie a URL da página e cole abaixo — ou informe somente o número do spot.</p>
+
+      <label class="form-field">
+        <span>Nome nos favoritos</span>
+        <input id="windguruNameInput" type="text" maxlength="60" required placeholder="Ex.: Lagoa da Conceição" autocomplete="off" />
+      </label>
+
+      <label class="form-field">
+        <span>URL ou ID do spot</span>
+        <input id="windguruSpotInput" type="text" inputmode="url" required placeholder="https://www.windguru.cz/477589" autocomplete="off" />
+      </label>
+
+      <div id="windguruSpotPreview" class="windguru-spot-preview" hidden>
+        <strong id="windguruPreviewId">—</strong>
+        <a id="windguruPreviewLink" class="windguru-preview-link" target="_blank" rel="noopener noreferrer">Conferir no Windguru ↗</a>
+      </div>
+      <p id="windguruValidation" class="windguru-validation" aria-live="polite"></p>
+
+      <div class="windguru-dialog-actions">
+        <button id="windguruCancelButton" class="button button-secondary" type="button">Cancelar</button>
+        <button id="windguruSaveButton" class="button button-primary" type="submit" disabled>Adicionar aos favoritos</button>
+      </div>
+    </form>
+  </dialog>
 
   <dialog id="marineDialog" class="marine-dialog">
     <form id="marineForm" class="marine-form">
@@ -191,9 +235,7 @@
       </div>
 
       <section class="marine-search-section" aria-labelledby="marineSearchLabel">
-        <label id="marineSearchLabel" class="form-field marine-search-field" for="marineSearchInput">
-          <span>Buscar lugar</span>
-        </label>
+        <label id="marineSearchLabel" class="form-field marine-search-field" for="marineSearchInput"><span>Buscar lugar</span></label>
         <div class="marine-search-row">
           <input id="marineSearchInput" type="search" maxlength="100" placeholder="Ex.: Praia de Cabeçudas, Itajaí" autocomplete="off" />
           <button id="marineSearchButton" class="button button-secondary" type="button">Buscar</button>
@@ -237,7 +279,6 @@
       </details>
 
       <p class="marine-form-note">Os favoritos ficam salvos somente neste navegador/dispositivo.</p>
-
       <div class="dialog-actions">
         <button id="marineCancelButton" class="button button-secondary" type="button">Cancelar</button>
         <button id="marineSaveButton" class="button button-primary" type="submit" disabled>Adicionar aos favoritos</button>
@@ -246,8 +287,9 @@
   </dialog>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <script src="config.js?v=20260907-6"></script>
-  <script src="app.js?v=20260907-7"></script>
-  <script src="marine.js?v=20260907-6"></script>
+  <script src="config.js?v=20260907-8"></script>
+  <script src="app.js?v=20260907-8"></script>
+  <script src="windguru.js?v=20260907-8"></script>
+  <script src="marine.js?v=20260907-8"></script>
 </body>
 </html>
