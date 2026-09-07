@@ -7,14 +7,7 @@
     const stationId = Number(station.stationId);
 
     const currentTarget = $("aldeiaCurrentTarget");
-    const currentDisplay = $("aldeiaCurrentDisplay");
     const currentLoading = $("aldeiaCurrentLoading");
-    const currentSpeed = $("aldeiaCurrentSpeed");
-    const currentGust = $("aldeiaCurrentGust");
-    const currentDirection = $("aldeiaCurrentDirection");
-    const currentArrow = $("aldeiaCurrentArrow");
-    const currentUpdated = $("aldeiaCurrentUpdated");
-    const currentUpdatedDate = $("aldeiaCurrentUpdatedDate");
     const currentFallback = $("aldeiaCurrentFallback");
     const graphSlot = $("aldeiaGraphSlot");
     const graphTarget = $("aldeiaGraphTarget");
@@ -22,91 +15,41 @@
     const stationLink = $("aldeiaStationLink");
 
     if (!Number.isInteger(stationId) || stationId <= 0) return;
-    if (
-      !currentTarget || !currentDisplay || !currentLoading || !currentSpeed || !currentGust ||
-      !currentDirection || !currentArrow || !currentUpdated || !currentUpdatedDate ||
-      !currentFallback || !graphSlot || !graphTarget || !graphFallback || !stationLink
-    ) return;
+    if (!currentTarget || !currentLoading || !currentFallback || !graphSlot || !graphTarget || !graphFallback || !stationLink) return;
 
     stationLink.href = station.url || `https://www.windguru.cz/station/${stationId}`;
-    currentTarget.inert = true;
 
-    const formatValue = (value) => {
-      const number = Number(String(value ?? "").trim().replace(",", "."));
-      if (!Number.isFinite(number)) return "—";
-      return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(number);
-    };
+    function hasCurrentWidget() {
+      return Boolean(
+        currentTarget.querySelector("iframe") ||
+        currentTarget.children.length ||
+        currentTarget.textContent.trim()
+      );
+    }
 
-    const textOf = (selector) => currentTarget.querySelector(selector)?.textContent?.trim() || "";
+    function markCurrentLoaded() {
+      if (!hasCurrentWidget()) return false;
+      currentLoading.hidden = true;
+      currentFallback.hidden = true;
+      currentTarget.classList.add("is-ready");
+      return true;
+    }
 
     function showCurrentFallback() {
+      if (markCurrentLoaded()) return;
       currentLoading.hidden = true;
-      currentDisplay.hidden = true;
-
-      const hasOfficialWidget = Boolean(currentTarget.children.length || currentTarget.textContent.trim());
-      if (hasOfficialWidget) {
-        currentTarget.classList.add("aldeia-current-source--fallback");
-        currentTarget.setAttribute("aria-hidden", "false");
-        currentTarget.inert = false;
-        currentFallback.hidden = true;
-      } else {
-        currentFallback.hidden = false;
-      }
+      currentFallback.hidden = false;
     }
 
     function showGraphFallback() {
       graphFallback.hidden = false;
     }
 
-    function syncCurrentReading() {
-      const rawText = currentTarget.textContent.replace(/\s+/g, " ").trim();
-
-      const speedRaw = textOf(".wgs_wind_avg_value") || rawText.match(/([0-9]+(?:[.,][0-9]+)?)\s*kts\b/i)?.[1] || "";
-      if (!speedRaw) return false;
-
-      const gustRaw = textOf(".wgs_wind_max_value") || rawText.match(/max:\s*([0-9]+(?:[.,][0-9]+)?)/i)?.[1] || "";
-      const directionText = textOf(".wgs_wind_dir_value") || rawText.match(/\b(N|NNE|NE|ENE|E|ESE|SE|SSE|S|SSW|SW|WSW|W|WNW|NW|NNW)\b/i)?.[1] || "";
-      const degreesRaw = textOf(".wgs_wind_dir_numvalue") || rawText.match(/\b([0-9]{1,3})\s*°/)?.[1] || "";
-      const dateMatch = rawText.match(/(\d{2})\.(\d{2})\.(\d{4})\s+(\d{1,2}:\d{2})/);
-
-      currentSpeed.textContent = formatValue(speedRaw);
-      currentGust.textContent = formatValue(gustRaw);
-
-      const degrees = Number(String(degreesRaw).replace(/[^0-9.-]/g, ""));
-      const hasDegrees = Number.isFinite(degrees);
-      currentDirection.textContent = [directionText.toUpperCase(), hasDegrees ? `${Math.round(degrees)}°` : ""]
-        .filter(Boolean)
-        .join(" · ") || "—";
-
-      if (hasDegrees) {
-        // Windguru reports the direction the wind comes from; the arrow points where it is going.
-        currentArrow.style.transform = `rotate(${(degrees + 180) % 360}deg)`;
-        currentArrow.hidden = false;
-      } else {
-        currentArrow.hidden = true;
-      }
-
-      if (dateMatch) {
-        currentUpdated.textContent = dateMatch[4];
-        currentUpdatedDate.textContent = `${dateMatch[1]}/${dateMatch[2]}`;
-      } else {
-        currentUpdated.textContent = "agora";
-        currentUpdatedDate.textContent = "";
-      }
-
-      currentTarget.classList.remove("aldeia-current-source--fallback");
-      currentTarget.setAttribute("aria-hidden", "true");
-      currentTarget.inert = true;
-      currentFallback.hidden = true;
-      currentLoading.hidden = true;
-      currentDisplay.hidden = false;
-      return true;
-    }
-
     function watchCurrentWidget() {
-      const observer = new MutationObserver(() => syncCurrentReading());
-      observer.observe(currentTarget, { childList: true, subtree: true, characterData: true });
-      return observer;
+      const observer = new MutationObserver(() => {
+        if (markCurrentLoaded()) observer.disconnect();
+      });
+      observer.observe(currentTarget, { childList: true, subtree: true });
     }
 
     function loadCurrentWidget() {
@@ -125,9 +68,7 @@
             type: "curr"
           });
 
-          window.setTimeout(() => {
-            if (!syncCurrentReading()) showCurrentFallback();
-          }, 5000);
+          window.setTimeout(showCurrentFallback, 5000);
         } catch (error) {
           console.error("MeteoPanel: falha ao renderizar vento ao vivo da Aldeia", error);
           showCurrentFallback();

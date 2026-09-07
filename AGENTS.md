@@ -25,12 +25,12 @@ A ordem atual dos módulos na página é intencional:
 - Usar integração oficial Windguru Station/Windguru Live; **não fazer scraping** da página da Aldeia ou da página da estação.
 - A estação `6023` foi validada no domínio publicado do GitHub Pages em setembro de 2026.
 - O painel usa `WgsWidget(..., type: "curr")` para a leitura atual e `wglive.php` para o gráfico.
-- A leitura atual é apresentada com UI própria do MeteoPanel: velocidade em destaque, seta/direção, rajada e horário da medição.
-- Essa UI lê somente os campos já renderizados pelo widget oficial no DOM da própria página. Não buscar endpoints privados/não documentados e não substituir essa integração por scraping externo.
-- Manter o widget oficial como fallback: se a estrutura DOM do widget mudar e os campos não puderem ser lidos, restaurar/exibir o widget original em vez de perder a informação.
-- Em desktop, leitura atual e gráfico ficam lado a lado.
+- A leitura atual é renderizada pelo widget oficial dentro de um iframe cross-origin. O JavaScript do MeteoPanel **não pode ler nem reestilizar o conteúdo interno desse iframe** por causa da same-origin policy.
+- Não tentar novamente montar uma UI própria lendo classes, texto ou DOM interno do iframe. Essa abordagem já foi testada e falhou corretamente para o widget real.
+- A UX deve melhorar o que é controlável externamente: largura/altura da viewport do iframe, proporção das colunas, espaçamento, ordem e fallback.
+- Em desktop, o painel “Agora” deve ser compacto e não deve esticar até a altura do gráfico; o gráfico recebe a maior parte da largura.
 - Em mobile, os dois painéis usam rolagem horizontal com `scroll-snap`; a leitura atual aparece primeiro.
-- O proprietário da estação pode restringir os domínios autorizados para embed. Se o widget não carregar, manter um fallback explícito com link para a estação original.
+- Se o widget não carregar, manter um fallback explícito com link para a estação original.
 - Não permitir uma falha deste módulo derrubar os demais.
 
 ### Windguru
@@ -81,7 +81,7 @@ Evite overengineering. Não introduza React, Vue, bundlers, npm, servidor, banco
 - `marine-search.css` — estilos específicos da busca/seleção de locais marítimos.
 - `config.js` — configuração central do local padrão, estação local, Windy, Windguru e defaults do módulo marítimo.
 - `app.js` — cabeçalho, Windy e Open-Meteo geral.
-- `aldeia-live.js` — carregamento dos widgets da estação `6023` e adaptação visual da leitura atual.
+- `aldeia-live.js` — carregamento isolado dos widgets oficiais da estação `6023` e seus fallbacks.
 - `windguru.js` — carregamento isolado do widget Windguru de previsão.
 - `marine.js` — favoritos marítimos, busca, mapa, geocodificação e temperatura do mar.
 - `README.md` — documentação pública principal.
@@ -114,7 +114,7 @@ O Nominatim público deve ser usado apenas para buscas explícitas disparadas pe
 - Manter a temperatura do mar no final da página.
 - Manter o Windguru de previsão imediatamente antes da observação local da Aldeia: primeiro previsão, depois medição real.
 - Para o módulo da Aldeia: leitura atual primeiro; gráfico secundário. Em mobile, preferir gesto lateral a empilhar dois blocos grandes verticalmente.
-- Na leitura atual da Aldeia, priorizar número grande, direção, rajada e horário em vez de expor a aparência crua do widget oficial.
+- No desktop, evitar que o painel curto “Agora” seja artificialmente esticado até a altura do gráfico.
 - Preferir módulos independentes e pequenos a um único script que possa quebrar toda a aplicação.
 
 ## Fluxo de Git e pull requests
