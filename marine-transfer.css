@@ -1,0 +1,212 @@
+.marine-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.marine-transfer-dialog {
+  width: min(92vw, 620px);
+  max-height: min(86vh, 760px);
+  padding: 0;
+  border: 1px solid rgba(31, 49, 65, .12);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(17, 31, 43, .22);
+  overflow: auto;
+}
+
+.marine-transfer-dialog::backdrop {
+  background: rgba(10, 18, 25, .56);
+  backdrop-filter: blur(2px);
+}
+
+.marine-transfer-content {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.marine-transfer-intro {
+  margin: -6px 0 0;
+  color: #667585;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+.marine-transfer-count {
+  margin: 0;
+  font-size: .9rem;
+  font-weight: 750;
+}
+
+.marine-transfer-section {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(31, 49, 65, .09);
+  border-radius: 14px;
+  background: rgba(238, 244, 248, .62);
+}
+
+.marine-transfer-section-heading {
+  display: grid;
+  gap: 3px;
+}
+
+.marine-transfer-section-heading strong {
+  font-size: .9rem;
+}
+
+.marine-transfer-section-heading span {
+  color: #74818d;
+  font-size: .74rem;
+  line-height: 1.4;
+}
+
+.marine-transfer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.marine-transfer-status {
+  min-height: 1.2em;
+  margin: 0;
+  color: #647482;
+  font-size: .76rem;
+  line-height: 1.4;
+}
+
+.marine-transfer-status.is-error {
+  color: #a13b3b;
+}
+
+.marine-qr-panel {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.marine-qr-panel[hidden] { display: none !important; }
+
+.marine-qr-code {
+  width: 244px;
+  min-height: 244px;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.marine-qr-code img,
+.marine-qr-code canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+.marine-qr-note {
+  margin: 0;
+  max-width: 360px;
+  text-align: center;
+  color: #74818d;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+.marine-transfer-footnote {
+  margin: -4px 0 0;
+  color: #74818d;
+  font-size: .72rem;
+  line-height: 1.45;
+}
+
+.marine-import-summary {
+  margin: 0;
+  font-size: .86rem;
+  line-height: 1.5;
+}
+
+.marine-import-list {
+  max-height: 220px;
+  margin: 0;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid rgba(31, 49, 65, .08);
+  border-radius: 12px;
+  background: rgba(238, 244, 248, .55);
+  overflow: auto;
+  font-size: .78rem;
+  line-height: 1.55;
+}
+
+.marine-import-help {
+  margin: 0;
+  color: #74818d;
+  font-size: .74rem;
+  line-height: 1.45;
+}
+
+.button-danger-soft {
+  border-color: rgba(161, 59, 59, .25);
+  color: #943838;
+}
+
+@media (max-width: 600px) {
+  .weather-card-sea .card-header {
+    align-items: flex-start;
+  }
+
+  .marine-card-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .marine-transfer-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .marine-transfer-actions .button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .marine-transfer-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .marine-qr-code {
+    width: min(244px, 100%);
+    min-height: auto;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .marine-transfer-dialog {
+    border-color: rgba(255, 255, 255, .08);
+  }
+
+  .marine-transfer-section,
+  .marine-import-list {
+    border-color: rgba(255, 255, 255, .07);
+    background: rgba(255, 255, 255, .035);
+  }
+
+  .marine-transfer-intro,
+  .marine-transfer-section-heading span,
+  .marine-transfer-status,
+  .marine-qr-note,
+  .marine-transfer-footnote,
+  .marine-import-help {
+    color: #9fb0bf;
+  }
+
+  .marine-transfer-status.is-error,
+  .button-danger-soft {
+    color: #efaaaa;
+  }
+}

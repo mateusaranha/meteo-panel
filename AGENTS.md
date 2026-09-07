@@ -57,6 +57,22 @@ A ordem atual dos módulos na página é intencional:
 - Temperatura exibida é modelada, não medição in situ.
 - Águas interiores/reservatórios estão deliberadamente fora do escopo por enquanto.
 
+### Transferência de favoritos marítimos
+
+- O módulo marítimo oferece **Transferir** para portabilidade sem backend/conta.
+- Implementação isolada em `marine-transfer.js` e `marine-transfer.css`.
+- Formas atuais: **copiar link**, **QR code**, **exportar JSON** e **importar JSON**.
+- A transferência é **pontual**, não sincronização automática. Não apresentar essa funcionalidade como cloud sync.
+- O link usa o fragmento `#marine=...` com payload compacto versionado; ele contém somente nome e coordenadas dos favoritos.
+- Ao receber um link, interpretar o payload e remover o fragmento da barra de endereço imediatamente antes da confirmação.
+- Não importar silenciosamente. Sempre mostrar uma prévia e exigir ação explícita.
+- **Mesclar** é a opção principal e não destrutiva; duplicatas são identificadas por coordenadas arredondadas a 5 casas.
+- **Substituir tudo** deve continuar sendo explícito e pedir confirmação adicional.
+- Backups JSON usam `format: "meteopanel-marine-favorites"` e `version: 1`. Manter compatibilidade com versões já publicadas quando o formato evoluir.
+- QR code é gerado client-side com **QRCode.js 1.0.0 (MIT)** carregado sob demanda. Não substituir por um serviço remoto de geração de QR sem necessidade.
+- O link de transferência não é um segredo. Quem tiver o link consegue recuperar nomes/coordenadas incluídos nele.
+- Se no futuro houver sincronização real, preservar abordagem local-first: favoritos locais continuam funcionando mesmo se o backend falhar.
+
 ## Princípios técnicos
 
 Preservar, salvo pedido explícito em contrário:
@@ -81,11 +97,13 @@ Evite overengineering. Não introduza React, Vue, bundlers, npm, servidor, banco
 - `styles.css` — estilos gerais do dashboard.
 - `aldeia-live.css` — estilos e responsividade do módulo de vento local.
 - `marine-search.css` — estilos específicos da busca/seleção de locais marítimos.
+- `marine-transfer.css` — estilos da transferência/importação de favoritos marítimos.
 - `config.js` — configuração central do local padrão, estação local, Windy, Windguru e defaults do módulo marítimo.
 - `app.js` — cabeçalho, Windy e Open-Meteo geral.
 - `aldeia-live.js` — carregamento isolado dos widgets oficiais da estação `6023` e seus fallbacks.
 - `windguru.js` — carregamento isolado do widget Windguru de previsão.
 - `marine.js` — favoritos marítimos, busca, mapa, geocodificação e temperatura do mar.
+- `marine-transfer.js` — transferência por link/QR, backup JSON e importação/mesclagem.
 - `README.md` — documentação pública principal.
 - `THIRD_PARTY_NOTICES.md` — licenças, termos e ressalvas de terceiros.
 - `LICENSE` — MIT para o código/documentação original do MeteoPanel.
@@ -103,7 +121,7 @@ Não assumir que dados, widgets, tiles, mapas, marcas ou APIs de terceiros são 
 5. não adicionar scraping quando existe uma integração oficial adequada;
 6. não colocar chaves privadas ou credenciais no repositório.
 
-Integrações atuais incluem Windy, Windguru Forecast, Windguru Station/Windguru Live, Open-Meteo, Leaflet, OpenStreetMap e Nominatim.
+Integrações atuais incluem Windy, Windguru Forecast, Windguru Station/Windguru Live, Open-Meteo, Leaflet, OpenStreetMap, Nominatim e QRCode.js.
 
 O Nominatim público deve ser usado apenas para buscas explícitas disparadas pelo usuário; não implementar autocomplete agressivo contra o serviço público.
 
@@ -117,6 +135,8 @@ O Nominatim público deve ser usado apenas para buscas explícitas disparadas pe
 - Manter o Windguru de previsão imediatamente antes da observação local da Aldeia: primeiro previsão, depois medição real.
 - Para o módulo da Aldeia, leitura atual primeiro e gráfico secundário logo abaixo.
 - Evitar espaço vazio artificial: não colocar conteúdo meramente decorativo para preencher layout.
+- Na transferência de favoritos, preferir **mesclar** a substituir dados existentes; ações destrutivas devem ser secundárias e explícitas.
+- Não poluir o card de temperatura do mar com toda a interface de backup: manter um botão compacto que abre modal dedicado.
 - Preferir módulos independentes e pequenos a um único script que possa quebrar toda a aplicação.
 
 ## Fluxo de Git e pull requests
