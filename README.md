@@ -61,7 +61,22 @@ O módulo marítimo usa a API Marine do Open-Meteo e permite:
 - editar ou remover favoritos;
 - consultar a temperatura superficial estimada do mar no ponto selecionado.
 
-Os favoritos ficam no `localStorage` do navegador. Isso preserva a arquitetura sem backend, mas significa que os locais salvos não são sincronizados automaticamente entre dispositivos ou navegadores.
+Os favoritos ficam no `localStorage` do navegador. Isso preserva a arquitetura sem backend e mantém o painel funcional mesmo sem qualquer serviço de conta/sincronização.
+
+### Transferência e backup de favoritos
+
+O botão **Transferir** permite levar a lista de locais para outro dispositivo sem login ou backend:
+
+- **Copiar link** — gera um link do MeteoPanel contendo uma cópia compacta dos nomes e coordenadas dos favoritos;
+- **Mostrar QR code** — gera localmente um QR code do mesmo link, útil para abrir a lista em outro celular/computador;
+- **Exportar arquivo** — baixa um backup JSON versionado;
+- **Importar arquivo** — lê um backup JSON e mostra uma prévia antes de alterar a lista local.
+
+Ao abrir um link de transferência, o MeteoPanel mostra os locais encontrados e exige confirmação. **Mesclar favoritos** é a ação principal e mantém os locais já existentes, adicionando apenas coordenadas novas. **Substituir tudo** é uma ação explícita e pede confirmação adicional.
+
+A transferência é uma **cópia pontual**, não sincronização automática. Se um favorito for adicionado depois no celular, ele não aparecerá sozinho no computador: é necessário transferir novamente.
+
+Os dados do link ficam no fragmento `#marine=...` da URL e são processados no navegador. O MeteoPanel remove esse fragmento da barra de endereço assim que o interpreta. O link não deve ser tratado como segredo: qualquer pessoa que o receba pode recuperar os nomes e coordenadas incluídos nele.
 
 Há um favorito inicial de exemplo chamado **Campeche**, que pode ser editado ou removido.
 
@@ -77,11 +92,13 @@ meteo-panel/
 ├── styles.css                 # estilos gerais
 ├── aldeia-live.css            # layout da estação local e responsividade
 ├── marine-search.css          # estilos da busca/seleção marítima
+├── marine-transfer.css        # estilos de transferência/importação de favoritos
 ├── config.js                  # configuração central
 ├── app.js                     # cabeçalho, Windy e Open-Meteo
 ├── aldeia-live.js             # widgets oficiais da estação local
 ├── windguru.js                # carregamento isolado do widget Windguru de previsão
 ├── marine.js                  # favoritos, mapa, geocodificação e temperatura do mar
+├── marine-transfer.js         # link, QR, exportação e importação de favoritos
 ├── README.md                  # documentação principal
 ├── AGENTS.md                  # contexto operacional para agentes de código
 ├── THIRD_PARTY_NOTICES.md     # licenças/termos dos serviços externos
@@ -110,7 +127,8 @@ O projeto atualmente se integra com:
 - **Open-Meteo Marine API** — temperatura superficial do mar;
 - **OpenStreetMap** — dados/mapa usados na seleção de pontos;
 - **Nominatim** — geocodificação de buscas explícitas feitas pelo usuário;
-- **Leaflet 1.9.4** — biblioteca JavaScript para o mapa interativo.
+- **Leaflet 1.9.4** — biblioteca JavaScript para o mapa interativo;
+- **QRCode.js 1.0.0** — geração client-side de QR codes para transferir favoritos; carregada sob demanda.
 
 Esses componentes **não passam a ser MIT** por aparecerem no MeteoPanel. Consulte [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) para detalhes, atribuições, restrições de uso e links para os termos atuais.
 
@@ -135,6 +153,8 @@ Consulte fontes oficiais/locais adequadas, condições observadas e procedimento
 Não há conta de usuário nem backend do MeteoPanel. Entretanto, por ser uma aplicação client-side que consome serviços externos, o navegador faz requisições diretamente aos provedores.
 
 Dependendo do recurso utilizado, terceiros podem receber metadados normais de rede, como endereço IP, informações do navegador e referrer, de acordo com as próprias políticas de privacidade desses serviços. Termos pesquisados no módulo de locais são enviados ao serviço de geocodificação utilizado.
+
+A geração de QR code é feita no navegador pela biblioteca QRCode.js; não é usado um serviço remoto de criação de QR que receba a lista de favoritos. A biblioteca é carregada sob demanda de um CDN de terceiros, conforme descrito em [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 ## Rodar localmente
 
@@ -180,7 +200,8 @@ Não há etapa de build.
 
 ## Limitações conhecidas
 
-- os favoritos marítimos são locais ao navegador/dispositivo;
+- os favoritos marítimos continuam locais ao navegador/dispositivo; transferência e backup não são sincronização automática;
+- links de transferência contêm nomes e coordenadas dos favoritos e não devem ser tratados como informação secreta;
 - integrações externas podem mudar ou deixar de funcionar sem alteração no MeteoPanel;
 - a disponibilidade do Windy/Windguru depende dos widgets e regras dos próprios serviços;
 - o interior do iframe da leitura atual da estação não pode ser customizado pelo MeteoPanel por causa da política de mesma origem do navegador;
@@ -205,6 +226,6 @@ A MIT é intencionalmente permissiva: permite uso, modificação, distribuição
 
 - previsão horária compacta;
 - reordenação de favoritos marítimos;
-- exportação/importação de favoritos entre dispositivos;
+- sincronização opcional entre dispositivos, caso a transferência manual se mostre insuficiente;
 - fallback/substituição configurável para provedores externos;
 - PWA, caso o ganho de uso justifique a complexidade adicional.
