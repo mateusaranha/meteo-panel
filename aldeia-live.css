@@ -1,0 +1,140 @@
+.weather-card-aldeia { grid-column: 1 / -1; }
+
+.aldeia-live-wrap {
+  padding: 18px 20px 20px;
+  background: linear-gradient(180deg, rgba(232, 243, 248, .76), rgba(255, 255, 255, .22));
+}
+
+.aldeia-live-track {
+  display: grid;
+  grid-template-columns: minmax(300px, .82fr) minmax(420px, 1.18fr);
+  gap: 14px;
+}
+
+.aldeia-live-pane {
+  min-width: 0;
+  border: 1px solid rgba(31, 49, 65, .09);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .6);
+  padding: 16px;
+  overflow: hidden;
+}
+
+.aldeia-pane-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.aldeia-pane-heading strong { font-size: .95rem; }
+.aldeia-pane-heading span { color: #74818d; font-size: .72rem; }
+
+.aldeia-current-widget {
+  min-height: 170px;
+  display: grid;
+  align-content: center;
+}
+
+.aldeia-current-widget .wgs_wind_avg_value {
+  font-size: clamp(2.7rem, 6vw, 4.4rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+
+.aldeia-current-widget .wgs_wind_units {
+  font-weight: 700;
+}
+
+.aldeia-current-widget .wgs_wind_max,
+.aldeia-current-widget .wgs_wind_dir,
+.aldeia-current-widget .wgs-wind-dir-txt {
+  font-weight: 700;
+}
+
+.aldeia-current-widget .wgs_wind_min { display: none !important; }
+
+.aldeia-live-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  color: #667585;
+  font-size: .76rem;
+}
+
+.aldeia-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px rgba(102, 117, 133, .12);
+}
+
+.aldeia-mobile-hint {
+  display: none;
+  margin: 10px 0 0;
+  color: #74818d;
+  font-size: .72rem;
+}
+
+.aldeia-graph-slot {
+  min-height: 220px;
+  display: grid;
+  align-content: center;
+  justify-items: stretch;
+  overflow: auto;
+}
+
+.aldeia-graph-slot iframe {
+  max-width: 100%;
+}
+
+.aldeia-live-fallback {
+  display: grid;
+  gap: 6px;
+  min-height: 145px;
+  place-content: center;
+  text-align: center;
+  color: #667585;
+  padding: 14px;
+}
+
+.aldeia-live-fallback[hidden] { display: none !important; }
+.aldeia-live-fallback a { color: inherit; font-weight: 750; }
+
+@media (max-width: 760px) {
+  .aldeia-live-wrap { padding-inline: 14px; }
+
+  .aldeia-live-track {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    padding-bottom: 6px;
+  }
+
+  .aldeia-live-pane {
+    flex: 0 0 calc(100% - 12px);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .aldeia-mobile-hint { display: block; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .aldeia-live-wrap { background: #111a21; }
+  .aldeia-live-pane {
+    border-color: rgba(255, 255, 255, .07);
+    background: rgba(255, 255, 255, .035);
+  }
+  .aldeia-pane-heading span,
+  .aldeia-live-source,
+  .aldeia-mobile-hint,
+  .aldeia-live-fallback { color: #9fb0bf; }
+}
