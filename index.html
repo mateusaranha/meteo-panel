@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
-  <meta name="description" content="Painel simples para consultar Windy, Windguru e Climatempo em uma única página." />
+  <meta name="description" content="Painel simples para consultar Windy, Windguru e Open-Meteo em uma única página." />
   <title>MeteoPanel</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -37,26 +37,66 @@
         </div>
       </article>
 
-      <article class="weather-card weather-card-climatempo">
+      <article class="weather-card weather-card-openmeteo">
         <div class="card-header">
           <div>
-            <p class="source-kicker">Previsão da cidade</p>
-            <h2>Climatempo</h2>
+            <p class="source-kicker">Resumo geral</p>
+            <h2>Open-Meteo</h2>
           </div>
-          <a id="climatempoLink" class="source-link" target="_blank" rel="noopener noreferrer">Abrir previsão completa ↗</a>
+          <a class="source-link" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Sobre a fonte ↗</a>
         </div>
 
-        <div class="climatempo-wrap">
-          <div class="climatempo-content">
-            <p class="climatempo-status">O selo público do Climatempo usa uma tecnologia antiga que não funciona nos navegadores atuais.</p>
-            <p class="climatempo-helper">Por enquanto, use os atalhos abaixo sem sair do painel de consulta.</p>
+        <div class="openmeteo-wrap" aria-live="polite">
+          <div id="openMeteoLoading" class="openmeteo-state">
+            <span class="loading-dot" aria-hidden="true"></span>
+            <span>Carregando previsão…</span>
+          </div>
 
-            <nav class="climatempo-links" aria-label="Atalhos do Climatempo">
-              <a id="climatempoNowLink" class="quick-link" target="_blank" rel="noopener noreferrer">Agora ↗</a>
-              <a id="climatempoTodayLink" class="quick-link" target="_blank" rel="noopener noreferrer">Hoje ↗</a>
-              <a id="climatempoTomorrowLink" class="quick-link" target="_blank" rel="noopener noreferrer">Amanhã ↗</a>
-              <a id="climatempo15DaysLink" class="quick-link" target="_blank" rel="noopener noreferrer">15 dias ↗</a>
-            </nav>
+          <div id="openMeteoError" class="openmeteo-state openmeteo-error" hidden>
+            <strong>Não foi possível carregar a previsão.</strong>
+            <span>Windy e Windguru continuam disponíveis normalmente.</span>
+            <button id="openMeteoRetry" class="button button-secondary" type="button">Tentar novamente</button>
+          </div>
+
+          <div id="openMeteoContent" class="openmeteo-content" hidden>
+            <section class="current-weather" aria-label="Condições atuais">
+              <div class="current-main">
+                <span id="currentWeatherIcon" class="weather-icon weather-icon-current" aria-hidden="true"></span>
+                <div>
+                  <div class="current-temperature"><span id="currentTemperature">—</span><span class="degree">°C</span></div>
+                  <p id="currentDescription" class="current-description">—</p>
+                </div>
+              </div>
+
+              <div class="weather-metrics">
+                <div class="weather-metric">
+                  <span class="metric-label">Sensação</span>
+                  <strong id="currentFeelsLike">—</strong>
+                </div>
+                <div class="weather-metric">
+                  <span class="metric-label">Vento</span>
+                  <strong id="currentWind">—</strong>
+                </div>
+                <div class="weather-metric">
+                  <span class="metric-label">Rajadas</span>
+                  <strong id="currentGusts">—</strong>
+                </div>
+                <div class="weather-metric">
+                  <span class="metric-label">Chuva agora</span>
+                  <strong id="currentPrecipitation">—</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="daily-section" aria-label="Previsão para os próximos dias">
+              <div class="daily-heading">
+                <strong>Próximos dias</strong>
+                <span id="forecastUpdatedAt" class="forecast-updated"></span>
+              </div>
+              <div id="dailyForecast" class="daily-forecast"></div>
+            </section>
+
+            <p class="openmeteo-attribution">Dados meteorológicos: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>.</p>
           </div>
         </div>
       </article>
@@ -80,7 +120,7 @@
     </section>
 
     <footer class="footer">
-      <p>Um painel de consulta rápida. Os dados continuam sendo fornecidos diretamente por Windy, Windguru e Climatempo.</p>
+      <p>Um painel de consulta rápida. Os dados continuam sendo fornecidos diretamente por Windy, Windguru e Open-Meteo.</p>
     </footer>
   </main>
 
