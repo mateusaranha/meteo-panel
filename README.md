@@ -12,8 +12,8 @@ Na configuração atual, a página apresenta:
 
 1. **Windy** — mapa meteorológico interativo;
 2. **Open-Meteo** — resumo geral com condições atuais e previsão dos próximos dias;
-3. **Vento agora — Aldeia da Conceição** — observação local da Windguru Station `6023`, com leitura atual e gráfico recente;
-4. **Windguru** — tabela técnica de vento, rajadas, direção, temperatura, nebulosidade e precipitação para o spot configurado;
+3. **Windguru** — tabela técnica de vento, rajadas, direção, temperatura, nebulosidade e precipitação para o spot configurado;
+4. **Vento agora — Aldeia da Conceição** — observação local da Windguru Station `6023`, com leitura atual e gráfico recente;
 5. **Temperatura do mar** — módulo de consulta de temperatura superficial estimada com locais favoritos.
 
 O local meteorológico principal configurado atualmente é **Florianópolis, SC**. O Windguru de previsão usa o spot `105160`.
@@ -22,16 +22,26 @@ O local meteorológico principal configurado atualmente é **Florianópolis, SC*
 
 Este módulo complementa as previsões com uma **medição local** da estação meteorológica da Aldeia da Conceição, identificada no Windguru como estação `6023`.
 
-A integração usa os widgets oficiais do Windguru Station/Windguru Live em vez de copiar ou fazer scraping dos valores da página da Aldeia.
+A integração usa os widgets oficiais do Windguru Station/Windguru Live. A leitura atual continua sendo obtida pelo `WgsWidget`, mas seus campos de vento são apresentados em uma interface própria do MeteoPanel, com:
+
+- velocidade atual em destaque;
+- seta e direção do vento;
+- rajada/máxima recente;
+- horário da última medição;
+- identificação explícita da estação de origem.
+
+O widget oficial permanece no DOM como fonte e fallback. Se a estrutura exposta pelo widget mudar e o MeteoPanel não conseguir montar a apresentação própria, a interface volta a exibir o widget oficial em vez de ocultar a medição.
+
+O gráfico recente continua sendo fornecido diretamente pelo Windguru Live.
 
 A apresentação é adaptativa:
 
 - em telas maiores, leitura atual e gráfico ficam lado a lado;
 - em telas menores, os dois painéis formam um carrossel horizontal com `scroll-snap`: a leitura atual aparece primeiro e o gráfico fica a um gesto lateral de distância.
 
-O módulo é isolado dos demais. Se o Windguru restringir o widget ao domínio autorizado pelo proprietário da estação ou se o serviço estiver indisponível, o MeteoPanel mostra um fallback com link para a página original da estação sem interromper Windy, Open-Meteo, Windguru de previsão ou temperatura do mar.
+O módulo é isolado dos demais. Se o Windguru estiver indisponível, o MeteoPanel mostra um fallback com link para a página original da estação sem interromper Windy, Open-Meteo, Windguru de previsão ou temperatura do mar.
 
-A rede Windguru Station informa que as estações podem enviar medições em intervalos de aproximadamente um minuto. O horário e a disponibilidade efetivos continuam sendo responsabilidade do provedor/estação.
+A estação `6023` foi validada no domínio publicado do GitHub Pages em setembro de 2026. A rede Windguru Station informa que as estações podem enviar medições em intervalos de aproximadamente um minuto; o horário e a disponibilidade efetivos continuam sendo responsabilidade do provedor/estação.
 
 ## Temperatura do mar
 
@@ -167,7 +177,7 @@ Não há etapa de build.
 - os favoritos marítimos são locais ao navegador/dispositivo;
 - integrações externas podem mudar ou deixar de funcionar sem alteração no MeteoPanel;
 - a disponibilidade do Windy/Windguru depende dos widgets e regras dos próprios serviços;
-- o widget Windguru Station pode depender de autorização do domínio configurada pelo proprietário da estação;
+- a apresentação própria de “Vento agora” depende da estrutura DOM exposta pelo widget oficial; se ela mudar, o widget oficial é usado como fallback;
 - uma estação local representa as condições no ponto onde o sensor está instalado, não necessariamente em toda a região;
 - a temperatura do mar é um valor modelado;
 - o uso dos serviços públicos OpenStreetMap/Nominatim deve permanecer dentro das políticas de uso dos respectivos projetos;
@@ -187,7 +197,6 @@ A MIT é intencionalmente permissiva: permite uso, modificação, distribuição
 
 ## Próximos passos possíveis
 
-- validar o widget Windguru Station `6023` no domínio publicado do GitHub Pages;
 - previsão horária compacta;
 - reordenação de favoritos marítimos;
 - exportação/importação de favoritos entre dispositivos;
