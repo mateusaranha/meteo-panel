@@ -1,16 +1,48 @@
 (() => {
   const STORAGE_KEY = "meteopanel-theme-v1";
   const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light", "tidal-dusk", "abyssal"]);
-  const PRIMARY_THEMES = new Set(["ocean-night", "coastal-light"]);
+  const AUTHOR_THEMES = ["coastal-light", "tidal-dusk", "ocean-night", "abyssal"];
+  const AUTHOR_THEME_SET = new Set(AUTHOR_THEMES);
+  const COMPASS_ANGLES = {
+    "coastal-light": 0,
+    "tidal-dusk": 90,
+    "ocean-night": 180,
+    abyssal: 270
+  };
+  const THEME_LABELS = {
+    auto: "Automático",
+    light: "Claro clássico",
+    "coastal-light": "Coastal Light",
+    "tidal-dusk": "Tidal Dusk",
+    "ocean-night": "Ocean Night",
+    abyssal: "Abyssal"
+  };
+  const THEME_DESCRIPTIONS = {
+    auto: "Segue o sistema",
+    light: "Aparência original",
+    "coastal-light": "Costa luminosa",
+    "tidal-dusk": "Entardecer costeiro",
+    "ocean-night": "Mar noturno",
+    abyssal: "Profundidade abissal"
+  };
+  const THEME_SYMBOLS = {
+    auto: "◌",
+    light: "☀",
+    "coastal-light": "☀",
+    "tidal-dusk": "◒",
+    "ocean-night": "☾",
+    abyssal: "≋"
+  };
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
   const REDUCED_MOTION_MEDIA = window.matchMedia("(prefers-reduced-motion: reduce)");
   const THEME_TRANSITION_MS = 760;
-  const SLIDER_LEAD_MS = 120;
+  const COMPASS_LEAD_MS = 110;
   const MOTION_STYLESHEET_ID = "themeMotionStylesheet";
 
   let transitionTimer = null;
-  let sliderLeadTimer = null;
+  let selectionLeadTimer = null;
   let selectionSequence = 0;
+  let compassVisualAngle = null;
 
   const ensureMotionStylesheet = () => {
     if (document.getElementById(MOTION_STYLESHEET_ID)) return;
@@ -36,7 +68,7 @@
     if (theme === "ocean-night") return "#07141c";
     if (theme === "coastal-light") return "#eef8fc";
     if (theme === "tidal-dusk") return "#1b2130";
-    if (theme === "abyssal") return "#01070b";
+    if (theme === "abyssal") return "#000304";
     if (theme === "light") return "#eef2f6";
     return DARK_MEDIA.matches ? "#0e151b" : "#eef2f6";
   };
@@ -69,34 +101,120 @@
     }
   };
 
+  function buildThemeCompass() {
+    const wrap = document.querySelector(".theme-primary-wrap");
+    if (!wrap || document.getElementById("themeCompass")) return;
+
+    wrap.innerHTML = `
+      <span class="theme-label" id="themePrimaryLabel">Tema</span>
+      <div class="theme-picker" id="themePicker">
+        <button class="theme-picker-trigger" id="themeCompassTrigger" type="button" aria-expanded="false" aria-controls="themeCompassPanel">
+          <span class="theme-picker-trigger-icon" id="themePickerTriggerIcon" aria-hidden="true">☾</span>
+          <span id="themePickerTriggerLabel">Ocean Night</span>
+          <span class="theme-picker-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="theme-compass-panel" id="themeCompassPanel">
+          <div class="theme-compass" id="themeCompass" role="group" aria-labelledby="themePrimaryLabel" data-has-active="false" data-compass-ready="false">
+            <span class="theme-compass-orbit" aria-hidden="true"><span class="theme-compass-puck"></span></span>
+            <button class="theme-compass-choice" type="button" data-theme-choice="coastal-light" aria-pressed="false" aria-label="Usar tema Coastal Light">
+              <span class="theme-compass-symbol" aria-hidden="true">☀</span>
+              <span class="theme-compass-choice-name">Coastal Light</span>
+            </button>
+            <button class="theme-compass-choice" type="button" data-theme-choice="tidal-dusk" aria-pressed="false" aria-label="Usar tema Tidal Dusk">
+              <span class="theme-compass-symbol" aria-hidden="true">◒</span>
+              <span class="theme-compass-choice-name">Tidal Dusk</span>
+            </button>
+            <button class="theme-compass-choice" type="button" data-theme-choice="ocean-night" aria-pressed="false" aria-label="Usar tema Ocean Night">
+              <span class="theme-compass-symbol" aria-hidden="true">☾</span>
+              <span class="theme-compass-choice-name">Ocean Night</span>
+            </button>
+            <button class="theme-compass-choice" type="button" data-theme-choice="abyssal" aria-pressed="false" aria-label="Usar tema Abyssal">
+              <span class="theme-compass-symbol" aria-hidden="true">≋</span>
+              <span class="theme-compass-choice-name">Abyssal</span>
+            </button>
+            <div class="theme-compass-center" aria-live="polite">
+              <span class="theme-compass-center-icon" id="themeCompassCenterIcon" data-theme-icon="ocean-night" aria-hidden="true">☾</span>
+              <strong id="themeCompassCenterName">Ocean Night</strong>
+              <small id="themeCompassCenterDescription">Mar noturno</small>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    const settingsMenu = document.getElementById("settingsMenu");
+    settingsMenu?.querySelectorAll('[data-theme-choice="tidal-dusk"], [data-theme-choice="abyssal"]').forEach((control) => control.remove());
+  }
+
+  function getNearestCompassAngle(theme) {
+    const baseAngle = COMPASS_ANGLES[theme];
+    if (typeof baseAngle !== "number") return compassVisualAngle;
+    if (compassVisualAngle === null) return baseAngle;
+
+    const nearestTurn = Math.round((compassVisualAngle - baseAngle) / 360);
+    const candidates = [nearestTurn - 1, nearestTurn, nearestTurn + 1]
+      .map((turn) => baseAngle + turn * 360);
+
+    return candidates.reduce((best, candidate) => (
+      Math.abs(candidate - compassVisualAngle) < Math.abs(best - compassVisualAngle)
+        ? candidate
+        : best
+    ));
+  }
+
+  function moveCompassTo(theme) {
+    const compass = document.getElementById("themeCompass");
+    if (!compass) return;
+
+    if (!AUTHOR_THEME_SET.has(theme)) {
+      compass.dataset.hasActive = "false";
+      return;
+    }
+
+    compassVisualAngle = getNearestCompassAngle(theme);
+    compass.style.setProperty("--theme-compass-angle", `${compassVisualAngle}deg`);
+    compass.dataset.hasActive = "true";
+  }
+
   function syncThemeControls() {
-    const primaryControl = document.getElementById("themePrimaryControl");
+    const compass = document.getElementById("themeCompass");
     const settingsMenu = document.getElementById("settingsMenu");
     const status = document.getElementById("settingsThemeStatus");
-
-    if (primaryControl) {
-      primaryControl.dataset.primaryTheme = PRIMARY_THEMES.has(activeTheme) ? activeTheme : "none";
-    }
+    const triggerIcon = document.getElementById("themePickerTriggerIcon");
+    const triggerLabel = document.getElementById("themePickerTriggerLabel");
+    const centerIcon = document.getElementById("themeCompassCenterIcon");
+    const centerName = document.getElementById("themeCompassCenterName");
+    const centerDescription = document.getElementById("themeCompassCenterDescription");
 
     document.querySelectorAll("[data-theme-choice]").forEach((control) => {
       control.setAttribute("aria-pressed", String(control.dataset.themeChoice === activeTheme));
     });
 
-    if (settingsMenu) {
-      settingsMenu.dataset.secondaryActive = String(!PRIMARY_THEMES.has(activeTheme));
+    moveCompassTo(activeTheme);
+
+    if (compass) {
+      compass.dataset.activeTheme = AUTHOR_THEME_SET.has(activeTheme) ? activeTheme : "secondary";
     }
 
-    if (status) {
-      const labels = {
-        auto: "Automático",
-        light: "Claro clássico",
-        "ocean-night": "Ocean Night",
-        "coastal-light": "Coastal Light",
-        "tidal-dusk": "Tidal Dusk",
-        abyssal: "Abyssal"
-      };
-      status.textContent = `Tema atual: ${labels[activeTheme] || activeTheme}`;
+    if (settingsMenu) {
+      settingsMenu.dataset.secondaryActive = String(!AUTHOR_THEME_SET.has(activeTheme));
     }
+
+    const label = THEME_LABELS[activeTheme] || activeTheme;
+    const description = THEME_DESCRIPTIONS[activeTheme] || "";
+    const symbol = THEME_SYMBOLS[activeTheme] || "◌";
+
+    if (triggerIcon) {
+      triggerIcon.textContent = symbol;
+      triggerIcon.dataset.themeIcon = activeTheme;
+    }
+    if (triggerLabel) triggerLabel.textContent = label;
+    if (centerIcon) {
+      centerIcon.textContent = symbol;
+      centerIcon.dataset.themeIcon = activeTheme;
+    }
+    if (centerName) centerName.textContent = label;
+    if (centerDescription) centerDescription.textContent = description;
+    if (status) status.textContent = `Tema atual: ${label}`;
   }
 
   function beginVisualTransition() {
@@ -159,69 +277,106 @@
       return;
     }
 
-    if (sliderLeadTimer) {
-      clearTimeout(sliderLeadTimer);
-      sliderLeadTimer = null;
+    if (selectionLeadTimer) {
+      clearTimeout(selectionLeadTimer);
+      selectionLeadTimer = null;
     }
 
-    const primaryControl = document.getElementById("themePrimaryControl");
-    const shouldLeadWithSlider = Boolean(
-      primaryControl
+    if (AUTHOR_THEME_SET.has(safeTheme)) moveCompassTo(safeTheme);
+
+    const shouldLeadWithCompass = Boolean(
+      document.getElementById("themeCompass")
       && !REDUCED_MOTION_MEDIA.matches
-      && PRIMARY_THEMES.has(activeTheme)
-      && PRIMARY_THEMES.has(safeTheme)
+      && AUTHOR_THEME_SET.has(activeTheme)
+      && AUTHOR_THEME_SET.has(safeTheme)
     );
 
-    if (!shouldLeadWithSlider) {
+    if (!shouldLeadWithCompass) {
       commitTheme(safeTheme);
       return;
     }
 
-    // Dá ao indicador tempo perceptível para iniciar a viagem antes que a
-    // paleta inteira comece a mudar. O transform continua ativo durante o commit.
-    primaryControl.dataset.primaryTheme = safeTheme;
-    sliderLeadTimer = window.setTimeout(() => {
-      sliderLeadTimer = null;
+    selectionLeadTimer = window.setTimeout(() => {
+      selectionLeadTimer = null;
       if (sequence !== selectionSequence) return;
       commitTheme(safeTheme);
-    }, SLIDER_LEAD_MS);
+    }, COMPASS_LEAD_MS);
+  }
+
+  function closeCompassPanel({ restoreFocus = false } = {}) {
+    const picker = document.getElementById("themePicker");
+    const trigger = document.getElementById("themeCompassTrigger");
+    if (!picker?.classList.contains("is-open")) return;
+    picker.classList.remove("is-open");
+    trigger?.setAttribute("aria-expanded", "false");
+    if (restoreFocus) trigger?.focus();
   }
 
   function initThemeControls() {
-    const primaryControl = document.getElementById("themePrimaryControl");
+    buildThemeCompass();
+
+    const compass = document.getElementById("themeCompass");
+    const picker = document.getElementById("themePicker");
+    const pickerTrigger = document.getElementById("themeCompassTrigger");
     const settingsMenu = document.getElementById("settingsMenu");
     const settingsTrigger = settingsMenu?.querySelector("summary");
-
-    if (primaryControl && !primaryControl.querySelector(".theme-slider")) {
-      const slider = document.createElement("span");
-      slider.className = "theme-slider";
-      slider.setAttribute("aria-hidden", "true");
-      primaryControl.prepend(slider);
-    }
 
     document.querySelectorAll("[data-theme-choice]").forEach((control) => {
       control.addEventListener("click", () => {
         selectTheme(control.dataset.themeChoice);
         if (settingsMenu?.contains(control)) settingsMenu.removeAttribute("open");
+        if (compass?.contains(control)) closeCompassPanel();
       });
     });
 
-    primaryControl?.addEventListener("keydown", (event) => {
-      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    pickerTrigger?.addEventListener("click", () => {
+      const willOpen = !picker?.classList.contains("is-open");
+      if (willOpen) settingsMenu?.removeAttribute("open");
+      picker?.classList.toggle("is-open", willOpen);
+      pickerTrigger.setAttribute("aria-expanded", String(willOpen));
+    });
+
+    settingsTrigger?.addEventListener("click", () => {
+      closeCompassPanel();
+    });
+
+    compass?.addEventListener("keydown", (event) => {
+      const currentChoice = event.target.closest?.(".theme-compass-choice");
+      if (!currentChoice) return;
+
+      const currentIndex = AUTHOR_THEMES.indexOf(currentChoice.dataset.themeChoice);
+      let nextIndex = null;
+
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (currentIndex + 1) % AUTHOR_THEMES.length;
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (currentIndex - 1 + AUTHOR_THEMES.length) % AUTHOR_THEMES.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = AUTHOR_THEMES.length - 1;
+      if (nextIndex === null) return;
+
       event.preventDefault();
-      const nextTheme = event.key === "ArrowLeft" ? "ocean-night" : "coastal-light";
+      const nextTheme = AUTHOR_THEMES[nextIndex];
       selectTheme(nextTheme);
-      primaryControl.querySelector(`[data-theme-choice="${nextTheme}"]`)?.focus();
+      compass.querySelector(`[data-theme-choice="${nextTheme}"]`)?.focus();
     });
 
     document.addEventListener("click", (event) => {
       if (settingsMenu?.open && !settingsMenu.contains(event.target)) {
         settingsMenu.removeAttribute("open");
       }
+      if (picker?.classList.contains("is-open") && !picker.contains(event.target)) {
+        closeCompassPanel();
+      }
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && settingsMenu?.open) {
+      if (event.key !== "Escape") return;
+
+      if (picker?.classList.contains("is-open")) {
+        closeCompassPanel({ restoreFocus: true });
+        return;
+      }
+
+      if (settingsMenu?.open) {
         settingsMenu.removeAttribute("open");
         settingsTrigger?.focus();
       }
@@ -229,10 +384,8 @@
 
     syncThemeControls();
 
-    // Evita uma animação artificial no carregamento inicial quando existe
-    // uma preferência salva; o slider passa a animar somente depois do 1º paint.
     requestAnimationFrame(() => {
-      if (primaryControl) primaryControl.dataset.sliderReady = "true";
+      if (compass) compass.dataset.compassReady = "true";
     });
   }
 
