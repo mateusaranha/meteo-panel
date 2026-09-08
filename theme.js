@@ -4,10 +4,24 @@
   const PRIMARY_THEMES = new Set(["ocean-night", "coastal-light"]);
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
   const REDUCED_MOTION_MEDIA = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const THEME_TRANSITION_MS = 430;
+  const THEME_TRANSITION_MS = 760;
+  const SLIDER_LEAD_MS = 120;
+  const MOTION_STYLESHEET_ID = "themeMotionStylesheet";
 
   let transitionTimer = null;
+  let sliderLeadTimer = null;
   let selectionSequence = 0;
+
+  const ensureMotionStylesheet = () => {
+    if (document.getElementById(MOTION_STYLESHEET_ID)) return;
+    const link = document.createElement("link");
+    link.id = MOTION_STYLESHEET_ID;
+    link.rel = "stylesheet";
+    link.href = "theme-motion.css?v=20260908-20";
+    document.head.appendChild(link);
+  };
+
+  ensureMotionStylesheet();
 
   const readStoredTheme = () => {
     try {
@@ -83,6 +97,7 @@
 
     if (REDUCED_MOTION_MEDIA.matches) {
       root.classList.remove("theme-transitioning");
+      root.style.removeProperty("--theme-transition-from-background");
       return false;
     }
 
@@ -91,6 +106,11 @@
       transitionTimer = null;
     }
 
+    const currentBackground = document.body
+      ? getComputedStyle(document.body).background
+      : getComputedStyle(root).backgroundColor;
+
+    root.style.setProperty("--theme-transition-from-background", currentBackground);
     root.classList.remove("theme-transitioning");
     void root.offsetWidth;
     root.classList.add("theme-transitioning");
@@ -100,7 +120,9 @@
 
   function scheduleTransitionCleanup() {
     transitionTimer = window.setTimeout(() => {
-      document.documentElement.classList.remove("theme-transitioning");
+      const root = document.documentElement;
+      root.classList.remove("theme-transitioning");
+      root.style.removeProperty("--theme-transition-from-background");
       transitionTimer = null;
     }, THEME_TRANSITION_MS);
   }
@@ -130,6 +152,11 @@
       return;
     }
 
+    if (sliderLeadTimer) {
+      clearTimeout(sliderLeadTimer);
+      sliderLeadTimer = null;
+    }
+
     const primaryControl = document.getElementById("themePrimaryControl");
     const shouldLeadWithSlider = Boolean(
       primaryControl
@@ -143,16 +170,14 @@
       return;
     }
 
-    // Move o indicador primeiro por alguns frames para que o deslocamento seja
-    // perceptível antes da paleta inteira começar a mudar.
+    // Dá ao indicador tempo perceptível para iniciar a viagem antes que a
+    // paleta inteira comece a mudar. O transform continua ativo durante o commit.
     primaryControl.dataset.primaryTheme = safeTheme;
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (sequence !== selectionSequence) return;
-        commitTheme(safeTheme);
-      });
-    });
+    sliderLeadTimer = window.setTimeout(() => {
+      sliderLeadTimer = null;
+      if (sequence !== selectionSequence) return;
+      commitTheme(safeTheme);
+    }, SLIDER_LEAD_MS);
   }
 
   function initThemeControls() {
