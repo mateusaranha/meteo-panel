@@ -3,6 +3,11 @@
   const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light"]);
   const PRIMARY_THEMES = new Set(["ocean-night", "coastal-light"]);
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
+  const REDUCED_MOTION_MEDIA = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const THEME_TRANSITION_MS = 430;
+
+  let transitionTimer = null;
+  let selectionSequence = 0;
 
   const readStoredTheme = () => {
     try {
@@ -73,10 +78,81 @@
     }
   }
 
-  function selectTheme(theme) {
-    activeTheme = applyTheme(theme);
-    persistTheme();
+  function beginVisualTransition() {
+    const root = document.documentElement;
+
+    if (REDUCED_MOTION_MEDIA.matches) {
+      root.classList.remove("theme-transitioning");
+      return false;
+    }
+
+    if (transitionTimer) {
+      clearTimeout(transitionTimer);
+      transitionTimer = null;
+    }
+
+    root.classList.remove("theme-transitioning");
+    void root.offsetWidth;
+    root.classList.add("theme-transitioning");
+    void root.offsetWidth;
+    return true;
+  }
+
+  function scheduleTransitionCleanup() {
+    transitionTimer = window.setTimeout(() => {
+      document.documentElement.classList.remove("theme-transitioning");
+      transitionTimer = null;
+    }, THEME_TRANSITION_MS);
+  }
+
+  function commitTheme(theme, { persist = true, force = false } = {}) {
+    const safeTheme = VALID_THEMES.has(theme) ? theme : "auto";
+
+    if (!force && safeTheme === activeTheme) {
+      syncThemeControls();
+      return;
+    }
+
+    const animated = beginVisualTransition();
+    activeTheme = applyTheme(safeTheme);
+    if (persist) persistTheme();
     syncThemeControls();
+
+    if (animated) scheduleTransitionCleanup();
+  }
+
+  function selectTheme(theme) {
+    const safeTheme = VALID_THEMES.has(theme) ? theme : "auto";
+    const sequence = ++selectionSequence;
+
+    if (safeTheme === activeTheme) {
+      syncThemeControls();
+      return;
+    }
+
+    const primaryControl = document.getElementById("themePrimaryControl");
+    const shouldLeadWithSlider = Boolean(
+      primaryControl
+      && !REDUCED_MOTION_MEDIA.matches
+      && PRIMARY_THEMES.has(activeTheme)
+      && PRIMARY_THEMES.has(safeTheme)
+    );
+
+    if (!shouldLeadWithSlider) {
+      commitTheme(safeTheme);
+      return;
+    }
+
+    // Move o indicador primeiro por alguns frames para que o deslocamento seja
+    // perceptível antes da paleta inteira começar a mudar.
+    primaryControl.dataset.primaryTheme = safeTheme;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (sequence !== selectionSequence) return;
+        commitTheme(safeTheme);
+      });
+    });
   }
 
   function initThemeControls() {
@@ -113,12 +189,18 @@
     });
 
     syncThemeControls();
+
+    // Evita uma animação artificial no carregamento inicial quando existe
+    // uma preferência salva; o slider passa a animar somente depois do 1º paint.
+    requestAnimationFrame(() => {
+      if (primaryControl) primaryControl.dataset.sliderReady = "true";
+    });
   }
 
   const handleSystemThemeChange = () => {
     if (activeTheme === "auto") {
-      applyTheme("auto");
-      syncThemeControls();
+      ++selectionSequence;
+      commitTheme("auto", { persist: false, force: true });
     }
   };
 
