@@ -78,7 +78,7 @@
   --theme-compass-accent: #6ed7d8;
   --theme-compass-accent-rgb: 110, 215, 216;
   position: relative;
-  width: 286px;
+  width: 220px;
   height: 186px;
   isolation: isolate;
 }
@@ -196,18 +196,14 @@
 
 .theme-compass-choice-name {
   position: absolute;
-  color: var(--theme-text-muted);
-  font-size: .64rem;
-  font-weight: 760;
-  line-height: 1;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
   white-space: nowrap;
-  pointer-events: none;
-  transition: color 180ms ease, opacity 180ms ease;
-}
-
-.theme-compass-choice:hover .theme-compass-choice-name,
-.theme-compass-choice[aria-pressed="true"] .theme-compass-choice-name {
-  color: var(--theme-text);
+  border: 0;
 }
 
 .theme-compass-choice[data-theme-choice="coastal-light"] {
@@ -216,22 +212,10 @@
   top: 13px;
 }
 
-.theme-compass-choice[data-theme-choice="coastal-light"] .theme-compass-choice-name {
-  bottom: calc(100% + 5px);
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .theme-compass-choice[data-theme-choice="tidal-dusk"] {
   --choice-accent: #dc9779;
-  right: 63px;
+  right: 30px;
   top: calc(50% - 18px);
-}
-
-.theme-compass-choice[data-theme-choice="tidal-dusk"] .theme-compass-choice-name {
-  left: calc(100% + 7px);
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .theme-compass-choice[data-theme-choice="ocean-night"] {
@@ -240,22 +224,10 @@
   bottom: 13px;
 }
 
-.theme-compass-choice[data-theme-choice="ocean-night"] .theme-compass-choice-name {
-  left: 50%;
-  top: calc(100% + 5px);
-  transform: translateX(-50%);
-}
-
 .theme-compass-choice[data-theme-choice="abyssal"] {
   --choice-accent: #e9fbfd;
-  left: 63px;
+  left: 30px;
   top: calc(50% - 18px);
-}
-
-.theme-compass-choice[data-theme-choice="abyssal"] .theme-compass-choice-name {
-  right: calc(100% + 7px);
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .theme-compass-center {
@@ -396,8 +368,8 @@ html.theme-transitioning .theme-picker-trigger {
     top: calc(100% + 9px);
     left: 50%;
     display: none;
-    width: 310px;
-    padding: 26px 12px 24px;
+    width: 250px;
+    padding: 22px 14px 20px;
     border: 1px solid var(--theme-card-border);
     border-radius: 20px;
     background: var(--theme-dialog-bg);
@@ -411,7 +383,7 @@ html.theme-transitioning .theme-picker-trigger {
   }
 
   .theme-compass {
-    width: 286px;
+    width: 220px;
     margin: 0 auto;
   }
 }
@@ -454,7 +426,7 @@ html.theme-transitioning .theme-picker-trigger {
 
   .theme-compass-panel {
     left: 0;
-    width: min(310px, calc(100vw - 24px));
+    width: min(250px, calc(100vw - 24px));
     transform: none;
   }
 
@@ -463,7 +435,7 @@ html.theme-transitioning .theme-picker-trigger {
   }
 
   .theme-compass {
-    width: 286px;
+    width: 220px;
     max-width: 100%;
   }
 }
