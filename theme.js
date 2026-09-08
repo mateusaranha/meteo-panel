@@ -1,6 +1,6 @@
 (() => {
   const STORAGE_KEY = "meteopanel-theme-v1";
-  const VALID_THEMES = new Set(["auto", "light", "ocean-night"]);
+  const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light"]);
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
 
   const readStoredTheme = () => {
@@ -14,6 +14,7 @@
 
   const getThemeColor = (theme) => {
     if (theme === "ocean-night") return "#07141c";
+    if (theme === "coastal-light") return "#eef8fc";
     if (theme === "light") return "#eef2f6";
     return DARK_MEDIA.matches ? "#0e151b" : "#eef2f6";
   };
@@ -23,7 +24,7 @@
     document.documentElement.dataset.theme = safeTheme;
     document.documentElement.style.colorScheme = safeTheme === "ocean-night"
       ? "dark"
-      : safeTheme === "light"
+      : safeTheme === "light" || safeTheme === "coastal-light"
         ? "light"
         : "light dark";
 

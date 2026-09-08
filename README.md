@@ -20,15 +20,16 @@ O local meteorológico principal configurado atualmente é **Florianópolis, SC*
 
 ## Temas visuais
 
-O cabeçalho possui um seletor de tema com três opções:
+O cabeçalho possui um seletor de tema com quatro opções:
 
 - **Automático** — segue a preferência `prefers-color-scheme` do sistema operacional;
 - **Claro** — força a aparência clara tradicional do MeteoPanel;
-- **Ocean Night** — tema escuro marítimo com fundo navy, superfícies azul-petróleo e accent turquesa.
+- **Ocean Night** — tema escuro marítimo com fundo navy, superfícies azul-petróleo e accent turquesa;
+- **Coastal Light** — tema claro marítimo com superfícies luminosas, azul oceânico e tipografia azul-marinho.
 
 A preferência é salva localmente no navegador em `localStorage` (`meteopanel-theme-v1`). Não existe sincronização de tema entre dispositivos.
 
-A implementação fica isolada em `theme.js` e `theme.css`. A camada visual tematiza apenas elementos controlados pelo MeteoPanel; conteúdo interno de widgets/iframes cross-origin continua com a aparência definida pelos respectivos provedores.
+A implementação base fica isolada em `theme.js` e `theme.css`; a paleta específica do Coastal Light fica em `coastal-light.css`. A camada visual tematiza apenas elementos controlados pelo MeteoPanel; conteúdo interno de widgets/iframes cross-origin continua com a aparência definida pelos respectivos provedores.
 
 ## Vento agora — Aldeia da Conceição
 
@@ -102,7 +103,8 @@ O MeteoPanel é uma aplicação client-side sem etapa de build:
 meteo-panel/
 ├── index.html                 # estrutura da interface
 ├── styles.css                 # estilos gerais
-├── theme.css                  # design tokens e temas visuais
+├── theme.css                  # design tokens e temas visuais base
+├── coastal-light.css          # paleta e overrides do tema Coastal Light
 ├── theme.js                   # preferência/persistência do tema
 ├── aldeia-live.css            # layout da estação local e responsividade
 ├── marine-search.css          # estilos da busca/seleção marítima

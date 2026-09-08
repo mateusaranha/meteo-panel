@@ -1,0 +1,70 @@
+html[data-theme="coastal-light"] {
+  --theme-page-bg: #eef8fc;
+  --theme-page-glow: rgba(126, 204, 235, .28);
+  --theme-text: #102f5e;
+  --theme-text-secondary: #456684;
+  --theme-text-muted: #526f82;
+  --theme-text-subtle: #557385;
+  --theme-kicker: #4f7087;
+  --theme-card-bg: rgba(255, 255, 255, .94);
+  --theme-card-border: rgba(32, 111, 156, .14);
+  --theme-card-shadow: 0 14px 34px rgba(55, 115, 148, .10);
+  --theme-divider: rgba(32, 111, 156, .12);
+  --theme-panel-bg: linear-gradient(180deg, rgba(247, 252, 254, .96), rgba(238, 248, 252, .86));
+  --theme-marine-bg: linear-gradient(180deg, rgba(240, 251, 254, .98), rgba(229, 245, 251, .90));
+  --theme-aldeia-bg: linear-gradient(180deg, rgba(246, 252, 254, .96), rgba(235, 247, 251, .88));
+  --theme-subtle-bg: rgba(230, 245, 251, .62);
+  --theme-subtle-bg-strong: rgba(219, 240, 248, .72);
+  --theme-subtle-border: rgba(32, 111, 156, .11);
+  --theme-control-bg: #e7f4fa;
+  --theme-control-fg: #245779;
+  --theme-control-hover: #dceef6;
+  --theme-primary-bg: #0f79b8;
+  --theme-primary-fg: #ffffff;
+  --theme-input-bg: #ffffff;
+  --theme-menu-bg: #ffffff;
+  --theme-menu-hover: #edf7fb;
+  --theme-dialog-bg: #f9fdff;
+  --theme-embed-bg: #dfeff6;
+  --theme-external-bg: #ffffff;
+  --theme-danger: #a64b4b;
+  --theme-danger-soft: #934343;
+  --theme-selection-border: rgba(15, 121, 184, .26);
+  --theme-selection-bg: rgba(112, 201, 232, .13);
+  --theme-selection-kicker: #236d96;
+  --theme-focus: #0f79b8;
+  --theme-live-dot-ring: rgba(15, 121, 184, .14);
+  --theme-backdrop: rgba(20, 58, 78, .32);
+  --theme-dialog-shadow: 0 26px 76px rgba(43, 99, 128, .20);
+  --theme-transfer-shadow: 0 22px 58px rgba(43, 99, 128, .16);
+}
+
+html[data-theme="coastal-light"] body {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(143, 216, 241, .34), transparent 30rem),
+    radial-gradient(circle at 88% 6%, rgba(205, 235, 247, .46), transparent 28rem),
+    var(--theme-page-bg);
+}
+
+html[data-theme="coastal-light"] .weather-card {
+  box-shadow: var(--theme-card-shadow);
+}
+
+html[data-theme="coastal-light"] .current-temperature,
+html[data-theme="coastal-light"] .marine-temperature,
+html[data-theme="coastal-light"] .weather-metric strong,
+html[data-theme="coastal-light"] .day-temperature strong {
+  color: #123765;
+}
+
+html[data-theme="coastal-light"] .marine-wave {
+  filter: saturate(.86) brightness(1.04);
+}
+
+html[data-theme="coastal-light"] .theme-control {
+  background: rgba(255, 255, 255, .56);
+}
+
+html[data-theme="coastal-light"] * {
+  scrollbar-color: rgba(15, 121, 184, .28) rgba(238, 248, 252, .72);
+}
