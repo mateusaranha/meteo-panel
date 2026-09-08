@@ -1,6 +1,6 @@
 (() => {
   const STORAGE_KEY = "meteopanel-theme-v1";
-  const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light"]);
+  const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light", "tidal-dusk", "abyssal"]);
   const PRIMARY_THEMES = new Set(["ocean-night", "coastal-light"]);
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
   const REDUCED_MOTION_MEDIA = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -35,6 +35,8 @@
   const getThemeColor = (theme) => {
     if (theme === "ocean-night") return "#07141c";
     if (theme === "coastal-light") return "#eef8fc";
+    if (theme === "tidal-dusk") return "#1b2130";
+    if (theme === "abyssal") return "#01070b";
     if (theme === "light") return "#eef2f6";
     return DARK_MEDIA.matches ? "#0e151b" : "#eef2f6";
   };
@@ -42,9 +44,12 @@
   const applyTheme = (theme) => {
     const safeTheme = VALID_THEMES.has(theme) ? theme : "auto";
     document.documentElement.dataset.theme = safeTheme;
-    document.documentElement.style.colorScheme = safeTheme === "ocean-night"
+
+    const isDarkTheme = safeTheme === "ocean-night" || safeTheme === "tidal-dusk" || safeTheme === "abyssal";
+    const isLightTheme = safeTheme === "light" || safeTheme === "coastal-light";
+    document.documentElement.style.colorScheme = isDarkTheme
       ? "dark"
-      : safeTheme === "light" || safeTheme === "coastal-light"
+      : isLightTheme
         ? "light"
         : "light dark";
 
@@ -86,7 +91,9 @@
         auto: "Automático",
         light: "Claro clássico",
         "ocean-night": "Ocean Night",
-        "coastal-light": "Coastal Light"
+        "coastal-light": "Coastal Light",
+        "tidal-dusk": "Tidal Dusk",
+        abyssal: "Abyssal"
       };
       status.textContent = `Tema atual: ${labels[activeTheme] || activeTheme}`;
     }

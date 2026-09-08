@@ -1,0 +1,191 @@
+html[data-theme="abyssal"] {
+  --theme-page-bg: #01070b;
+  --theme-page-glow: rgba(40, 177, 201, .10);
+  --theme-text: #eaf6f8;
+  --theme-text-secondary: #9fb8bf;
+  --theme-text-muted: #6f8f98;
+  --theme-text-subtle: #536f78;
+  --theme-kicker: #66c3d0;
+  --theme-card-bg: #041219;
+  --theme-card-border: rgba(87, 214, 231, .085);
+  --theme-card-shadow: 0 26px 72px rgba(0, 2, 4, .56), inset 0 1px 0 rgba(167, 241, 249, .015);
+  --theme-divider: rgba(87, 214, 231, .075);
+  --theme-panel-bg: linear-gradient(180deg, rgba(5, 24, 32, .98), rgba(2, 12, 18, .995));
+  --theme-marine-bg: linear-gradient(180deg, rgba(4, 27, 35, .98), rgba(2, 12, 18, .995));
+  --theme-aldeia-bg: linear-gradient(180deg, rgba(4, 22, 29, .98), rgba(2, 11, 17, .995));
+  --theme-subtle-bg: rgba(65, 198, 219, .033);
+  --theme-subtle-bg-strong: rgba(65, 198, 219, .052);
+  --theme-subtle-border: rgba(87, 214, 231, .072);
+  --theme-control-bg: #071c24;
+  --theme-control-fg: #d7eef1;
+  --theme-control-hover: #0a2630;
+  --theme-primary-bg: #62d7e7;
+  --theme-primary-fg: #001217;
+  --theme-input-bg: #031117;
+  --theme-menu-bg: #061820;
+  --theme-menu-hover: #0a222b;
+  --theme-dialog-bg: #04161d;
+  --theme-embed-bg: #020d12;
+  --theme-external-bg: #020d12;
+  --theme-danger: #efaaa7;
+  --theme-danger-soft: #df9997;
+  --theme-selection-border: rgba(98, 215, 231, .25);
+  --theme-selection-bg: rgba(98, 215, 231, .075);
+  --theme-selection-kicker: #7ce1ec;
+  --theme-focus: #76e2ee;
+  --theme-live-dot-ring: rgba(98, 215, 231, .16);
+  --theme-backdrop: rgba(0, 3, 5, .86);
+  --theme-dialog-shadow: 0 36px 110px rgba(0, 0, 0, .68);
+  --theme-transfer-shadow: 0 30px 90px rgba(0, 0, 0, .58);
+}
+
+html[data-theme="abyssal"] body {
+  background:
+    radial-gradient(ellipse 50rem 24rem at 8% -4%, rgba(33, 135, 158, .10), transparent 66%),
+    radial-gradient(ellipse 34rem 22rem at 90% 18%, rgba(19, 79, 105, .09), transparent 72%),
+    linear-gradient(180deg, #020a0f 0%, #01070b 52%, #000507 100%);
+}
+
+html[data-theme="abyssal"] .topbar {
+  box-shadow: inset 0 -1px rgba(87, 214, 231, .05);
+}
+
+html[data-theme="abyssal"] .eyebrow {
+  color: #55b7c4;
+  letter-spacing: .14em;
+}
+
+html[data-theme="abyssal"] #panelTitle {
+  color: #edf9fa;
+  text-shadow: 0 3px 30px rgba(64, 205, 222, .055);
+}
+
+html[data-theme="abyssal"] .location {
+  color: #8ba7ae;
+}
+
+html[data-theme="abyssal"] .updated {
+  color: #5f7c84;
+}
+
+html[data-theme="abyssal"] .weather-card {
+  border-color: rgba(87, 214, 231, .082);
+  background: linear-gradient(180deg, rgba(5, 20, 27, .995), rgba(2, 13, 18, .999));
+  box-shadow:
+    0 26px 72px rgba(0, 2, 4, .56),
+    inset 0 1px 0 rgba(168, 241, 249, .012);
+}
+
+html[data-theme="abyssal"] .card-header {
+  background: linear-gradient(180deg, rgba(92, 215, 231, .015), transparent);
+}
+
+html[data-theme="abyssal"] .card-header h2 {
+  color: #edf7f9;
+}
+
+html[data-theme="abyssal"] .source-kicker {
+  color: #5daebb;
+}
+
+html[data-theme="abyssal"] .openmeteo-wrap,
+html[data-theme="abyssal"] .marine-wrap,
+html[data-theme="abyssal"] .aldeia-live-wrap {
+  box-shadow: inset 0 1px 0 rgba(168, 241, 249, .01);
+}
+
+html[data-theme="abyssal"] .weather-metric,
+html[data-theme="abyssal"] .day-card,
+html[data-theme="abyssal"] .marine-selected,
+html[data-theme="abyssal"] .aldeia-graph-pane {
+  background: linear-gradient(180deg, rgba(64, 197, 218, .036), rgba(64, 197, 218, .016));
+  box-shadow: inset 0 1px 0 rgba(168, 241, 249, .01);
+}
+
+html[data-theme="abyssal"] .weather-metric:hover,
+html[data-theme="abyssal"] .day-card:hover {
+  border-color: rgba(98, 215, 231, .13);
+  background: linear-gradient(180deg, rgba(64, 197, 218, .052), rgba(64, 197, 218, .022));
+}
+
+html[data-theme="abyssal"] .current-temperature,
+html[data-theme="abyssal"] .marine-temperature {
+  color: #82e5ef;
+  text-shadow: 0 0 16px rgba(80, 218, 233, .12);
+}
+
+html[data-theme="abyssal"] .current-temperature .degree,
+html[data-theme="abyssal"] .marine-temperature span:last-child {
+  color: #b5d1d6;
+}
+
+html[data-theme="abyssal"] #currentWind,
+html[data-theme="abyssal"] #currentGusts {
+  color: #caedf0;
+}
+
+html[data-theme="abyssal"] .weather-metric strong,
+html[data-theme="abyssal"] .day-temperature strong {
+  color: #e6f4f6;
+}
+
+html[data-theme="abyssal"] .metric-label {
+  color: #68868e;
+}
+
+html[data-theme="abyssal"] .weather-icon-current {
+  filter: saturate(.72) brightness(.98);
+}
+
+html[data-theme="abyssal"] .button-primary {
+  box-shadow: 0 0 18px rgba(67, 200, 219, .10);
+}
+
+html[data-theme="abyssal"] .button-primary:hover {
+  box-shadow: 0 0 24px rgba(67, 200, 219, .15);
+}
+
+html[data-theme="abyssal"] .button-secondary,
+html[data-theme="abyssal"] .source-link,
+html[data-theme="abyssal"] .marine-menu summary,
+html[data-theme="abyssal"] .dialog-close,
+html[data-theme="abyssal"] .settings-trigger {
+  border: 1px solid rgba(87, 214, 231, .055);
+}
+
+html[data-theme="abyssal"] .marine-chip {
+  color: #9eb8be;
+}
+
+html[data-theme="abyssal"] .marine-chip[aria-current="true"] {
+  color: #001217;
+  box-shadow: 0 0 18px rgba(67, 200, 219, .10);
+}
+
+html[data-theme="abyssal"] .settings-popover {
+  border-color: rgba(87, 214, 231, .085);
+  background: linear-gradient(180deg, #071a22, #031117);
+}
+
+html[data-theme="abyssal"] .form-field input:focus,
+html[data-theme="abyssal"] .marine-search-row input:focus {
+  border-color: rgba(118, 226, 238, .30);
+}
+
+html[data-theme="abyssal"] .aldeia-live-dot {
+  box-shadow: 0 0 0 4px rgba(98, 215, 231, .11), 0 0 18px rgba(98, 215, 231, .12);
+}
+
+html[data-theme="abyssal"] .footer {
+  color: #4d6870;
+}
+
+html[data-theme="abyssal"] * {
+  scrollbar-color: rgba(87, 214, 231, .24) rgba(0, 6, 9, .62);
+}
+
+@media (max-width: 560px) {
+  html[data-theme="abyssal"] .topbar {
+    box-shadow: inset 0 -1px rgba(87, 214, 231, .04);
+  }
+}
