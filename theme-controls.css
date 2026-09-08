@@ -1,3 +1,237 @@
+@property --theme-page-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #eef2f6;
+}
+
+@property --theme-page-glow {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, .95);
+}
+
+@property --theme-text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #15202b;
+}
+
+@property --theme-text-secondary {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #536273;
+}
+
+@property --theme-text-muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #667585;
+}
+
+@property --theme-text-subtle {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7a8793;
+}
+
+@property --theme-kicker {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #617181;
+}
+
+@property --theme-card-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, .92);
+}
+
+@property --theme-card-border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(31, 49, 65, .10);
+}
+
+@property --theme-divider {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(31, 49, 65, .09);
+}
+
+@property --theme-subtle-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, .55);
+}
+
+@property --theme-subtle-bg-strong {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, .66);
+}
+
+@property --theme-subtle-border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(31, 49, 65, .08);
+}
+
+@property --theme-control-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #edf3f8;
+}
+
+@property --theme-control-fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #324e67;
+}
+
+@property --theme-control-hover {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #e6eef5;
+}
+
+@property --theme-primary-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #172634;
+}
+
+@property --theme-primary-fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --theme-input-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --theme-menu-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --theme-menu-hover {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #eef3f7;
+}
+
+@property --theme-dialog-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f9fbfc;
+}
+
+@property --theme-embed-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dfe7ed;
+}
+
+@property --theme-external-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --theme-selection-border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(37, 121, 88, .22);
+}
+
+@property --theme-selection-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(219, 245, 232, .5);
+}
+
+@property --theme-selection-kicker {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #4e7465;
+}
+
+@property --theme-focus {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #1d6f8f;
+}
+
+:root {
+  --theme-motion-duration: 360ms;
+  --theme-motion-ease: cubic-bezier(.2, .72, .2, 1);
+  --theme-slider-duration: 260ms;
+  --theme-slider-ease: cubic-bezier(.22, .78, .22, 1);
+}
+
+html.theme-transitioning {
+  transition:
+    --theme-page-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-page-glow var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-text var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-text-secondary var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-text-muted var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-text-subtle var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-kicker var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-card-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-card-border var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-divider var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-subtle-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-subtle-bg-strong var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-subtle-border var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-control-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-control-fg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-control-hover var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-primary-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-primary-fg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-input-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-menu-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-menu-hover var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-dialog-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-embed-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-external-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-selection-border var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-selection-bg var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-selection-kicker var(--theme-motion-duration) var(--theme-motion-ease),
+    --theme-focus var(--theme-motion-duration) var(--theme-motion-ease);
+}
+
+html.theme-transitioning body,
+html.theme-transitioning .weather-card,
+html.theme-transitioning .button,
+html.theme-transitioning .source-link,
+html.theme-transitioning .marine-chip,
+html.theme-transitioning .marine-menu summary,
+html.theme-transitioning .dialog-close,
+html.theme-transitioning .marine-menu-popover,
+html.theme-transitioning .marine-dialog,
+html.theme-transitioning .marine-transfer-dialog,
+html.theme-transitioning .form-field input,
+html.theme-transitioning .marine-search-row input,
+html.theme-transitioning .settings-trigger,
+html.theme-transitioning .settings-popover,
+html.theme-transitioning .settings-theme-option,
+html.theme-transitioning .theme-segmented,
+html.theme-transitioning .theme-segment,
+html.theme-transitioning .theme-slider,
+html.theme-transitioning .current-temperature,
+html.theme-transitioning .marine-temperature,
+html.theme-transitioning .weather-metric strong,
+html.theme-transitioning .day-temperature strong {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: var(--theme-motion-duration);
+  transition-timing-function: var(--theme-motion-ease);
+}
+
 .theme-primary-wrap {
   display: inline-flex;
   align-items: center;
@@ -24,10 +258,9 @@
   isolation: isolate;
 }
 
-.theme-segmented::before {
-  content: "";
+.theme-slider {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   top: 4px;
   left: 4px;
   width: calc(50% - 4px);
@@ -36,15 +269,24 @@
   background: var(--theme-control-bg);
   box-shadow: 0 4px 14px rgba(15, 40, 54, .10);
   opacity: 1;
+  pointer-events: none;
   transform: translateX(0);
-  transition: transform 210ms cubic-bezier(.2, .7, .2, 1), opacity 160ms ease, background 180ms ease, box-shadow 180ms ease;
+  will-change: transform;
 }
 
-.theme-segmented[data-primary-theme="coastal-light"]::before {
+.theme-segmented[data-slider-ready="true"] .theme-slider {
+  transition:
+    transform var(--theme-slider-duration) var(--theme-slider-ease),
+    opacity 180ms ease,
+    background-color var(--theme-motion-duration) var(--theme-motion-ease),
+    box-shadow var(--theme-motion-duration) var(--theme-motion-ease);
+}
+
+.theme-segmented[data-primary-theme="coastal-light"] .theme-slider {
   transform: translateX(100%);
 }
 
-.theme-segmented[data-primary-theme="none"]::before {
+.theme-segmented[data-primary-theme="none"] .theme-slider {
   opacity: 0;
 }
 
@@ -66,7 +308,7 @@
   font-size: .78rem;
   font-weight: 760;
   white-space: nowrap;
-  transition: color 160ms ease, opacity 160ms ease;
+  transition: color 180ms ease, opacity 180ms ease;
 }
 
 .theme-segment:hover {
@@ -104,7 +346,7 @@
   cursor: pointer;
   font-size: 1rem;
   list-style: none;
-  transition: transform 140ms ease, background 140ms ease;
+  transition: transform 140ms ease, background-color 140ms ease, color 140ms ease, border-color 140ms ease;
 }
 
 .settings-trigger::-webkit-details-marker { display: none; }
@@ -234,7 +476,7 @@
   outline-offset: 2px;
 }
 
-html[data-theme="ocean-night"] .theme-segmented::before {
+html[data-theme="ocean-night"] .theme-slider {
   background: rgba(67, 198, 200, .14);
   box-shadow: inset 0 0 0 1px rgba(121, 213, 209, .24), 0 5px 18px rgba(0, 8, 12, .20);
 }
@@ -247,7 +489,7 @@ html[data-theme="coastal-light"] .theme-segmented {
   background: rgba(255, 255, 255, .52);
 }
 
-html[data-theme="coastal-light"] .theme-segmented::before {
+html[data-theme="coastal-light"] .theme-slider {
   background: #fff;
   box-shadow: 0 5px 16px rgba(55, 115, 148, .14), inset 0 0 0 1px rgba(15, 121, 184, .10);
 }
@@ -337,7 +579,30 @@ html[data-theme="coastal-light"] .theme-segment[aria-pressed="true"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .theme-segmented::before,
+  html.theme-transitioning,
+  html.theme-transitioning body,
+  html.theme-transitioning .weather-card,
+  html.theme-transitioning .button,
+  html.theme-transitioning .source-link,
+  html.theme-transitioning .marine-chip,
+  html.theme-transitioning .marine-menu summary,
+  html.theme-transitioning .dialog-close,
+  html.theme-transitioning .marine-menu-popover,
+  html.theme-transitioning .marine-dialog,
+  html.theme-transitioning .marine-transfer-dialog,
+  html.theme-transitioning .form-field input,
+  html.theme-transitioning .marine-search-row input,
+  html.theme-transitioning .settings-trigger,
+  html.theme-transitioning .settings-popover,
+  html.theme-transitioning .settings-theme-option,
+  html.theme-transitioning .theme-segmented,
+  html.theme-transitioning .theme-segment,
+  html.theme-transitioning .theme-slider,
+  html.theme-transitioning .current-temperature,
+  html.theme-transitioning .marine-temperature,
+  html.theme-transitioning .weather-metric strong,
+  html.theme-transitioning .day-temperature strong,
+  .theme-segmented[data-slider-ready="true"] .theme-slider,
   .theme-segment,
   .settings-trigger {
     transition: none;
