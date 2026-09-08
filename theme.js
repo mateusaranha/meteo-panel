@@ -160,6 +160,13 @@
     const settingsMenu = document.getElementById("settingsMenu");
     const settingsTrigger = settingsMenu?.querySelector("summary");
 
+    if (primaryControl && !primaryControl.querySelector(".theme-slider")) {
+      const slider = document.createElement("span");
+      slider.className = "theme-slider";
+      slider.setAttribute("aria-hidden", "true");
+      primaryControl.prepend(slider);
+    }
+
     document.querySelectorAll("[data-theme-choice]").forEach((control) => {
       control.addEventListener("click", () => {
         selectTheme(control.dataset.themeChoice);
