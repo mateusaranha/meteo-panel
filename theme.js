@@ -175,6 +175,18 @@
     compass.dataset.hasActive = "true";
   }
 
+  function syncDisplayIcon(element, theme, symbol) {
+    if (!element) return;
+    element.textContent = symbol;
+    element.dataset.themeIcon = theme;
+
+    const useTextFallback = !AUTHOR_THEME_SET.has(theme);
+    element.style.background = useTextFallback ? "none" : "";
+    element.style.webkitMaskImage = useTextFallback ? "none" : "";
+    element.style.maskImage = useTextFallback ? "none" : "";
+    element.style.fontSize = useTextFallback ? "1rem" : "";
+  }
+
   function syncThemeControls() {
     const compass = document.getElementById("themeCompass");
     const settingsMenu = document.getElementById("settingsMenu");
@@ -203,15 +215,9 @@
     const description = THEME_DESCRIPTIONS[activeTheme] || "";
     const symbol = THEME_SYMBOLS[activeTheme] || "◌";
 
-    if (triggerIcon) {
-      triggerIcon.textContent = symbol;
-      triggerIcon.dataset.themeIcon = activeTheme;
-    }
+    syncDisplayIcon(triggerIcon, activeTheme, symbol);
     if (triggerLabel) triggerLabel.textContent = label;
-    if (centerIcon) {
-      centerIcon.textContent = symbol;
-      centerIcon.dataset.themeIcon = activeTheme;
-    }
+    syncDisplayIcon(centerIcon, activeTheme, symbol);
     if (centerName) centerName.textContent = label;
     if (centerDescription) centerDescription.textContent = description;
     if (status) status.textContent = `Tema atual: ${label}`;
