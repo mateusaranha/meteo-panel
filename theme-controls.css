@@ -262,6 +262,30 @@ html[data-theme="coastal-light"] .theme-segment[aria-pressed="true"] {
   }
 }
 
+@media (max-width: 720px) and (min-width: 561px) {
+  .topbar-actions {
+    flex-wrap: wrap;
+  }
+
+  .topbar-actions .updated {
+    flex: 1 0 100%;
+  }
+
+  .theme-primary-wrap {
+    flex: 1 1 330px;
+    margin-left: 0;
+  }
+
+  .theme-segmented {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .settings-menu {
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 560px) {
   .theme-primary-wrap {
     width: 100%;
