@@ -220,7 +220,7 @@ html[data-theme="coastal-light"] * {
 .settings-trigger > span,
 .marine-wave,
 .marine-empty-icon {
-  font-size: 0;
+  font-size: 0 !important;
 }
 
 .theme-segment-icon::before,
