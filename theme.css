@@ -1,0 +1,338 @@
+:root {
+  --theme-page-bg: #eef2f6;
+  --theme-page-glow: rgba(255, 255, 255, .95);
+  --theme-text: #15202b;
+  --theme-text-secondary: #536273;
+  --theme-text-muted: #667585;
+  --theme-text-subtle: #7a8793;
+  --theme-kicker: #617181;
+  --theme-card-bg: rgba(255, 255, 255, .92);
+  --theme-card-border: rgba(31, 49, 65, .10);
+  --theme-card-shadow: 0 13px 38px rgba(40, 56, 72, .08);
+  --theme-divider: rgba(31, 49, 65, .09);
+  --theme-panel-bg: linear-gradient(180deg, rgba(238, 244, 249, .75), rgba(255, 255, 255, .15));
+  --theme-marine-bg: linear-gradient(180deg, rgba(226, 242, 248, .72), rgba(255, 255, 255, .2));
+  --theme-aldeia-bg: linear-gradient(180deg, rgba(232, 243, 248, .76), rgba(255, 255, 255, .22));
+  --theme-subtle-bg: rgba(255, 255, 255, .55);
+  --theme-subtle-bg-strong: rgba(255, 255, 255, .66);
+  --theme-subtle-border: rgba(31, 49, 65, .08);
+  --theme-control-bg: #edf3f8;
+  --theme-control-fg: #324e67;
+  --theme-control-hover: #e6eef5;
+  --theme-primary-bg: #172634;
+  --theme-primary-fg: #fff;
+  --theme-input-bg: #fff;
+  --theme-menu-bg: #fff;
+  --theme-menu-hover: #eef3f7;
+  --theme-dialog-bg: #f9fbfc;
+  --theme-embed-bg: #dfe7ed;
+  --theme-external-bg: #fff;
+  --theme-danger: #a33;
+  --theme-danger-soft: #943838;
+  --theme-selection-border: rgba(37, 121, 88, .22);
+  --theme-selection-bg: rgba(219, 245, 232, .5);
+  --theme-selection-kicker: #4e7465;
+  --theme-focus: #1d6f8f;
+  --theme-live-dot-ring: rgba(102, 117, 133, .12);
+  --theme-backdrop: rgba(6, 14, 20, .58);
+  --theme-dialog-shadow: 0 24px 80px rgba(12, 25, 35, .3);
+  --theme-transfer-shadow: 0 24px 70px rgba(17, 31, 43, .22);
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --theme-page-bg: #0e151b;
+    --theme-page-glow: rgba(39, 54, 66, .7);
+    --theme-text: #eef3f7;
+    --theme-text-secondary: #9fb0bf;
+    --theme-text-muted: #9fb0bf;
+    --theme-text-subtle: #9fb0bf;
+    --theme-kicker: #9fb0bf;
+    --theme-card-bg: #172129;
+    --theme-card-border: rgba(255, 255, 255, .08);
+    --theme-card-shadow: none;
+    --theme-divider: rgba(255, 255, 255, .08);
+    --theme-panel-bg: #111a21;
+    --theme-marine-bg: #111a21;
+    --theme-aldeia-bg: #111a21;
+    --theme-subtle-bg: rgba(255, 255, 255, .035);
+    --theme-subtle-bg-strong: rgba(255, 255, 255, .035);
+    --theme-subtle-border: rgba(255, 255, 255, .07);
+    --theme-control-bg: #263641;
+    --theme-control-fg: #dce9f2;
+    --theme-control-hover: #30434f;
+    --theme-primary-bg: #eef5fa;
+    --theme-primary-fg: #13202a;
+    --theme-input-bg: #111a21;
+    --theme-menu-bg: #172129;
+    --theme-menu-hover: #263641;
+    --theme-dialog-bg: #172129;
+    --theme-embed-bg: #111a21;
+    --theme-external-bg: #111a21;
+    --theme-danger: #efaaaa;
+    --theme-danger-soft: #efaaaa;
+    --theme-selection-border: rgba(106, 205, 160, .2);
+    --theme-selection-bg: rgba(44, 104, 76, .16);
+    --theme-selection-kicker: #8fc9ad;
+    --theme-focus: #8ecddf;
+    --theme-live-dot-ring: rgba(159, 176, 191, .15);
+    --theme-backdrop: rgba(6, 14, 20, .72);
+    --theme-dialog-shadow: none;
+    --theme-transfer-shadow: none;
+  }
+}
+
+html[data-theme="ocean-night"] {
+  --theme-page-bg: #07141c;
+  --theme-page-glow: rgba(43, 124, 139, .20);
+  --theme-text: #eff6f7;
+  --theme-text-secondary: #a2b7be;
+  --theme-text-muted: #8fa7af;
+  --theme-text-subtle: #718b94;
+  --theme-kicker: #82a6af;
+  --theme-card-bg: #0d2029;
+  --theme-card-border: rgba(121, 213, 209, .13);
+  --theme-card-shadow: 0 16px 42px rgba(0, 8, 12, .18);
+  --theme-divider: rgba(121, 213, 209, .12);
+  --theme-panel-bg: linear-gradient(180deg, rgba(17, 48, 59, .92), rgba(9, 29, 38, .96));
+  --theme-marine-bg: linear-gradient(180deg, rgba(15, 51, 61, .96), rgba(8, 28, 37, .98));
+  --theme-aldeia-bg: linear-gradient(180deg, rgba(15, 43, 53, .94), rgba(8, 27, 35, .98));
+  --theme-subtle-bg: rgba(121, 213, 209, .045);
+  --theme-subtle-bg-strong: rgba(121, 213, 209, .07);
+  --theme-subtle-border: rgba(121, 213, 209, .10);
+  --theme-control-bg: #132a34;
+  --theme-control-fg: #d8e9ec;
+  --theme-control-hover: #193541;
+  --theme-primary-bg: #43c6c8;
+  --theme-primary-fg: #061820;
+  --theme-input-bg: #0a1b23;
+  --theme-menu-bg: #102630;
+  --theme-menu-hover: #193541;
+  --theme-dialog-bg: #0d2029;
+  --theme-embed-bg: #091a22;
+  --theme-external-bg: #091a22;
+  --theme-danger: #ffb0ad;
+  --theme-danger-soft: #ffb0ad;
+  --theme-selection-border: rgba(67, 198, 200, .28);
+  --theme-selection-bg: rgba(67, 198, 200, .09);
+  --theme-selection-kicker: #79d5d1;
+  --theme-focus: #79d5d1;
+  --theme-live-dot-ring: rgba(67, 198, 200, .16);
+  --theme-backdrop: rgba(1, 10, 14, .78);
+  --theme-dialog-shadow: 0 28px 90px rgba(0, 5, 8, .46);
+  --theme-transfer-shadow: 0 24px 72px rgba(0, 5, 8, .38);
+}
+
+html {
+  color: var(--theme-text);
+  background: var(--theme-page-bg);
+}
+
+body {
+  color: var(--theme-text);
+  background: radial-gradient(circle at top left, var(--theme-page-glow), transparent 34rem), var(--theme-page-bg);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.eyebrow,
+.source-kicker { color: var(--theme-kicker); }
+.location,
+.current-description,
+.day-name { color: var(--theme-text-secondary); }
+.updated,
+.metric-label,
+.day-rain,
+.openmeteo-state,
+.marine-state,
+.marine-meta,
+.marine-empty,
+.aldeia-current-loading,
+.aldeia-live-source,
+.aldeia-live-fallback,
+.marine-search-status { color: var(--theme-text-muted); }
+.forecast-updated,
+.openmeteo-attribution,
+.marine-coordinates,
+.marine-note,
+.marine-temperature-block p,
+.marine-form-note,
+.map-heading small,
+.footer,
+.aldeia-now-label span,
+.aldeia-pane-heading span,
+.marine-search-help,
+.marine-search-result span,
+#marineSelectionCoords,
+.marine-coordinate-details summary,
+.marine-transfer-intro,
+.marine-transfer-section-heading span,
+.marine-transfer-status,
+.marine-qr-note,
+.marine-transfer-footnote,
+.marine-import-help { color: var(--theme-text-subtle); }
+
+.weather-card {
+  border-color: var(--theme-card-border);
+  background: var(--theme-card-bg);
+  box-shadow: var(--theme-card-shadow);
+}
+
+.card-header,
+.current-weather,
+.aldeia-now-strip { border-color: var(--theme-divider); }
+
+.openmeteo-wrap { background: var(--theme-panel-bg); }
+.marine-wrap { background: var(--theme-marine-bg); }
+.aldeia-live-wrap { background: var(--theme-aldeia-bg); }
+.windguru-scroll { background: var(--theme-external-bg); }
+.embed-frame { background: var(--theme-embed-bg); }
+
+.weather-metric,
+.day-card,
+.marine-selected,
+.marine-chip,
+.aldeia-graph-pane,
+.marine-transfer-section,
+.marine-import-list,
+.marine-search-result {
+  border-color: var(--theme-subtle-border);
+  background: var(--theme-subtle-bg);
+}
+
+.marine-chip { background: var(--theme-subtle-bg-strong); }
+
+.button-primary,
+.marine-chip[aria-current="true"] {
+  color: var(--theme-primary-fg);
+  background: var(--theme-primary-bg);
+  border-color: var(--theme-primary-bg);
+}
+
+.button-secondary,
+.source-link,
+.marine-menu summary,
+.dialog-close {
+  color: var(--theme-control-fg);
+  background: var(--theme-control-bg);
+}
+
+.button-secondary:hover,
+.source-link:hover,
+.marine-menu summary:hover,
+.dialog-close:hover { background: var(--theme-control-hover); }
+
+.marine-menu-popover,
+.marine-dialog,
+.marine-transfer-dialog {
+  color: var(--theme-text);
+  background: var(--theme-dialog-bg);
+  border-color: var(--theme-card-border);
+}
+
+.marine-dialog { box-shadow: var(--theme-dialog-shadow); }
+.marine-transfer-dialog { box-shadow: var(--theme-transfer-shadow); }
+.marine-dialog::backdrop,
+.marine-transfer-dialog::backdrop { background: var(--theme-backdrop); }
+
+.marine-menu-popover button:hover,
+.marine-search-result:hover,
+.marine-search-result:focus-visible { background: var(--theme-menu-hover); }
+
+.form-field input,
+.marine-search-row input {
+  color: var(--theme-text);
+  background: var(--theme-input-bg);
+  border-color: var(--theme-card-border);
+}
+
+.marine-selection-card {
+  border-color: var(--theme-selection-border);
+  background: var(--theme-selection-bg);
+}
+.marine-selection-kicker { color: var(--theme-selection-kicker); }
+
+.danger-action,
+.marine-transfer-status.is-error { color: var(--theme-danger) !important; }
+.button-danger-soft { color: var(--theme-danger-soft); }
+
+.aldeia-live-dot { box-shadow: 0 0 0 4px var(--theme-live-dot-ring); }
+
+.button:focus-visible,
+.source-link:focus-visible,
+.marine-chip:focus-visible,
+.marine-menu summary:focus-visible,
+.dialog-close:focus-visible,
+.form-field input:focus-visible,
+.marine-search-row input:focus-visible,
+.marine-search-result:focus-visible,
+.theme-select:focus-visible {
+  outline: 2px solid var(--theme-focus);
+  outline-offset: 2px;
+}
+
+.theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 5px 7px 5px 12px;
+  border: 1px solid var(--theme-card-border);
+  border-radius: 999px;
+  color: var(--theme-text-muted);
+  background: var(--theme-subtle-bg);
+  font-size: .78rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.theme-select {
+  min-width: 126px;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 30px 7px 10px;
+  color: var(--theme-control-fg);
+  background: var(--theme-control-bg);
+  cursor: pointer;
+  font: inherit;
+}
+
+html[data-theme="ocean-night"] .weather-card {
+  backdrop-filter: saturate(112%);
+}
+
+html[data-theme="ocean-night"] .current-temperature,
+html[data-theme="ocean-night"] .marine-temperature,
+html[data-theme="ocean-night"] .weather-metric strong,
+html[data-theme="ocean-night"] .day-temperature strong {
+  color: #f4fbfc;
+}
+
+html[data-theme="ocean-night"] .marine-wave { filter: saturate(.72) brightness(1.14); }
+
+html[data-theme="ocean-night"] * {
+  scrollbar-color: rgba(121, 213, 209, .30) rgba(7, 20, 28, .40);
+}
+
+@media (max-width: 900px) {
+  .theme-control { margin-left: auto; }
+}
+
+@media (max-width: 560px) {
+  .theme-control {
+    width: 100%;
+    justify-content: space-between;
+    border-radius: 14px;
+    padding: 7px 8px 7px 12px;
+  }
+
+  .theme-select {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .button,
+  .source-link { transition: none; }
+}
