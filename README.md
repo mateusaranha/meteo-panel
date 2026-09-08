@@ -20,16 +20,21 @@ O local meteorológico principal configurado atualmente é **Florianópolis, SC*
 
 ## Temas visuais
 
-O cabeçalho possui um seletor de tema com quatro opções:
+O cabeçalho prioriza os dois temas visuais principais em um controle segmentado:
 
-- **Automático** — segue a preferência `prefers-color-scheme` do sistema operacional;
-- **Claro** — força a aparência clara tradicional do MeteoPanel;
 - **Ocean Night** — tema escuro marítimo com fundo navy, superfícies azul-petróleo e accent turquesa;
 - **Coastal Light** — tema claro marítimo com superfícies luminosas, azul oceânico e tipografia azul-marinho.
 
+O indicador do controle desliza entre esses dois temas. As opções utilitárias ficam no botão de **Configurações** no canto direito do cabeçalho:
+
+- **Automático** — segue a preferência `prefers-color-scheme` do sistema operacional;
+- **Claro clássico** — força a aparência clara original do MeteoPanel.
+
+Quando Automático ou Claro clássico está ativo, nenhum dos dois temas principais aparece falsamente selecionado no controle segmentado. O botão de configurações também funciona como ponto de entrada para futuras preferências, evitando espalhar novos controles pelo cabeçalho.
+
 A preferência é salva localmente no navegador em `localStorage` (`meteopanel-theme-v1`). Não existe sincronização de tema entre dispositivos.
 
-A implementação base fica isolada em `theme.js` e `theme.css`; a paleta específica do Coastal Light fica em `coastal-light.css`. A camada visual tematiza apenas elementos controlados pelo MeteoPanel; conteúdo interno de widgets/iframes cross-origin continua com a aparência definida pelos respectivos provedores.
+A implementação base fica em `theme.js` e `theme.css`; a UI do seletor/configurações fica em `theme-controls.css`, e a paleta específica do Coastal Light fica em `coastal-light.css`. A camada visual tematiza apenas elementos controlados pelo MeteoPanel; conteúdo interno de widgets/iframes cross-origin continua com a aparência definida pelos respectivos provedores.
 
 ## Vento agora — Aldeia da Conceição
 
@@ -104,8 +109,9 @@ meteo-panel/
 ├── index.html                 # estrutura da interface
 ├── styles.css                 # estilos gerais
 ├── theme.css                  # design tokens e temas visuais base
+├── theme-controls.css         # seletor segmentado e menu de preferências
 ├── coastal-light.css          # paleta e overrides do tema Coastal Light
-├── theme.js                   # preferência/persistência do tema
+├── theme.js                   # preferência, persistência e controles de tema
 ├── aldeia-live.css            # layout da estação local e responsividade
 ├── marine-search.css          # estilos da busca/seleção marítima
 ├── marine-transfer.css        # estilos de transferência/importação de favoritos
