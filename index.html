@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#eef2f6" />
   <meta name="description" content="Painel simples para consultar Windy, Windguru, Open-Meteo, vento local e temperatura do mar em uma única página." />
   <title>MeteoPanel</title>
-  <script src="theme.js?v=20260907-16"></script>
+  <script src="theme.js?v=20260908-17"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="styles.css?v=20260907-14" />
   <link rel="stylesheet" href="marine-search.css?v=20260907-14" />
@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="aldeia-live.css?v=20260907-14" />
   <link rel="stylesheet" href="theme.css?v=20260907-15" />
   <link rel="stylesheet" href="coastal-light.css?v=20260907-16" />
+  <link rel="stylesheet" href="theme-controls.css?v=20260908-17" />
 </head>
 <body>
   <main class="shell">
@@ -26,16 +27,41 @@
       </div>
       <div class="topbar-actions">
         <p class="updated" id="updatedAt" aria-live="polite"></p>
-        <label class="theme-control" for="themeSelect">
-          <span>Tema</span>
-          <select id="themeSelect" class="theme-select" aria-label="Tema visual">
-            <option value="auto">Automático</option>
-            <option value="light">Claro</option>
-            <option value="ocean-night">Ocean Night</option>
-            <option value="coastal-light">Coastal Light</option>
-          </select>
-        </label>
+        <div class="theme-primary-wrap">
+          <span class="theme-label" id="themePrimaryLabel">Tema</span>
+          <div class="theme-segmented" id="themePrimaryControl" role="group" aria-labelledby="themePrimaryLabel" data-primary-theme="none">
+            <button class="theme-segment" type="button" data-theme-choice="ocean-night" aria-pressed="false">
+              <span class="theme-segment-icon" aria-hidden="true">☾</span>
+              <span>Ocean Night</span>
+            </button>
+            <button class="theme-segment" type="button" data-theme-choice="coastal-light" aria-pressed="false">
+              <span class="theme-segment-icon" aria-hidden="true">☀</span>
+              <span>Coastal Light</span>
+            </button>
+          </div>
+        </div>
         <button class="button button-primary" id="refreshButton" type="button">Atualizar painel</button>
+        <details class="settings-menu" id="settingsMenu" data-secondary-active="false">
+          <summary class="settings-trigger" aria-label="Abrir configurações" title="Configurações"><span aria-hidden="true">⚙</span></summary>
+          <div class="settings-popover">
+            <div class="settings-heading">
+              <strong>Preferências</strong>
+              <span>Opções secundárias do MeteoPanel.</span>
+            </div>
+            <p class="settings-section-label">Tema</p>
+            <div class="settings-theme-options" role="group" aria-label="Outras opções de tema">
+              <button class="settings-theme-option" type="button" data-theme-choice="auto" aria-pressed="false">
+                <span class="settings-theme-option-copy"><strong>Automático</strong><small>Segue claro/escuro do sistema</small></span>
+                <span class="settings-check" aria-hidden="true">✓</span>
+              </button>
+              <button class="settings-theme-option" type="button" data-theme-choice="light" aria-pressed="false">
+                <span class="settings-theme-option-copy"><strong>Claro clássico</strong><small>Aparência clara original</small></span>
+                <span class="settings-check" aria-hidden="true">✓</span>
+              </button>
+            </div>
+            <p class="settings-theme-status" id="settingsThemeStatus" aria-live="polite"></p>
+          </div>
+        </details>
       </div>
     </header>
 
