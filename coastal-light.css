@@ -1,5 +1,3 @@
-@import url("iconography.css?v=20260908-22");
-
 html[data-theme="coastal-light"] {
   --theme-page-bg: #eef8fc;
   --theme-page-glow: rgba(117, 205, 235, .30);
