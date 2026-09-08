@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#eef2f6" />
   <meta name="description" content="Painel simples para consultar Windy, Windguru, Open-Meteo, vento local e temperatura do mar em uma única página." />
   <title>MeteoPanel</title>
-  <script src="theme.js?v=20260908-18"></script>
+  <script src="theme.js?v=20260908-23"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="styles.css?v=20260907-14" />
   <link rel="stylesheet" href="marine-search.css?v=20260907-14" />
@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="theme.css?v=20260907-15" />
   <link rel="stylesheet" href="coastal-light.css?v=20260907-16" />
   <link rel="stylesheet" href="ocean-night.css?v=20260908-21" />
+  <link rel="stylesheet" href="tidal-dusk.css?v=20260908-23" />
+  <link rel="stylesheet" href="abyssal.css?v=20260908-23" />
   <link rel="stylesheet" href="theme-controls.css?v=20260908-18" />
   <link rel="stylesheet" href="iconography.css?v=20260908-22" />
 </head>
@@ -52,6 +54,14 @@
             </div>
             <p class="settings-section-label">Tema</p>
             <div class="settings-theme-options" role="group" aria-label="Outras opções de tema">
+              <button class="settings-theme-option" type="button" data-theme-choice="tidal-dusk" aria-pressed="false">
+                <span class="settings-theme-option-copy"><strong>Tidal Dusk</strong><small>Entardecer costeiro em índigo e âmbar</small></span>
+                <span class="settings-check" aria-hidden="true">✓</span>
+              </button>
+              <button class="settings-theme-option" type="button" data-theme-choice="abyssal" aria-pressed="false">
+                <span class="settings-theme-option-copy"><strong>Abyssal</strong><small>Mar profundo quase negro e bioluminescente</small></span>
+                <span class="settings-check" aria-hidden="true">✓</span>
+              </button>
               <button class="settings-theme-option" type="button" data-theme-choice="auto" aria-pressed="false">
                 <span class="settings-theme-option-copy"><strong>Automático</strong><small>Segue claro/escuro do sistema</small></span>
                 <span class="settings-check" aria-hidden="true">✓</span>
