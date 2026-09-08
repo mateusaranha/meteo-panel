@@ -18,6 +18,18 @@ Na configuração atual, a página apresenta:
 
 O local meteorológico principal configurado atualmente é **Florianópolis, SC**. O Windguru de previsão usa o spot `105160`.
 
+## Temas visuais
+
+O cabeçalho possui um seletor de tema com três opções:
+
+- **Automático** — segue a preferência `prefers-color-scheme` do sistema operacional;
+- **Claro** — força a aparência clara tradicional do MeteoPanel;
+- **Ocean Night** — tema escuro marítimo com fundo navy, superfícies azul-petróleo e accent turquesa.
+
+A preferência é salva localmente no navegador em `localStorage` (`meteopanel-theme-v1`). Não existe sincronização de tema entre dispositivos.
+
+A implementação fica isolada em `theme.js` e `theme.css`. A camada visual tematiza apenas elementos controlados pelo MeteoPanel; conteúdo interno de widgets/iframes cross-origin continua com a aparência definida pelos respectivos provedores.
+
 ## Vento agora — Aldeia da Conceição
 
 Este módulo complementa as previsões com uma **medição local** da estação meteorológica da Aldeia da Conceição, identificada no Windguru como estação `6023`.
@@ -90,6 +102,8 @@ O MeteoPanel é uma aplicação client-side sem etapa de build:
 meteo-panel/
 ├── index.html                 # estrutura da interface
 ├── styles.css                 # estilos gerais
+├── theme.css                  # design tokens e temas visuais
+├── theme.js                   # preferência/persistência do tema
 ├── aldeia-live.css            # layout da estação local e responsividade
 ├── marine-search.css          # estilos da busca/seleção marítima
 ├── marine-transfer.css        # estilos de transferência/importação de favoritos
