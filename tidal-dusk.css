@@ -27,11 +27,14 @@ html[data-theme="tidal-dusk"] {
   --theme-dialog-bg: #24283b;
   --theme-embed-bg: #1b2030;
   --theme-external-bg: #1b2030;
+  --theme-danger: #f0aaa5;
+  --theme-danger-soft: #e49d98;
   --theme-selection-border: rgba(211, 160, 113, .29);
   --theme-selection-bg: rgba(211, 160, 113, .095);
   --theme-selection-kicker: #e0b185;
   --theme-focus: #d7a978;
   --theme-live-dot-ring: rgba(215, 169, 120, .16);
+  --theme-backdrop: rgba(12, 12, 22, .72);
   --theme-dialog-shadow: 0 32px 92px rgba(10, 10, 18, .48);
   --theme-transfer-shadow: 0 28px 76px rgba(10, 10, 18, .40);
 }
