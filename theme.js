@@ -1,6 +1,7 @@
 (() => {
   const STORAGE_KEY = "meteopanel-theme-v1";
   const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light"]);
+  const PRIMARY_THEMES = new Set(["ocean-night", "coastal-light"]);
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
 
   const readStoredTheme = () => {
@@ -36,23 +37,89 @@
 
   let activeTheme = applyTheme(readStoredTheme());
 
-  function initThemeControl() {
-    const select = document.getElementById("themeSelect");
-    if (!select) return;
+  const persistTheme = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, activeTheme);
+    } catch {
+      // A preferência continua válida durante a sessão mesmo sem localStorage.
+    }
+  };
 
-    select.value = activeTheme;
-    select.addEventListener("change", () => {
-      activeTheme = applyTheme(select.value);
-      try {
-        localStorage.setItem(STORAGE_KEY, activeTheme);
-      } catch {
-        // A preferência continua válida durante a sessão mesmo sem localStorage.
+  function syncThemeControls() {
+    const primaryControl = document.getElementById("themePrimaryControl");
+    const settingsMenu = document.getElementById("settingsMenu");
+    const status = document.getElementById("settingsThemeStatus");
+
+    if (primaryControl) {
+      primaryControl.dataset.primaryTheme = PRIMARY_THEMES.has(activeTheme) ? activeTheme : "none";
+    }
+
+    document.querySelectorAll("[data-theme-choice]").forEach((control) => {
+      control.setAttribute("aria-pressed", String(control.dataset.themeChoice === activeTheme));
+    });
+
+    if (settingsMenu) {
+      settingsMenu.dataset.secondaryActive = String(!PRIMARY_THEMES.has(activeTheme));
+    }
+
+    if (status) {
+      const labels = {
+        auto: "Automático",
+        light: "Claro clássico",
+        "ocean-night": "Ocean Night",
+        "coastal-light": "Coastal Light"
+      };
+      status.textContent = `Tema atual: ${labels[activeTheme] || activeTheme}`;
+    }
+  }
+
+  function selectTheme(theme) {
+    activeTheme = applyTheme(theme);
+    persistTheme();
+    syncThemeControls();
+  }
+
+  function initThemeControls() {
+    const primaryControl = document.getElementById("themePrimaryControl");
+    const settingsMenu = document.getElementById("settingsMenu");
+    const settingsTrigger = settingsMenu?.querySelector("summary");
+
+    document.querySelectorAll("[data-theme-choice]").forEach((control) => {
+      control.addEventListener("click", () => {
+        selectTheme(control.dataset.themeChoice);
+        if (settingsMenu?.contains(control)) settingsMenu.removeAttribute("open");
+      });
+    });
+
+    primaryControl?.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      const nextTheme = event.key === "ArrowLeft" ? "ocean-night" : "coastal-light";
+      selectTheme(nextTheme);
+      primaryControl.querySelector(`[data-theme-choice="${nextTheme}"]`)?.focus();
+    });
+
+    document.addEventListener("click", (event) => {
+      if (settingsMenu?.open && !settingsMenu.contains(event.target)) {
+        settingsMenu.removeAttribute("open");
       }
     });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && settingsMenu?.open) {
+        settingsMenu.removeAttribute("open");
+        settingsTrigger?.focus();
+      }
+    });
+
+    syncThemeControls();
   }
 
   const handleSystemThemeChange = () => {
-    if (activeTheme === "auto") applyTheme("auto");
+    if (activeTheme === "auto") {
+      applyTheme("auto");
+      syncThemeControls();
+    }
   };
 
   if (typeof DARK_MEDIA.addEventListener === "function") {
@@ -62,8 +129,8 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initThemeControl, { once: true });
+    document.addEventListener("DOMContentLoaded", initThemeControls, { once: true });
   } else {
-    initThemeControl();
+    initThemeControls();
   }
 })();
