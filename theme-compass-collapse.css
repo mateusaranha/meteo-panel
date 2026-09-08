@@ -3,7 +3,6 @@
   --theme-compass-collapse-ease: cubic-bezier(.2, .78, .2, 1);
 }
 
-/* Mantém o bloco de identidade no topo mesmo quando a área de ações cresce. */
 .topbar > :first-child {
   align-self: flex-start;
 }
@@ -11,20 +10,43 @@
 .topbar-actions {
   position: relative;
   flex-wrap: wrap;
-  align-content: flex-start;
+  align-items: center;
+  justify-content: flex-end;
+  align-content: center;
+  min-width: 0;
 }
 
-/* Faz o trigger e o painel participarem diretamente do flex de ações. */
-.theme-primary-wrap,
+.theme-primary-wrap {
+  display: block !important;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
 .theme-picker {
-  display: contents !important;
+  position: relative;
+  display: grid !important;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  place-items: center;
+  overflow: visible;
+  transition:
+    width var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease),
+    height var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+}
+
+.theme-picker.is-open {
+  width: 196px;
+  height: 166px;
 }
 
 .theme-picker-trigger {
-  position: relative;
-  z-index: 4;
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 50%;
   display: grid !important;
-  flex: 0 0 44px;
   width: 44px;
   height: 44px;
   min-width: 44px;
@@ -39,8 +61,10 @@
     inset 0 0 0 1px var(--theme-subtle-border),
     0 7px 18px rgba(0, 0, 0, .055);
   cursor: pointer;
-  transform: scale(1);
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
   transition:
+    opacity 160ms ease,
     transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease),
     color 180ms ease,
     background-color 180ms ease,
@@ -48,23 +72,21 @@
     box-shadow 180ms ease;
 }
 
-/* Quatro micro-marcas: a versão “adormecida” do Compass. */
+/* Ícone e marcas usam exatamente o mesmo centro geométrico. */
 .theme-picker-trigger::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow:
-    0 -15px 0 currentColor,
-    15px 0 0 currentColor,
-    0 15px 0 currentColor,
-    -15px 0 0 currentColor;
+  width: 30px;
+  height: 30px;
   opacity: .34;
   pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 0%, currentColor 0 1.15px, transparent 1.35px),
+    radial-gradient(circle at 100% 50%, currentColor 0 1.15px, transparent 1.35px),
+    radial-gradient(circle at 50% 100%, currentColor 0 1.15px, transparent 1.35px),
+    radial-gradient(circle at 0% 50%, currentColor 0 1.15px, transparent 1.35px);
   transform: translate(-50%, -50%) scale(1);
   transition: opacity 180ms ease, transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
 }
@@ -72,17 +94,21 @@
 .theme-picker-trigger::after {
   content: "";
   position: absolute;
-  inset: 5px;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--theme-subtle-border);
-  border-radius: inherit;
-  opacity: .56;
+  border-radius: 50%;
+  opacity: .54;
   pointer-events: none;
+  transform: translate(-50%, -50%);
   transition: opacity 180ms ease, transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
 }
 
 .theme-picker-trigger:hover {
-  transform: translateY(-1px);
   background: var(--theme-control-hover);
+  transform: translate(-50%, -50%) scale(1.025);
 }
 
 .theme-picker-trigger:focus-visible {
@@ -91,14 +117,16 @@
 }
 
 .theme-picker-trigger-icon {
-  position: relative;
+  position: absolute;
   z-index: 2;
-  width: 20px;
-  height: 20px;
+  left: 50%;
+  top: 50%;
+  width: 19px;
+  height: 19px;
   color: var(--theme-compass-accent, var(--theme-focus));
+  transform: translate(-50%, -50%);
 }
 
-/* O nome deixa de ocupar espaço; aparece apenas como tooltip em hover/foco. */
 #themePickerTriggerLabel {
   position: absolute;
   z-index: 15;
@@ -135,78 +163,101 @@
 }
 
 .theme-picker.is-open .theme-picker-trigger {
-  border-color: var(--theme-subtle-border);
-  box-shadow:
-    inset 0 0 0 1px var(--theme-subtle-border),
-    0 0 0 4px rgba(120, 180, 200, .035);
-  transform: scale(.96);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(.78);
 }
 
 .theme-picker.is-open .theme-picker-trigger::before {
-  opacity: .12;
-  transform: translate(-50%, -50%) scale(1.18);
+  opacity: .1;
+  transform: translate(-50%, -50%) scale(1.2);
 }
 
 .theme-picker.is-open .theme-picker-trigger::after {
-  opacity: .32;
-  transform: scale(1.06);
+  opacity: .26;
+  transform: translate(-50%, -50%) scale(1.08);
 }
 
 /*
- * O Compass deixa de flutuar sobre o header: torna-se a segunda linha do
- * container de ações e, portanto, aumenta a altura do header naturalmente.
+ * A expansão agora é local: o próprio seletor cresce dentro da linha de
+ * ações. O painel fica absoluto apenas dentro desse espaço reservado,
+ * portanto não invade os controles vizinhos.
  */
 .theme-compass-panel {
-  position: relative !important;
-  z-index: 2;
-  order: 20;
-  display: flex !important;
-  flex: 0 0 100%;
-  justify-content: center;
-  width: 100% !important;
-  max-height: 0;
-  height: auto !important;
+  position: absolute !important;
+  z-index: 4;
+  left: 50% !important;
+  top: 50% !important;
+  display: block !important;
+  width: 196px !important;
+  height: 166px !important;
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   opacity: 0;
-  overflow: clip;
   visibility: hidden;
   pointer-events: none;
-  transform: none !important;
+  transform: translate(-50%, -50%) scale(.72) !important;
+  transform-origin: center;
   transition:
-    max-height var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease),
-    opacity 180ms ease,
+    opacity 170ms ease,
     visibility 0s linear var(--theme-compass-collapse-motion),
-    margin-top var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+    transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
 }
 
 .theme-picker.is-open .theme-compass-panel {
-  max-height: 198px;
-  margin-top: 10px !important;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1) !important;
   transition-delay: 0s;
   animation: none !important;
 }
 
+/* Compacta o Compass real sem reduzir artificialmente as áreas de clique. */
 .theme-compass-panel .theme-compass {
-  flex: 0 0 220px;
-  margin: 0 auto;
-  opacity: 0;
-  transform: translateY(-12px) scale(.84);
-  transform-origin: top center;
-  transition:
-    opacity 180ms ease,
-    transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+  width: 196px;
+  height: 166px;
+  margin: 0;
 }
 
-.theme-picker.is-open .theme-compass-panel .theme-compass {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.theme-compass-panel .theme-compass::before,
+.theme-compass-panel .theme-compass-orbit {
+  width: 112px;
+  height: 112px;
+}
+
+.theme-compass-panel .theme-compass::after {
+  width: 84px;
+  height: 84px;
+}
+
+.theme-compass-panel .theme-compass-puck {
+  top: -21px;
+  width: 42px;
+  height: 42px;
+}
+
+.theme-compass-panel .theme-compass-choice[data-theme-choice="coastal-light"] {
+  left: calc(50% - 18px);
+  top: 9px;
+}
+
+.theme-compass-panel .theme-compass-choice[data-theme-choice="tidal-dusk"] {
+  right: 25px;
+  top: calc(50% - 18px);
+}
+
+.theme-compass-panel .theme-compass-choice[data-theme-choice="ocean-night"] {
+  left: calc(50% - 18px);
+  bottom: 9px;
+}
+
+.theme-compass-panel .theme-compass-choice[data-theme-choice="abyssal"] {
+  left: 25px;
+  top: calc(50% - 18px);
 }
 
 .theme-compass::before,
@@ -235,19 +286,19 @@
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="coastal-light"] {
-  transform: translateY(58px) scale(.7);
+  transform: translateY(54px) scale(.72);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="tidal-dusk"] {
-  transform: translateX(-58px) scale(.7);
+  transform: translateX(-54px) scale(.72);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="ocean-night"] {
-  transform: translateY(-58px) scale(.7);
+  transform: translateY(-54px) scale(.72);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="abyssal"] {
-  transform: translateX(58px) scale(.7);
+  transform: translateX(54px) scale(.72);
 }
 
 .theme-picker.is-open .theme-compass-choice {
@@ -282,18 +333,9 @@ html[data-theme="abyssal"] .theme-picker-trigger-icon {
   color: #f1fdff;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1020px) {
   .topbar-actions {
     width: 100%;
-  }
-
-  .theme-compass-panel {
-    max-width: 100%;
-  }
-
-  .theme-picker.is-open .theme-compass-panel {
-    max-height: 202px;
-    margin-top: 8px !important;
   }
 }
 
@@ -303,6 +345,7 @@ html[data-theme="abyssal"] .theme-picker-trigger-icon {
     flex-direction: row !important;
     flex-wrap: wrap;
     align-items: center !important;
+    justify-content: flex-start;
     gap: 10px !important;
   }
 
@@ -310,30 +353,27 @@ html[data-theme="abyssal"] .theme-picker-trigger-icon {
     flex: 0 0 100%;
   }
 
+  .theme-picker,
   .theme-picker-trigger {
-    flex: 0 0 42px;
     width: 42px;
     height: 42px;
     min-width: 42px;
     min-height: 42px;
   }
 
+  .theme-picker.is-open {
+    width: 196px;
+    height: 166px;
+  }
+
   #refreshButton {
-    flex: 1 1 auto;
+    flex: 1 1 118px;
     width: auto !important;
   }
 
   .settings-menu {
     flex: 0 0 auto;
     align-self: center;
-  }
-
-  .theme-compass-panel {
-    flex: 0 0 100%;
-  }
-
-  .theme-compass-panel .theme-compass {
-    max-width: 100%;
   }
 
   #themePickerTriggerLabel {
@@ -343,12 +383,12 @@ html[data-theme="abyssal"] .theme-picker-trigger-icon {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .theme-picker,
   .theme-picker-trigger,
   .theme-picker-trigger::before,
   .theme-picker-trigger::after,
   #themePickerTriggerLabel,
   .theme-compass-panel,
-  .theme-compass-panel .theme-compass,
   .theme-compass::before,
   .theme-compass::after,
   .theme-compass-orbit,
