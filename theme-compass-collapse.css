@@ -1,32 +1,46 @@
 :root {
-  --theme-compass-collapse-motion: 280ms;
+  --theme-compass-collapse-motion: 300ms;
   --theme-compass-collapse-ease: cubic-bezier(.2, .78, .2, 1);
 }
 
-.theme-picker {
+/* Mantém o bloco de identidade no topo mesmo quando a área de ações cresce. */
+.topbar > :first-child {
+  align-self: flex-start;
+}
+
+.topbar-actions {
   position: relative;
-  width: 122px;
-  min-height: 72px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+/* Faz o trigger e o painel participarem diretamente do flex de ações. */
+.theme-primary-wrap,
+.theme-picker {
+  display: contents !important;
 }
 
 .theme-picker-trigger {
   position: relative;
   z-index: 4;
-  display: inline-flex !important;
-  width: 122px;
-  min-height: 72px;
-  padding: 9px 14px 10px;
-  flex-direction: column;
-  gap: 3px;
-  border-radius: 999px;
-  color: var(--theme-text);
+  display: grid !important;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--theme-card-border);
+  border-radius: 50%;
+  color: var(--theme-text-muted);
   background: var(--theme-subtle-bg);
   box-shadow:
     inset 0 0 0 1px var(--theme-subtle-border),
-    0 8px 22px rgba(0, 0, 0, .06);
+    0 7px 18px rgba(0, 0, 0, .055);
+  cursor: pointer;
   transform: scale(1);
   transition:
-    opacity 180ms ease,
     transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease),
     color 180ms ease,
     background-color 180ms ease,
@@ -34,80 +48,165 @@
     box-shadow 180ms ease;
 }
 
+/* Quatro micro-marcas: a versão “adormecida” do Compass. */
+.theme-picker-trigger::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow:
+    0 -15px 0 currentColor,
+    15px 0 0 currentColor,
+    0 15px 0 currentColor,
+    -15px 0 0 currentColor;
+  opacity: .34;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity 180ms ease, transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+}
+
 .theme-picker-trigger::after {
   content: "";
   position: absolute;
-  inset: 6px;
+  inset: 5px;
   border: 1px solid var(--theme-subtle-border);
   border-radius: inherit;
-  opacity: .52;
+  opacity: .56;
   pointer-events: none;
+  transition: opacity 180ms ease, transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+}
+
+.theme-picker-trigger:hover {
+  transform: translateY(-1px);
+  background: var(--theme-control-hover);
+}
+
+.theme-picker-trigger:focus-visible {
+  outline: 2px solid var(--theme-focus);
+  outline-offset: 3px;
 }
 
 .theme-picker-trigger-icon {
-  width: 23px;
-  height: 23px;
+  position: relative;
+  z-index: 2;
+  width: 20px;
+  height: 20px;
   color: var(--theme-compass-accent, var(--theme-focus));
 }
 
+/* O nome deixa de ocupar espaço; aparece apenas como tooltip em hover/foco. */
 #themePickerTriggerLabel {
-  max-width: 96px;
+  position: absolute;
+  z-index: 15;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  width: max-content;
+  max-width: 150px;
+  padding: 5px 8px;
+  border: 1px solid var(--theme-card-border);
+  border-radius: 8px;
+  color: var(--theme-text);
+  background: var(--theme-dialog-bg);
+  box-shadow: var(--theme-transfer-shadow);
+  opacity: 0;
   overflow: hidden;
+  pointer-events: none;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: .72rem;
-  line-height: 1.05;
+  font-size: .68rem;
+  font-weight: 760;
+  line-height: 1.1;
+  transform: translate(-50%, 3px);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.theme-picker-trigger:hover #themePickerTriggerLabel,
+.theme-picker-trigger:focus-visible #themePickerTriggerLabel {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 .theme-picker-chevron {
-  position: absolute;
-  right: 13px;
-  bottom: 12px;
-  width: 5px;
-  height: 5px;
-  opacity: .42;
+  display: none !important;
 }
 
-.theme-picker.is-open .theme-picker-chevron {
-  transform: rotate(225deg) translate(-1px, -1px);
+.theme-picker.is-open .theme-picker-trigger {
+  border-color: var(--theme-subtle-border);
+  box-shadow:
+    inset 0 0 0 1px var(--theme-subtle-border),
+    0 0 0 4px rgba(120, 180, 200, .035);
+  transform: scale(.96);
 }
 
+.theme-picker.is-open .theme-picker-trigger::before {
+  opacity: .12;
+  transform: translate(-50%, -50%) scale(1.18);
+}
+
+.theme-picker.is-open .theme-picker-trigger::after {
+  opacity: .32;
+  transform: scale(1.06);
+}
+
+/*
+ * O Compass deixa de flutuar sobre o header: torna-se a segunda linha do
+ * container de ações e, portanto, aumenta a altura do header naturalmente.
+ */
 .theme-compass-panel {
-  position: absolute !important;
-  z-index: 90;
-  left: 50% !important;
-  top: 50% !important;
-  display: block !important;
-  width: 220px !important;
-  height: 186px;
+  position: relative !important;
+  z-index: 2;
+  order: 20;
+  display: flex !important;
+  flex: 0 0 100%;
+  justify-content: center;
+  width: 100% !important;
+  max-height: 0;
+  height: auto !important;
+  margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   opacity: 0;
+  overflow: clip;
   visibility: hidden;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(.52) !important;
-  transform-origin: center;
+  transform: none !important;
   transition:
+    max-height var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease),
     opacity 180ms ease,
     visibility 0s linear var(--theme-compass-collapse-motion),
-    transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+    margin-top var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
 }
 
 .theme-picker.is-open .theme-compass-panel {
+  max-height: 198px;
+  margin-top: 10px !important;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1) !important;
   transition-delay: 0s;
   animation: none !important;
 }
 
-.theme-picker.is-open .theme-picker-trigger {
+.theme-compass-panel .theme-compass {
+  flex: 0 0 220px;
+  margin: 0 auto;
   opacity: 0;
-  pointer-events: none;
-  transform: scale(.78);
+  transform: translateY(-12px) scale(.84);
+  transform-origin: top center;
+  transition:
+    opacity 180ms ease,
+    transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
+}
+
+.theme-picker.is-open .theme-compass-panel .theme-compass {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .theme-compass::before,
@@ -115,7 +214,7 @@
 .theme-compass-orbit {
   opacity: 0;
   transition:
-    opacity 180ms ease 60ms,
+    opacity 180ms ease 45ms,
     transform var(--theme-compass-collapse-motion) var(--theme-compass-collapse-ease);
 }
 
@@ -127,7 +226,7 @@
 
 .theme-picker:not(.is-open) .theme-compass::before,
 .theme-picker:not(.is-open) .theme-compass::after {
-  transform: translate(-50%, -50%) scale(.62);
+  transform: translate(-50%, -50%) scale(.6);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice {
@@ -136,26 +235,26 @@
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="coastal-light"] {
-  transform: translateY(62px) scale(.72);
+  transform: translateY(58px) scale(.7);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="tidal-dusk"] {
-  transform: translateX(-62px) scale(.72);
+  transform: translateX(-58px) scale(.7);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="ocean-night"] {
-  transform: translateY(-62px) scale(.72);
+  transform: translateY(-58px) scale(.7);
 }
 
 .theme-picker:not(.is-open) .theme-compass-choice[data-theme-choice="abyssal"] {
-  transform: translateX(62px) scale(.72);
+  transform: translateX(58px) scale(.7);
 }
 
 .theme-picker.is-open .theme-compass-choice {
   opacity: 1;
   transform: translate(0, 0) scale(1);
   transition:
-    opacity 170ms ease 70ms,
+    opacity 170ms ease 65ms,
     color 180ms ease,
     border-color 180ms ease,
     background-color 180ms ease,
@@ -184,85 +283,72 @@ html[data-theme="abyssal"] .theme-picker-trigger-icon {
 }
 
 @media (max-width: 900px) {
-  .theme-picker {
-    width: auto;
-    min-height: 42px;
-  }
-
-  .theme-picker-trigger {
-    width: auto;
-    min-width: 148px;
-    min-height: 42px;
-    padding: 9px 34px 9px 14px;
-    flex-direction: row;
-    gap: 8px;
-    justify-content: flex-start;
-  }
-
-  .theme-picker-trigger::after {
-    inset: 5px;
-  }
-
-  #themePickerTriggerLabel {
-    max-width: 112px;
-    font-size: .78rem;
-  }
-
-  .theme-picker-chevron {
-    right: 15px;
-    bottom: auto;
-    top: 50%;
-    transform: translateY(-65%) rotate(45deg);
-  }
-
-  .theme-picker.is-open .theme-picker-chevron {
-    transform: translateY(-15%) rotate(225deg);
-  }
-
-  .theme-compass-panel {
-    top: calc(100% + 9px) !important;
-    left: 50% !important;
-    width: 250px !important;
-    height: auto;
-    padding: 22px 14px 20px !important;
-    border: 1px solid var(--theme-card-border) !important;
-    border-radius: 20px;
-    background: var(--theme-dialog-bg) !important;
-    box-shadow: var(--theme-transfer-shadow) !important;
-    transform: translate(-50%, -7px) scale(.94) !important;
-  }
-
-  .theme-picker.is-open .theme-compass-panel {
-    transform: translate(-50%, 0) scale(1) !important;
-  }
-
-  .theme-picker.is-open .theme-picker-trigger {
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-  }
-}
-
-@media (max-width: 560px) {
-  .theme-picker,
-  .theme-picker-trigger {
+  .topbar-actions {
     width: 100%;
   }
 
   .theme-compass-panel {
-    left: 0 !important;
-    width: min(250px, calc(100vw - 24px)) !important;
-    transform: translateY(-7px) scale(.94) !important;
+    max-width: 100%;
   }
 
   .theme-picker.is-open .theme-compass-panel {
-    transform: translateY(0) scale(1) !important;
+    max-height: 202px;
+    margin-top: 8px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .topbar-actions .updated {
+    flex: 0 0 100%;
+  }
+
+  .theme-picker-trigger {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+
+  #refreshButton {
+    flex: 1 1 auto;
+    width: auto !important;
+  }
+
+  .settings-menu {
+    flex: 0 0 auto;
+    align-self: center;
+  }
+
+  .theme-compass-panel {
+    flex: 0 0 100%;
+  }
+
+  .theme-compass-panel .theme-compass {
+    max-width: 100%;
+  }
+
+  #themePickerTriggerLabel {
+    bottom: auto;
+    top: calc(100% + 8px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .theme-picker-trigger,
+  .theme-picker-trigger::before,
+  .theme-picker-trigger::after,
+  #themePickerTriggerLabel,
   .theme-compass-panel,
+  .theme-compass-panel .theme-compass,
   .theme-compass::before,
   .theme-compass::after,
   .theme-compass-orbit,
