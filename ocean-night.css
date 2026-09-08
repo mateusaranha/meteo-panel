@@ -1,0 +1,209 @@
+html[data-theme="ocean-night"] {
+  --theme-page-bg: #051118;
+  --theme-page-glow: rgba(45, 156, 169, .18);
+  --theme-text: #f1f8f9;
+  --theme-text-secondary: #aec3c9;
+  --theme-text-muted: #8ca6ae;
+  --theme-text-subtle: #6f8992;
+  --theme-kicker: #83bbb9;
+  --theme-card-bg: #0b2029;
+  --theme-card-border: rgba(116, 211, 207, .15);
+  --theme-card-shadow: 0 22px 56px rgba(0, 7, 11, .28), inset 0 1px 0 rgba(210, 247, 245, .025);
+  --theme-divider: rgba(116, 211, 207, .13);
+  --theme-panel-bg: linear-gradient(180deg, rgba(16, 48, 59, .96), rgba(7, 27, 36, .985));
+  --theme-marine-bg: linear-gradient(180deg, rgba(13, 52, 61, .97), rgba(6, 26, 35, .99));
+  --theme-aldeia-bg: linear-gradient(180deg, rgba(13, 43, 53, .97), rgba(6, 25, 34, .99));
+  --theme-subtle-bg: rgba(100, 203, 201, .052);
+  --theme-subtle-bg-strong: rgba(100, 203, 201, .082);
+  --theme-subtle-border: rgba(116, 211, 207, .115);
+  --theme-control-bg: #112d37;
+  --theme-control-fg: #dceced;
+  --theme-control-hover: #173944;
+  --theme-primary-bg: #55d1cf;
+  --theme-primary-fg: #04171d;
+  --theme-input-bg: #071a22;
+  --theme-menu-bg: #0d252e;
+  --theme-menu-hover: #153641;
+  --theme-dialog-bg: #0a2029;
+  --theme-embed-bg: #071820;
+  --theme-external-bg: #071820;
+  --theme-selection-border: rgba(85, 209, 207, .31);
+  --theme-selection-bg: rgba(85, 209, 207, .105);
+  --theme-selection-kicker: #82dfdb;
+  --theme-focus: #82dfdb;
+  --theme-live-dot-ring: rgba(85, 209, 207, .18);
+  --theme-dialog-shadow: 0 32px 96px rgba(0, 4, 7, .54);
+  --theme-transfer-shadow: 0 28px 80px rgba(0, 4, 7, .44);
+}
+
+html[data-theme="ocean-night"] body {
+  background:
+    radial-gradient(ellipse 62rem 34rem at 8% -8%, rgba(53, 174, 179, .16), transparent 64%),
+    radial-gradient(ellipse 48rem 28rem at 94% 16%, rgba(30, 99, 122, .12), transparent 68%),
+    linear-gradient(180deg, #06151d 0%, #051118 44%, #040e14 100%);
+}
+
+html[data-theme="ocean-night"] .topbar {
+  border-bottom: 1px solid rgba(116, 211, 207, .08);
+}
+
+html[data-theme="ocean-night"] .eyebrow {
+  color: #76c9c7;
+  letter-spacing: .135em;
+}
+
+html[data-theme="ocean-night"] #panelTitle {
+  color: #f4fbfb;
+  text-shadow: 0 3px 26px rgba(75, 196, 197, .08);
+}
+
+html[data-theme="ocean-night"] .location {
+  color: #9eb7be;
+}
+
+html[data-theme="ocean-night"] .updated {
+  color: #78959e;
+}
+
+html[data-theme="ocean-night"] .weather-card {
+  border-color: rgba(116, 211, 207, .145);
+  background: linear-gradient(180deg, rgba(13, 34, 43, .985), rgba(8, 27, 35, .995));
+  box-shadow:
+    0 22px 56px rgba(0, 6, 10, .28),
+    inset 0 1px 0 rgba(223, 250, 248, .025);
+}
+
+html[data-theme="ocean-night"] .card-header {
+  background: linear-gradient(180deg, rgba(112, 211, 207, .025), transparent);
+}
+
+html[data-theme="ocean-night"] .card-header h2 {
+  color: #f2f9fa;
+}
+
+html[data-theme="ocean-night"] .source-kicker {
+  color: #79b9b7;
+}
+
+html[data-theme="ocean-night"] .openmeteo-wrap,
+html[data-theme="ocean-night"] .marine-wrap,
+html[data-theme="ocean-night"] .aldeia-live-wrap {
+  box-shadow: inset 0 1px 0 rgba(198, 244, 241, .018);
+}
+
+html[data-theme="ocean-night"] .weather-metric,
+html[data-theme="ocean-night"] .day-card,
+html[data-theme="ocean-night"] .marine-selected,
+html[data-theme="ocean-night"] .aldeia-graph-pane {
+  background: linear-gradient(180deg, rgba(117, 215, 211, .058), rgba(117, 215, 211, .028));
+  box-shadow: inset 0 1px 0 rgba(225, 250, 248, .018);
+}
+
+html[data-theme="ocean-night"] .weather-metric:hover,
+html[data-theme="ocean-night"] .day-card:hover {
+  border-color: rgba(116, 211, 207, .19);
+  background: linear-gradient(180deg, rgba(117, 215, 211, .075), rgba(117, 215, 211, .038));
+}
+
+html[data-theme="ocean-night"] .current-temperature,
+html[data-theme="ocean-night"] .marine-temperature {
+  color: #9be7e2;
+  text-shadow: 0 5px 26px rgba(69, 201, 199, .10);
+}
+
+html[data-theme="ocean-night"] .current-temperature .degree,
+html[data-theme="ocean-night"] .marine-temperature span:last-child {
+  color: #c1d8dc;
+}
+
+html[data-theme="ocean-night"] #currentWind,
+html[data-theme="ocean-night"] #currentGusts {
+  color: #d9f2f1;
+}
+
+html[data-theme="ocean-night"] .weather-metric strong,
+html[data-theme="ocean-night"] .day-temperature strong {
+  color: #edf7f8;
+}
+
+html[data-theme="ocean-night"] .metric-label {
+  color: #7e9da6;
+}
+
+html[data-theme="ocean-night"] .weather-icon-current {
+  filter: saturate(.88) brightness(1.05);
+}
+
+html[data-theme="ocean-night"] .marine-wave {
+  filter: saturate(.68) brightness(1.18);
+}
+
+html[data-theme="ocean-night"] .button-primary {
+  box-shadow: 0 7px 22px rgba(30, 151, 153, .13);
+}
+
+html[data-theme="ocean-night"] .button-primary:hover {
+  box-shadow: 0 9px 25px rgba(30, 151, 153, .18);
+}
+
+html[data-theme="ocean-night"] .button-secondary,
+html[data-theme="ocean-night"] .source-link,
+html[data-theme="ocean-night"] .marine-menu summary,
+html[data-theme="ocean-night"] .dialog-close,
+html[data-theme="ocean-night"] .settings-trigger {
+  border: 1px solid rgba(116, 211, 207, .07);
+}
+
+html[data-theme="ocean-night"] .marine-chip {
+  color: #bcd0d5;
+}
+
+html[data-theme="ocean-night"] .marine-chip[aria-current="true"] {
+  color: #04171d;
+  box-shadow: 0 6px 18px rgba(40, 166, 167, .13);
+}
+
+html[data-theme="ocean-night"] .theme-segmented {
+  border-color: rgba(116, 211, 207, .14);
+  background: rgba(71, 157, 162, .045);
+}
+
+html[data-theme="ocean-night"] .theme-slider {
+  background: linear-gradient(180deg, rgba(75, 196, 197, .18), rgba(54, 153, 159, .10));
+  box-shadow:
+    inset 0 0 0 1px rgba(130, 223, 219, .26),
+    0 7px 20px rgba(0, 7, 11, .22);
+}
+
+html[data-theme="ocean-night"] .settings-popover {
+  border-color: rgba(116, 211, 207, .14);
+  background: linear-gradient(180deg, #0d2730, #091d25);
+}
+
+html[data-theme="ocean-night"] .form-field input,
+html[data-theme="ocean-night"] .marine-search-row input {
+  box-shadow: inset 0 1px 0 rgba(230, 252, 250, .018);
+}
+
+html[data-theme="ocean-night"] .form-field input:focus,
+html[data-theme="ocean-night"] .marine-search-row input:focus {
+  border-color: rgba(130, 223, 219, .34);
+}
+
+html[data-theme="ocean-night"] .aldeia-live-dot {
+  box-shadow: 0 0 0 4px rgba(85, 209, 207, .16), 0 0 16px rgba(85, 209, 207, .12);
+}
+
+html[data-theme="ocean-night"] .footer {
+  color: #67828b;
+}
+
+html[data-theme="ocean-night"] * {
+  scrollbar-color: rgba(116, 211, 207, .34) rgba(4, 14, 20, .50);
+}
+
+@media (max-width: 560px) {
+  html[data-theme="ocean-night"] .topbar {
+    border-bottom-color: rgba(116, 211, 207, .065);
+  }
+}
