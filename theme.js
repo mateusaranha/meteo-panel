@@ -35,12 +35,19 @@
   };
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
   const REDUCED_MOTION_MEDIA = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const MOBILE_MEDIA = window.matchMedia("(max-width: 900px)");
   const THEME_TRANSITION_MS = 760;
   const COMPASS_LEAD_MS = 110;
+  const COMPASS_IDLE_MS = 5000;
+  const COMPASS_SELECTION_CLOSE_MS = 1200;
+  const COMPASS_SELECTION_CLOSE_MOBILE_MS = 700;
   const MOTION_STYLESHEET_ID = "themeMotionStylesheet";
+  const COLLAPSE_STYLESHEET_ID = "themeCompassCollapseStylesheet";
 
   let transitionTimer = null;
   let selectionLeadTimer = null;
+  let compassIdleTimer = null;
+  let compassSelectionCloseTimer = null;
   let selectionSequence = 0;
   let compassVisualAngle = null;
 
@@ -53,7 +60,17 @@
     document.head.appendChild(link);
   };
 
+  const ensureCollapseStylesheet = () => {
+    if (document.getElementById(COLLAPSE_STYLESHEET_ID)) return;
+    const link = document.createElement("link");
+    link.id = COLLAPSE_STYLESHEET_ID;
+    link.rel = "stylesheet";
+    link.href = "theme-compass-collapse.css?v=20260908-31";
+    document.head.appendChild(link);
+  };
+
   ensureMotionStylesheet();
+  ensureCollapseStylesheet();
 
   const readStoredTheme = () => {
     try {
@@ -309,13 +326,91 @@
     }, COMPASS_LEAD_MS);
   }
 
+  function clearCompassIdleTimer() {
+    if (!compassIdleTimer) return;
+    clearTimeout(compassIdleTimer);
+    compassIdleTimer = null;
+  }
+
+  function clearCompassSelectionCloseTimer() {
+    if (!compassSelectionCloseTimer) return;
+    clearTimeout(compassSelectionCloseTimer);
+    compassSelectionCloseTimer = null;
+  }
+
+  function clearCompassTimers() {
+    clearCompassIdleTimer();
+    clearCompassSelectionCloseTimer();
+  }
+
+  function compassHasKeyboardFocus() {
+    const compass = document.getElementById("themeCompass");
+    return Boolean(compass && compass.contains(document.activeElement));
+  }
+
+  function scheduleCompassIdle(delay = COMPASS_IDLE_MS) {
+    const picker = document.getElementById("themePicker");
+    if (!picker?.classList.contains("is-open")) return;
+
+    clearCompassIdleTimer();
+    compassIdleTimer = window.setTimeout(() => {
+      compassIdleTimer = null;
+      if (!picker.classList.contains("is-open")) return;
+
+      if (compassHasKeyboardFocus() || picker.matches(":hover")) {
+        scheduleCompassIdle();
+        return;
+      }
+
+      closeCompassPanel();
+    }, delay);
+  }
+
+  function openCompassPanel({ focusActiveChoice = false } = {}) {
+    const picker = document.getElementById("themePicker");
+    const trigger = document.getElementById("themeCompassTrigger");
+    const settingsMenu = document.getElementById("settingsMenu");
+    const compass = document.getElementById("themeCompass");
+    if (!picker || !trigger) return;
+
+    settingsMenu?.removeAttribute("open");
+    clearCompassTimers();
+    picker.classList.add("is-open");
+    trigger.setAttribute("aria-expanded", "true");
+
+    if (focusActiveChoice) {
+      requestAnimationFrame(() => {
+        const activeChoice = compass?.querySelector('[aria-pressed="true"]')
+          || compass?.querySelector(".theme-compass-choice");
+        activeChoice?.focus();
+      });
+      return;
+    }
+
+    scheduleCompassIdle();
+  }
+
   function closeCompassPanel({ restoreFocus = false } = {}) {
     const picker = document.getElementById("themePicker");
     const trigger = document.getElementById("themeCompassTrigger");
     if (!picker?.classList.contains("is-open")) return;
+
+    clearCompassTimers();
     picker.classList.remove("is-open");
     trigger?.setAttribute("aria-expanded", "false");
-    if (restoreFocus) trigger?.focus();
+    if (restoreFocus) trigger?.focus({ preventScroll: true });
+  }
+
+  function scheduleCompassCloseAfterSelection({ restoreFocus = true } = {}) {
+    const delay = MOBILE_MEDIA.matches
+      ? COMPASS_SELECTION_CLOSE_MOBILE_MS
+      : COMPASS_SELECTION_CLOSE_MS;
+
+    clearCompassTimers();
+    compassSelectionCloseTimer = window.setTimeout(() => {
+      compassSelectionCloseTimer = null;
+      closeCompassPanel({ restoreFocus });
+    }, delay);
   }
 
   function initThemeControls() {
@@ -328,22 +423,65 @@
     const settingsTrigger = settingsMenu?.querySelector("summary");
 
     document.querySelectorAll("[data-theme-choice]").forEach((control) => {
-      control.addEventListener("click", () => {
+      control.addEventListener("click", (event) => {
         selectTheme(control.dataset.themeChoice);
-        if (settingsMenu?.contains(control)) settingsMenu.removeAttribute("open");
-        if (compass?.contains(control)) closeCompassPanel();
+
+        if (settingsMenu?.contains(control)) {
+          settingsMenu.removeAttribute("open");
+          return;
+        }
+
+        if (!compass?.contains(control)) return;
+
+        if (event.detail === 0) {
+          clearCompassTimers();
+          return;
+        }
+
+        control.blur();
+        scheduleCompassCloseAfterSelection();
       });
     });
 
-    pickerTrigger?.addEventListener("click", () => {
+    pickerTrigger?.addEventListener("click", (event) => {
       const willOpen = !picker?.classList.contains("is-open");
-      if (willOpen) settingsMenu?.removeAttribute("open");
-      picker?.classList.toggle("is-open", willOpen);
-      pickerTrigger.setAttribute("aria-expanded", String(willOpen));
+      if (willOpen) {
+        openCompassPanel({ focusActiveChoice: event.detail === 0 });
+      } else {
+        closeCompassPanel();
+      }
     });
 
     settingsTrigger?.addEventListener("click", () => {
       closeCompassPanel();
+    });
+
+    picker?.addEventListener("pointermove", () => {
+      if (!picker.classList.contains("is-open")) return;
+      clearCompassSelectionCloseTimer();
+      scheduleCompassIdle();
+    }, { passive: true });
+
+    picker?.addEventListener("pointerenter", () => {
+      if (!picker.classList.contains("is-open")) return;
+      clearCompassSelectionCloseTimer();
+      scheduleCompassIdle();
+    });
+
+    picker?.addEventListener("pointerleave", () => {
+      if (picker.classList.contains("is-open")) scheduleCompassIdle();
+    });
+
+    compass?.addEventListener("focusin", () => {
+      clearCompassTimers();
+    });
+
+    compass?.addEventListener("focusout", () => {
+      requestAnimationFrame(() => {
+        if (!compass.contains(document.activeElement) && picker?.classList.contains("is-open")) {
+          scheduleCompassIdle();
+        }
+      });
     });
 
     compass?.addEventListener("keydown", (event) => {
@@ -360,6 +498,7 @@
       if (nextIndex === null) return;
 
       event.preventDefault();
+      clearCompassTimers();
       const nextTheme = AUTHOR_THEMES[nextIndex];
       selectTheme(nextTheme);
       compass.querySelector(`[data-theme-choice="${nextTheme}"]`)?.focus();
@@ -389,6 +528,7 @@
     });
 
     syncThemeControls();
+    closeCompassPanel();
 
     requestAnimationFrame(() => {
       if (compass) compass.dataset.compassReady = "true";
