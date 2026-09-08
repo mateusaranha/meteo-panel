@@ -1,0 +1,98 @@
+:root {
+  --theme-motion-duration: 560ms;
+  --theme-slider-duration: 420ms;
+  --theme-motion-ease: cubic-bezier(.2, .72, .2, 1);
+  --theme-slider-ease: cubic-bezier(.22, .78, .22, 1);
+}
+
+/* Mantém o transform do indicador ativo mesmo durante a transição global. */
+html.theme-transitioning .theme-segmented[data-slider-ready="true"] .theme-slider {
+  transition:
+    transform var(--theme-slider-duration) var(--theme-slider-ease),
+    opacity 220ms ease,
+    background-color var(--theme-motion-duration) var(--theme-motion-ease),
+    box-shadow var(--theme-motion-duration) var(--theme-motion-ease) !important;
+}
+
+/*
+ * A paleta possui gradientes que não interpolam bem apenas com custom properties.
+ * Esta camada preserva por alguns instantes o fundo anterior e o libera suavemente,
+ * enquanto as cores/superfícies abaixo já caminham para o novo tema.
+ */
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background: var(--theme-transition-from-background, transparent);
+  opacity: 0;
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+}
+
+html.theme-transitioning body::before {
+  animation: meteo-theme-background-release 640ms var(--theme-motion-ease) both;
+}
+
+@keyframes meteo-theme-background-release {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Componentes cuja mudança visual precisa ser perceptível ao usuário. */
+html.theme-transitioning .openmeteo-wrap,
+html.theme-transitioning .marine-wrap,
+html.theme-transitioning .aldeia-live-wrap,
+html.theme-transitioning .windguru-scroll,
+html.theme-transitioning .embed-frame,
+html.theme-transitioning .weather-metric,
+html.theme-transitioning .day-card,
+html.theme-transitioning .marine-selected,
+html.theme-transitioning .marine-chip,
+html.theme-transitioning .aldeia-graph-pane,
+html.theme-transitioning .marine-transfer-section,
+html.theme-transitioning .marine-import-list,
+html.theme-transitioning .marine-search-result,
+html.theme-transitioning .settings-heading,
+html.theme-transitioning .settings-section-label,
+html.theme-transitioning .theme-label {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: var(--theme-motion-duration);
+  transition-timing-function: var(--theme-motion-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transitioning body::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  html.theme-transitioning .theme-segmented[data-slider-ready="true"] .theme-slider,
+  html.theme-transitioning .openmeteo-wrap,
+  html.theme-transitioning .marine-wrap,
+  html.theme-transitioning .aldeia-live-wrap,
+  html.theme-transitioning .windguru-scroll,
+  html.theme-transitioning .embed-frame,
+  html.theme-transitioning .weather-metric,
+  html.theme-transitioning .day-card,
+  html.theme-transitioning .marine-selected,
+  html.theme-transitioning .marine-chip,
+  html.theme-transitioning .aldeia-graph-pane,
+  html.theme-transitioning .marine-transfer-section,
+  html.theme-transitioning .marine-import-list,
+  html.theme-transitioning .marine-search-result,
+  html.theme-transitioning .settings-heading,
+  html.theme-transitioning .settings-section-label,
+  html.theme-transitioning .theme-label {
+    transition: none !important;
+  }
+}
