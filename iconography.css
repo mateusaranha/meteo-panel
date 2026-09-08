@@ -1,0 +1,140 @@
+/*
+ * Iconografia própria do MeteoPanel.
+ * Os glyphs/emoji do HTML permanecem como fallback. Em navegadores com suporte
+ * a CSS mask, eles são substituídos por vetores leves e consistentes.
+ */
+@supports ((-webkit-mask-image: url("")) or (mask-image: url(""))) {
+  .theme-segment-icon,
+  .settings-trigger > span,
+  .marine-wave,
+  .marine-empty-icon {
+    font-size: 0;
+  }
+
+  .theme-segment-icon::before,
+  .settings-trigger > span::before,
+  .marine-wave::before,
+  .marine-empty-icon::before,
+  .marine-menu summary::before {
+    content: "";
+    display: block;
+    background: currentColor;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  .theme-segment-icon {
+    color: inherit;
+    opacity: .72;
+    transition: color 180ms ease, filter 180ms ease, opacity 180ms ease, transform 180ms ease;
+  }
+
+  .theme-segment-icon::before {
+    width: 17px;
+    height: 17px;
+  }
+
+  .theme-segment[data-theme-choice="ocean-night"] .theme-segment-icon::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M20.7 15.1A8.1 8.1 0 0 1 8.9 3.3 9 9 0 1 0 20.7 15.1Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M20.7 15.1A8.1 8.1 0 0 1 8.9 3.3 9 9 0 1 0 20.7 15.1Z'/%3E%3C/svg%3E");
+  }
+
+  .theme-segment[data-theme-choice="coastal-light"] .theme-segment-icon::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .theme-segment[aria-pressed="true"] .theme-segment-icon {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  .theme-segment[aria-pressed="true"][data-theme-choice="ocean-night"] .theme-segment-icon {
+    color: #d9e6ea;
+    filter: drop-shadow(0 0 4px rgba(224, 237, 241, .28));
+  }
+
+  .theme-segment[aria-pressed="true"][data-theme-choice="coastal-light"] .theme-segment-icon {
+    color: #e6a126;
+    filter: drop-shadow(0 0 4px rgba(239, 166, 43, .30));
+  }
+
+  .settings-trigger > span {
+    display: grid;
+    width: 18px;
+    height: 18px;
+    place-items: center;
+  }
+
+  .settings-trigger > span::before {
+    width: 18px;
+    height: 18px;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M19.14 12.94a7.6 7.6 0 0 0 .05-.94 7.6 7.6 0 0 0-.05-.94l2.03-1.58a.48.48 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94L14.4 2.8a.48.48 0 0 0-.48-.4h-3.84a.48.48 0 0 0-.48.4l-.37 2.55c-.58.24-1.12.55-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.71 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.6 7.6 0 0 0-.05.94c0 .32.02.63.05.94l-2.03 1.58a.48.48 0 0 0-.12.61l1.92 3.32c.12.22.38.3.59.22l2.39-.96c.5.39 1.04.7 1.62.94l.37 2.55c.04.23.24.4.48.4h3.84c.24 0 .44-.17.48-.4l.37-2.55a7.03 7.03 0 0 0 1.62-.94l2.39.96c.21.08.47 0 .59-.22l1.92-3.32a.48.48 0 0 0-.12-.61l-2.03-1.58ZM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M19.14 12.94a7.6 7.6 0 0 0 .05-.94 7.6 7.6 0 0 0-.05-.94l2.03-1.58a.48.48 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94L14.4 2.8a.48.48 0 0 0-.48-.4h-3.84a.48.48 0 0 0-.48.4l-.37 2.55c-.58.24-1.12.55-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.71 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.6 7.6 0 0 0-.05.94c0 .32.02.63.05.94l-2.03 1.58a.48.48 0 0 0-.12.61l1.92 3.32c.12.22.38.3.59.22l2.39-.96c.5.39 1.04.7 1.62.94l.37 2.55c.04.23.24.4.48.4h3.84c.24 0 .44-.17.48-.4l.37-2.55a7.03 7.03 0 0 0 1.62-.94l2.39.96c.21.08.47 0 .59-.22l1.92-3.32a.48.48 0 0 0-.12-.61l-2.03-1.58ZM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5Z'/%3E%3C/svg%3E");
+  }
+
+  .marine-wave,
+  .marine-empty-icon {
+    display: inline-grid;
+    place-items: center;
+    color: var(--theme-focus);
+  }
+
+  .marine-wave {
+    width: 48px;
+    height: 48px;
+  }
+
+  .marine-empty-icon {
+    width: 44px;
+    height: 44px;
+    opacity: .82;
+  }
+
+  .marine-wave::before,
+  .marine-empty-icon::before {
+    width: 100%;
+    height: 100%;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1'/%3E%3Cpath d='M3 12c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1'/%3E%3Cpath d='M3 15.5c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1'/%3E%3Cpath d='M3 12c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1'/%3E%3Cpath d='M3 15.5c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .marine-menu summary {
+    font-size: 0;
+  }
+
+  .marine-menu summary::before {
+    width: 18px;
+    height: 18px;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='black'%3E%3Ccircle cx='12' cy='5' r='1.7'/%3E%3Ccircle cx='12' cy='12' r='1.7'/%3E%3Ccircle cx='12' cy='19' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='black'%3E%3Ccircle cx='12' cy='5' r='1.7'/%3E%3Ccircle cx='12' cy='12' r='1.7'/%3E%3Ccircle cx='12' cy='19' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  @media (max-width: 390px) {
+    .theme-segment-icon::before {
+      width: 15px;
+      height: 15px;
+    }
+
+    .settings-trigger > span,
+    .settings-trigger > span::before {
+      width: 17px;
+      height: 17px;
+    }
+
+    .marine-wave {
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-segment-icon {
+      transition: none;
+    }
+  }
+}
