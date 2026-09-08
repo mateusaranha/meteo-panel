@@ -3,6 +3,15 @@
   const VALID_THEMES = new Set(["auto", "light", "ocean-night", "coastal-light"]);
   const DARK_MEDIA = window.matchMedia("(prefers-color-scheme: dark)");
 
+  const ensureCoastalLightStylesheet = () => {
+    if (document.querySelector('link[data-theme-styles="coastal-light"]')) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "coastal-light.css?v=20260907-16";
+    link.dataset.themeStyles = "coastal-light";
+    document.head.appendChild(link);
+  };
+
   const readStoredTheme = () => {
     try {
       const value = localStorage.getItem(STORAGE_KEY);
@@ -34,8 +43,6 @@
     return safeTheme;
   };
 
-  let activeTheme = applyTheme(readStoredTheme());
-
   function ensureCoastalLightOption(select) {
     if (select.querySelector('option[value="coastal-light"]')) return;
     const option = document.createElement("option");
@@ -43,6 +50,9 @@
     option.textContent = "Coastal Light";
     select.appendChild(option);
   }
+
+  ensureCoastalLightStylesheet();
+  let activeTheme = applyTheme(readStoredTheme());
 
   function initThemeControl() {
     const select = document.getElementById("themeSelect");
